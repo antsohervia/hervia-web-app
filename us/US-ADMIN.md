@@ -30,12 +30,12 @@ Lorsqu'un nouveau transitaire souscrit à la plateforme, l'admin doit pouvoir lu
 
 ### Critères d'acceptation
 
-- [ ] Un formulaire de création permet de saisir : nom de l'entreprise, sous-domaine souhaité, email de l'administrateur entreprise, pays, devise par défaut
-- [ ] Le système vérifie que le sous-domaine est disponible et valide (lettres, chiffres, tirets uniquement — pas d'espaces ni caractères spéciaux)
-- [ ] En cas de sous-domaine déjà pris, un message d'erreur clair est affiché avec des suggestions alternatives
+- [x] Un formulaire de création permet de saisir : nom de l'entreprise, sous-domaine souhaité, email de l'administrateur entreprise, pays, devise par défaut
+- [x] Le système vérifie que le sous-domaine est disponible et valide (lettres, chiffres, tirets uniquement — pas d'espaces ni caractères spéciaux)
+- [x] En cas de sous-domaine déjà pris, un message d'erreur clair est affiché avec des suggestions alternatives
 - [ ] Un email d'activation est envoyé automatiquement à l'administrateur entreprise avec un lien valable 72h
-- [ ] L'application du tenant est accessible via `[sous-domaine].trackapp.com` dès la création
-- [ ] Le tenant est visible dans la liste des tenants de l'admin avec le statut "Actif"
+- [x] L'application du tenant est accessible via `[sous-domaine].trackapp.com` dès la création
+- [x] Le tenant est visible dans la liste des tenants de l'admin avec le statut "Actif"
 - [ ] Un logo par défaut est attribué au tenant jusqu'à personnalisation
 
 ### Règles métier
@@ -71,18 +71,18 @@ Un transitaire peut cesser son abonnement, être en défaut de paiement, ou dema
 ### Critères d'acceptation
 
 **Suspension :**
-- [ ] L'admin peut suspendre un tenant depuis sa fiche détail
-- [ ] Un motif de suspension peut être renseigné (champ texte libre + liste prédéfinie : impayé, fraude, demande client, maintenance)
-- [ ] Dès la suspension, les utilisateurs du tenant (entreprise et clients) voient une page de suspension avec un message explicatif
-- [ ] Les données du tenant sont intégralement conservées
-- [ ] L'admin peut réactiver le tenant à tout moment — le tenant retrouve son état exact d'avant suspension
+- [x] L'admin peut suspendre un tenant depuis sa fiche détail
+- [x] Un motif de suspension peut être renseigné (champ texte libre + liste prédéfinie : impayé, fraude, demande client, maintenance)
+- [x] Dès la suspension, les utilisateurs du tenant (entreprise et clients) voient une page de suspension avec un message explicatif
+- [x] Les données du tenant sont intégralement conservées
+- [x] L'admin peut réactiver le tenant à tout moment — le tenant retrouve son état exact d'avant suspension
 - [ ] Un email de notification est envoyé à l'administrateur entreprise lors de la suspension
 
 **Suppression définitive :**
-- [ ] La suppression est disponible uniquement si le tenant est déjà suspendu (pas de suppression directe depuis l'état actif)
-- [ ] Une confirmation en deux étapes est requise (saisie manuelle du sous-domaine pour confirmer)
-- [ ] Un export ZIP des données (clients, colis, historique au format CSV/JSON) est proposé avant suppression
-- [ ] La suppression est irréversible — le sous-domaine redevient disponible après 30 jours
+- [x] La suppression est disponible uniquement si le tenant est déjà suspendu (pas de suppression directe depuis l'état actif)
+- [x] Une confirmation en deux étapes est requise (saisie manuelle du sous-domaine pour confirmer)
+- [x] Un export ZIP des données (clients, colis, historique au format CSV/JSON) est proposé avant suppression
+- [x] La suppression est irréversible — le sous-domaine redevient disponible après 30 jours
 
 ### Règles métier
 
@@ -113,12 +113,12 @@ Avec un nombre croissant de transitaires sur la plateforme, l'admin a besoin d'u
 
 ### Critères d'acceptation
 
-- [ ] Une liste paginée de tous les tenants est affichée avec : nom, sous-domaine, statut (actif/suspendu), date de création, nombre de clients, nombre de colis total
-- [ ] Des filtres sont disponibles : par statut, par date de création (plage), par recherche textuelle (nom, sous-domaine)
-- [ ] Un tri est possible sur chaque colonne
-- [ ] En cliquant sur un tenant, l'admin accède à sa fiche détail (informations, statistiques, actions)
-- [ ] Un bouton "Accéder à l'espace entreprise" permet à l'admin de se connecter en tant que ce tenant (mode impersonification, clairement signalé visuellement)
-- [ ] Des indicateurs globaux sont affichés en haut : nb total de tenants actifs, nb total de clients, nb total de colis en cours
+- [x] Une liste paginée de tous les tenants est affichée avec : nom, sous-domaine, statut (actif/suspendu), date de création, nombre de clients, nombre de colis total
+- [x] Des filtres sont disponibles : par statut, par date de création (plage), par recherche textuelle (nom, sous-domaine)
+- [x] Un tri est possible sur chaque colonne
+- [x] En cliquant sur un tenant, l'admin accède à sa fiche détail (informations, statistiques, actions)
+- [x] Un bouton "Accéder à l'espace entreprise" permet à l'admin de se connecter en tant que ce tenant (mode impersonification, clairement signalé visuellement)
+- [x] Des indicateurs globaux sont affichés en haut : nb total de tenants actifs, nb total de clients, nb total de colis en cours
 
 ### Règles métier
 
@@ -150,11 +150,11 @@ Les informations renseignées à la création peuvent évoluer : un transitaire 
 ### Critères d'acceptation
 
 - [ ] Depuis la fiche détail d'un tenant, l'admin peut éditer : nom de l'entreprise, email administrateur entreprise, pays, devise par défaut, fuseau horaire, logo
-- [ ] Le sous-domaine reste **non modifiable** depuis cette interface (cf. US-A1.1)
-- [ ] Toute modification est horodatée et tracée dans le journal d'audit (cf. US-A1.7)
+- [x] Le sous-domaine reste **non modifiable** depuis cette interface (cf. US-A1.1)
+- [x] Toute modification est horodatée et tracée dans le journal d'audit (cf. US-A1.7)
 - [ ] Un changement d'email administrateur entreprise déclenche un email de notification à l'ancien et au nouveau contact
-- [ ] La modification de devise par défaut n'affecte pas les colis/factures existants (verrouillés à leur devise d'origine)
-- [ ] Un changement de fuseau horaire est appliqué immédiatement aux affichages de dates côté tenant
+- [x] La modification de devise par défaut n'affecte pas les colis/factures existants (verrouillés à leur devise d'origine)
+- [x] Un changement de fuseau horaire est appliqué immédiatement aux affichages de dates côté tenant
 
 ### Règles métier
 
@@ -229,13 +229,13 @@ Chaque transitaire souscrit à un plan (Starter, Pro, Enterprise…) avec des qu
 
 ### Critères d'acceptation
 
-- [ ] Un admin principal peut créer, modifier, désactiver d'autres comptes administrateurs
+- [x] Un admin principal peut créer, modifier, désactiver d'autres comptes administrateurs
 - [ ] Trois rôles minimum sont disponibles : `Super Admin` (tous droits), `Admin Support` (lecture + impersonification, pas de suspension/suppression), `Admin Comptable` (lecture des facturations + exports)
-- [ ] Chaque action sensible (suppression, modification de plan, impersonification) est restreinte selon le rôle
+- [x] Chaque action sensible (suppression, modification de plan, impersonification) est restreinte selon le rôle
 - [ ] L'authentification des admins exige un second facteur (2FA obligatoire)
-- [ ] Un admin désactivé voit ses sessions actives invalidées immédiatement
-- [ ] La liste des admins affiche : nom, email, rôle, dernière connexion, statut (actif/désactivé)
-- [ ] Un admin ne peut pas modifier ou supprimer son propre compte (évite l'auto-lockout)
+- [x] Un admin désactivé voit ses sessions actives invalidées immédiatement
+- [x] La liste des admins affiche : nom, email, rôle, dernière connexion, statut (actif/désactivé)
+- [x] Un admin ne peut pas modifier ou supprimer son propre compte (évite l'auto-lockout)
 
 ### Règles métier
 
@@ -269,13 +269,13 @@ La traçabilité est une exigence légale (RGPD, devoir de conservation) et opé
 
 ### Critères d'acceptation
 
-- [ ] Un journal centralise toutes les actions sensibles : création/modification/suppression de tenants, suspensions, changements de plan, modifications de comptes admin, impersonifications, exports de données
-- [ ] Chaque entrée affiche : date/heure, acteur (admin), action, cible (tenant ou ressource), métadonnées (IP, user-agent, motif si renseigné)
-- [ ] Des filtres sont disponibles : par acteur, par type d'action, par tenant cible, par plage de dates
-- [ ] Une recherche textuelle libre est possible
-- [ ] Un export CSV/JSON du journal filtré est proposé
+- [x] Un journal centralise toutes les actions sensibles : création/modification/suppression de tenants, suspensions, changements de plan, modifications de comptes admin, impersonifications, exports de données
+- [x] Chaque entrée affiche : date/heure, acteur (admin), action, cible (tenant ou ressource), métadonnées (IP, user-agent, motif si renseigné)
+- [x] Des filtres sont disponibles : par acteur, par type d'action, par tenant cible, par plage de dates
+- [x] Une recherche textuelle libre est possible
+- [x] Un export CSV/JSON du journal filtré est proposé
 - [ ] Les sessions d'impersonification affichent en plus : durée, ressources consultées (résumé)
-- [ ] Le journal est en lecture seule — aucune modification/suppression d'entrée possible depuis l'interface
+- [x] Le journal est en lecture seule — aucune modification/suppression d'entrée possible depuis l'interface
 
 ### Règles métier
 
