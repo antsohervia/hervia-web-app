@@ -110,6 +110,9 @@ export type TenantDetail = {
   timezone: string;
   status: "active" | "suspended" | "deleted";
   logo_url: string | null;
+  theme: "light" | "dark" | "corporate";
+  primary_color: string;
+  secondary_color: string | null;
   suspension_reason: string | null;
   suspension_note: string | null;
   suspension_message: string | null;
