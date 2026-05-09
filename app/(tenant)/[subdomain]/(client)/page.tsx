@@ -8,9 +8,11 @@ import {
 } from "lucide-react";
 import { requireClientSession } from "@/lib/auth/client-dal";
 import { getClientParcelStats, listClientParcels } from "@/lib/clients/repo";
+import { listTransportModes } from "@/lib/transport-modes/repo";
 import { getClientBrand } from "@/lib/branding/client-theme";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AddParcelModal } from "./_add-parcel-modal";
 
 export const dynamic = "force-dynamic";
 
@@ -67,7 +69,7 @@ export default async function ClientDashboardPage({
     sp.status === "active" || sp.status === "final" ? sp.status : "all";
   const range = periodToRange(sp.period);
 
-  const [{ rows, total, pageSize }, stats] = await Promise.all([
+  const [{ rows, total, pageSize }, stats, transportModes] = await Promise.all([
     listClientParcels(session.clientId, session.tenant.id, {
       search: sp.q,
       statusType,
@@ -77,6 +79,7 @@ export default async function ClientDashboardPage({
       pageSize: 20,
     }),
     getClientParcelStats(session.clientId, session.tenant.id),
+    listTransportModes(session.tenant.id),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -108,16 +111,27 @@ export default async function ClientDashboardPage({
           >
             {session.tenant.name}
           </p>
-          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight mt-2">
-            {greeting()}, {firstName}
-          </h1>
-          <p
-            className="text-sm mt-1.5 max-w-xl"
-            style={{ color: brand.palette.muted }}
-          >
-            Retrouvez l&apos;ensemble de vos expéditions confiées à{" "}
-            {session.tenant.name}, leur statut et les prochaines étapes.
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mt-2">
+            <div className="min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+                {greeting()}, {firstName}
+              </h1>
+              <p
+                className="text-sm mt-1.5 max-w-xl"
+                style={{ color: brand.palette.muted }}
+              >
+                Retrouvez l&apos;ensemble de vos expéditions confiées à{" "}
+                {session.tenant.name}, leur statut et les prochaines étapes.
+              </p>
+            </div>
+            <AddParcelModal
+              subdomain={subdomain}
+              transportModes={transportModes.map((m) => ({
+                id: m.id,
+                label: m.label,
+              }))}
+            />
+          </div>
 
           <div className="grid grid-cols-3 gap-3 mt-6 max-w-xl">
             <KpiCard
@@ -170,7 +184,7 @@ export default async function ClientDashboardPage({
           className="flex flex-wrap items-end gap-3 rounded-xl border bg-card p-4"
           style={{ borderColor: brand.palette.border }}
         >
-          <div className="space-y-1.5 flex-1 min-w-[220px]">
+          <div className="space-y-1.5 w-full sm:flex-1 sm:min-w-[220px]">
             <label className="text-xs font-medium text-muted-foreground">
               Recherche
             </label>
@@ -184,28 +198,28 @@ export default async function ClientDashboardPage({
               />
             </div>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 w-full sm:w-auto">
             <label className="text-xs font-medium text-muted-foreground">
               Statut
             </label>
             <select
               name="status"
               defaultValue={statusType}
-              className="flex h-9 rounded-md border border-input bg-card px-3 py-1 text-sm shadow-sm"
+              className="flex h-9 w-full sm:w-auto rounded-md border border-input bg-card px-3 py-1 text-sm shadow-sm"
             >
               <option value="all">Tous</option>
               <option value="active">En cours</option>
               <option value="final">Livrées</option>
             </select>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 w-full sm:w-auto">
             <label className="text-xs font-medium text-muted-foreground">
               Période
             </label>
             <select
               name="period"
               defaultValue={sp.period ?? ""}
-              className="flex h-9 rounded-md border border-input bg-card px-3 py-1 text-sm shadow-sm"
+              className="flex h-9 w-full sm:w-auto rounded-md border border-input bg-card px-3 py-1 text-sm shadow-sm"
             >
               <option value="">Toutes</option>
               <option value="month">Ce mois</option>

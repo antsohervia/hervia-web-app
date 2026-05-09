@@ -4,6 +4,7 @@ import {
   Package,
   Palette,
   Tags,
+  Truck,
   LayoutDashboard,
 } from "lucide-react";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
@@ -42,6 +43,13 @@ export default async function TenantAdminShellLayout({
       >
         <Tags className="size-5 lg:size-4" />
         Statuts
+      </Link>
+      <Link
+        href="/admin/modes-transport"
+        className="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-accent text-sm min-h-11"
+      >
+        <Truck className="size-5 lg:size-4" />
+        Modes de transport
       </Link>
       {session.role === "entreprise_admin" ? (
         <Link
@@ -100,7 +108,7 @@ export default async function TenantAdminShellLayout({
           <LogoutButton subdomain={subdomain} />
         ) : null}
       </aside>
-      <main className="flex-1 min-w-0">{children}</main>
+      <main className="flex-1 min-w-0 overflow-x-hidden">{children}</main>
     </div>
   );
 }

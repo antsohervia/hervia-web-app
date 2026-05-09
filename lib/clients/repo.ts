@@ -77,6 +77,7 @@ export type ClientParcelRow = {
   destination_country: string | null;
   estimated_delivery_at: string | null;
   shipped_at: string | null;
+  transport_mode_label: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -111,7 +112,8 @@ export async function listClientParcels(
     .select(
       `id, reference, description, status_id, destination_country,
        estimated_delivery_at, shipped_at, created_at, updated_at,
-       parcel_statuses!inner(label, color, type)`,
+       parcel_statuses!inner(label, color, type),
+       transport_modes(label)`,
       { count: "exact" },
     )
     .eq("tenant_id", tenantId)
@@ -142,6 +144,7 @@ export async function listClientParcels(
       color: string;
       type: ParcelStatusType;
     }>(r.parcel_statuses);
+    const mode = pickOne<{ label: string }>(r.transport_modes);
     return {
       id: r.id as string,
       reference: r.reference as string,
@@ -154,6 +157,7 @@ export async function listClientParcels(
       estimated_delivery_at:
         (r.estimated_delivery_at as string | null) ?? null,
       shipped_at: (r.shipped_at as string | null) ?? null,
+      transport_mode_label: mode?.label ?? null,
       created_at: r.created_at as string,
       updated_at: r.updated_at as string,
     };
@@ -211,6 +215,7 @@ export type ClientParcelDetail = {
   destination_country: string | null;
   shipped_at: string | null;
   estimated_delivery_at: string | null;
+  transport_mode_label: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -226,13 +231,15 @@ export async function getClientParcelDetail(
     .select(
       `id, reference, description, status_id, estimated_price, currency,
        origin_country, destination_country, shipped_at, estimated_delivery_at,
-       created_at, updated_at`,
+       created_at, updated_at,
+       transport_modes(label)`,
     )
     .eq("tenant_id", tenantId)
     .eq("client_id", clientId)
     .eq("id", parcelId)
     .maybeSingle();
   if (!data) return null;
+  const mode = pickOne<{ label: string }>(data.transport_modes);
   return {
     id: data.id as string,
     reference: data.reference as string,
@@ -245,6 +252,7 @@ export async function getClientParcelDetail(
     shipped_at: (data.shipped_at as string | null) ?? null,
     estimated_delivery_at:
       (data.estimated_delivery_at as string | null) ?? null,
+    transport_mode_label: mode?.label ?? null,
     created_at: data.created_at as string,
     updated_at: data.updated_at as string,
   };
@@ -277,4 +285,91 @@ export async function activateClient(clientId: string): Promise<void> {
     .update({ status: "active" })
     .eq("id", clientId);
   if (error) throw new Error(error.message);
+}
+
+export type TenantParcelLookup = {
+  id: string;
+  client_id: string | null;
+  status_id: string | null;
+  transport_mode_id: string | null;
+};
+
+export async function findTenantParcelByReference(
+  tenantId: string,
+  reference: string,
+): Promise<TenantParcelLookup | null> {
+  const admin = createSupabaseAdmin();
+  const { data } = await admin
+    .from("parcels")
+    .select("id, client_id, status_id, transport_mode_id")
+    .eq("tenant_id", tenantId)
+    .eq("reference", reference)
+    .maybeSingle();
+  if (!data) return null;
+  return {
+    id: data.id as string,
+    client_id: (data.client_id as string | null) ?? null,
+    status_id: (data.status_id as string | null) ?? null,
+    transport_mode_id: (data.transport_mode_id as string | null) ?? null,
+  };
+}
+
+export async function linkParcelToClient(
+  parcelId: string,
+  clientId: string,
+  opts: { transportModeIdIfNull?: string } = {},
+): Promise<void> {
+  const admin = createSupabaseAdmin();
+  const update: Record<string, unknown> = { client_id: clientId };
+  if (opts.transportModeIdIfNull) {
+    update.transport_mode_id = opts.transportModeIdIfNull;
+  }
+  const { error } = await admin
+    .from("parcels")
+    .update(update)
+    .eq("id", parcelId);
+  if (error) throw new Error(error.message);
+}
+
+export async function getPendingClientResponseStatusId(
+  tenantId: string,
+): Promise<string> {
+  const admin = createSupabaseAdmin();
+  const { data, error } = await admin
+    .from("parcel_statuses")
+    .select("id")
+    .eq("tenant_id", tenantId)
+    .eq("system_code", "pending_client_response")
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) {
+    throw new Error(
+      'Statut système "En attente de réponse" introuvable. Contactez le support.',
+    );
+  }
+  return data.id as string;
+}
+
+export async function createClientInitiatedParcel(input: {
+  tenantId: string;
+  clientId: string;
+  reference: string;
+  transportModeId: string;
+  pendingStatusId: string;
+}): Promise<{ id: string }> {
+  const admin = createSupabaseAdmin();
+  const { data, error } = await admin
+    .from("parcels")
+    .insert({
+      tenant_id: input.tenantId,
+      client_id: input.clientId,
+      reference: input.reference,
+      transport_mode_id: input.transportModeId,
+      status_id: input.pendingStatusId,
+      is_client_initiated: true,
+    })
+    .select("id")
+    .single();
+  if (error) throw new Error(error.message);
+  return { id: data.id as string };
 }

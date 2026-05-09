@@ -99,6 +99,18 @@ export async function updateStatusAction(
 
   const admin = createSupabaseAdmin();
 
+  const { data: target } = await admin
+    .from("parcel_statuses")
+    .select("system_code, type")
+    .eq("tenant_id", session.tenant.id)
+    .eq("id", parsed.data.id)
+    .maybeSingle();
+  if (!target) return { errors: { _form: ["Statut introuvable"] } };
+
+  // Statut système : on autorise le rename du label/couleur/icône mais on
+  // verrouille code et type pour préserver le contrat système.
+  const isSystem = (target.system_code as string | null) != null;
+
   if (parsed.data.type === "initial") {
     const { data: existingInitial } = await admin
       .from("parcel_statuses")
@@ -115,16 +127,20 @@ export async function updateStatusAction(
     }
   }
 
+  const update: Record<string, unknown> = {
+    label: parsed.data.label,
+    color: parsed.data.color,
+    icon: parsed.data.icon || null,
+    description: parsed.data.description || null,
+  };
+  if (!isSystem) {
+    update.code = parsed.data.code;
+    update.type = parsed.data.type;
+  }
+
   const { error } = await admin
     .from("parcel_statuses")
-    .update({
-      code: parsed.data.code,
-      label: parsed.data.label,
-      color: parsed.data.color,
-      icon: parsed.data.icon || null,
-      description: parsed.data.description || null,
-      type: parsed.data.type,
-    })
+    .update(update)
     .eq("tenant_id", session.tenant.id)
     .eq("id", parsed.data.id);
 
@@ -151,6 +167,17 @@ export async function deleteStatusAction(formData: FormData): Promise<void> {
   assertNotImpersonatingTenant(session);
 
   const admin = createSupabaseAdmin();
+
+  const { data: target } = await admin
+    .from("parcel_statuses")
+    .select("system_code")
+    .eq("tenant_id", session.tenant.id)
+    .eq("id", id)
+    .maybeSingle();
+  if (!target) throw new Error("Statut introuvable");
+  if ((target.system_code as string | null) != null) {
+    throw new Error("Statut système — non supprimable");
+  }
 
   const { count: total } = await admin
     .from("parcel_statuses")

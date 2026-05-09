@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, Package, ChevronRight } from "lucide-react";
+import { Plus, Package, ChevronRight, ScanBarcode } from "lucide-react";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
 import { listParcels, listStatuses } from "@/lib/parcels/repo";
 import { Button } from "@/components/ui/button";
@@ -46,12 +46,20 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
             {total} colis enregistré{total > 1 ? "s" : ""}.
           </p>
         </div>
-        <Button asChild className="w-full sm:w-auto">
-          <Link href="/admin/colis/new">
-            <Plus className="size-4 mr-1" />
-            Nouveau colis
-          </Link>
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <Button asChild variant="outline" className="w-full sm:w-auto">
+            <Link href="/admin/colis/scan">
+              <ScanBarcode className="size-4 mr-1" />
+              Scan en lot
+            </Link>
+          </Button>
+          <Button asChild className="w-full sm:w-auto">
+            <Link href="/admin/colis/new">
+              <Plus className="size-4 mr-1" />
+              Nouveau colis
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <form className="grid grid-cols-1 sm:flex sm:flex-wrap sm:items-end gap-3">
@@ -60,7 +68,7 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
           <input
             name="q"
             defaultValue={sp.q ?? ""}
-            placeholder="Référence..."
+            placeholder="Numéro de tracking..."
             className="flex h-11 sm:h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base sm:text-sm shadow-sm"
           />
         </div>
@@ -111,9 +119,17 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
                           {r.status_label}
                         </span>
                       ) : null}
+                      {r.is_client_initiated ? (
+                        <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium border border-primary/40 text-primary">
+                          Initié par le client
+                        </span>
+                      ) : null}
                     </div>
                     <p className="text-xs text-muted-foreground truncate">
                       {r.client_name ?? "—"}
+                      {r.transport_mode_label
+                        ? ` · ${r.transport_mode_label}`
+                        : ""}
                       {r.destination_country
                         ? ` · ${r.destination_country}`
                         : ""}
@@ -128,13 +144,15 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
             ))}
           </ul>
 
-          <div className="hidden md:block rounded-md border bg-card">
+          <div className="hidden md:block rounded-md border bg-card overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Référence</TableHead>
+                  <TableHead>Numéro de tracking</TableHead>
                   <TableHead>Client</TableHead>
                   <TableHead>Statut</TableHead>
+                  <TableHead>Mode</TableHead>
+                  <TableHead>Source</TableHead>
                   <TableHead>Destination</TableHead>
                   <TableHead>Livraison estimée</TableHead>
                   <TableHead className="w-12" />
@@ -157,6 +175,18 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
                         </span>
                       ) : (
                         "—"
+                      )}
+                    </TableCell>
+                    <TableCell>{r.transport_mode_label ?? "—"}</TableCell>
+                    <TableCell>
+                      {r.is_client_initiated ? (
+                        <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium border border-primary/40 text-primary">
+                          Client
+                        </span>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">
+                          Tenant
+                        </span>
                       )}
                     </TableCell>
                     <TableCell>{r.destination_country ?? "—"}</TableCell>

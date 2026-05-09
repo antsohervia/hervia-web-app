@@ -6,6 +6,7 @@ import {
   getParcel,
   listParcelEvents,
   listStatuses,
+  listTransportModes,
 } from "@/lib/parcels/repo";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ChangeStatusCard } from "../_change-status-card";
+import { EditParcelCard } from "../_edit-parcel-card";
 
 export const dynamic = "force-dynamic";
 
@@ -36,9 +38,10 @@ export default async function ParcelDetailPage({ params }: Props) {
   const parcel = await getParcel(session.tenant.id, id);
   if (!parcel) notFound();
 
-  const [statuses, events] = await Promise.all([
+  const [statuses, events, transportModes] = await Promise.all([
     listStatuses(session.tenant.id),
     listParcelEvents(parcel.id),
+    listTransportModes(session.tenant.id),
   ]);
 
   const currentStatus = statuses.find((s) => s.id === parcel.status_id) ?? null;
@@ -56,9 +59,16 @@ export default async function ParcelDetailPage({ params }: Props) {
 
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="min-w-0">
-          <h1 className="text-xl sm:text-2xl font-semibold break-words">
-            {parcel.reference}
-          </h1>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-semibold break-words">
+              {parcel.reference}
+            </h1>
+            {parcel.is_client_initiated ? (
+              <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium border border-primary/40 text-primary">
+                Initié par le client
+              </span>
+            ) : null}
+          </div>
           <p className="text-sm text-muted-foreground mt-1">
             Client : {parcel.client_name ?? "non assigné"} · Créé le{" "}
             {dateFmt.format(new Date(parcel.created_at))}
@@ -80,6 +90,11 @@ export default async function ParcelDetailPage({ params }: Props) {
             <CardTitle>Informations</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
+            <Row label="Numéro de tracking" value={parcel.reference} />
+            <Row
+              label="Mode de transport"
+              value={parcel.transport_mode_label}
+            />
             <Row label="Description" value={parcel.description} />
             <Row
               label="Poids"
@@ -126,9 +141,29 @@ export default async function ParcelDetailPage({ params }: Props) {
         </Card>
 
         <div className="md:col-span-2 space-y-4 sm:space-y-6">
+          <EditParcelCard
+            subdomain={subdomain}
+            parcelId={parcel.id}
+            defaultCurrency={session.tenant.default_currency}
+            transportModes={transportModes}
+            initial={{
+              transport_mode_id: parcel.transport_mode_id,
+              description: parcel.description,
+              weight_kg: parcel.weight_kg,
+              volume_m3: parcel.volume_m3,
+              estimated_price: parcel.estimated_price,
+              currency: parcel.currency,
+              origin_country: parcel.origin_country,
+              destination_country: parcel.destination_country,
+              shipped_at: parcel.shipped_at,
+              estimated_delivery_at: parcel.estimated_delivery_at,
+            }}
+          />
+
           <ChangeStatusCard
             subdomain={subdomain}
             parcelId={parcel.id}
+            parcelReference={parcel.reference}
             currentStatusId={parcel.status_id}
             currentStatusType={currentStatus?.type ?? null}
             statuses={statuses.map((s) => ({
@@ -184,8 +219,8 @@ export default async function ParcelDetailPage({ params }: Props) {
 function Row({ label, value }: { label: string; value: string | null }) {
   return (
     <div className="flex justify-between gap-3">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="text-right">{value ?? "—"}</span>
+      <span className="text-muted-foreground shrink-0">{label}</span>
+      <span className="text-right min-w-0 break-all">{value ?? "—"}</span>
     </div>
   );
 }

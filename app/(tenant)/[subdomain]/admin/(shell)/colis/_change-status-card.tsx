@@ -38,6 +38,7 @@ type StatusOpt = {
 type Props = {
   subdomain: string;
   parcelId: string;
+  parcelReference: string;
   currentStatusId: string | null;
   currentStatusType: "initial" | "intermediate" | "final" | null;
   statuses: StatusOpt[];
@@ -49,6 +50,7 @@ const FORM_ID = "change-status-form";
 export function ChangeStatusCard({
   subdomain,
   parcelId,
+  parcelReference,
   currentStatusId,
   currentStatusType,
   statuses,
@@ -73,6 +75,10 @@ export function ChangeStatusCard({
     <Card>
       <CardHeader>
         <CardTitle>Changer le statut</CardTitle>
+        <p className="text-xs text-muted-foreground mt-1">
+          Numéro de tracking :{" "}
+          <span className="font-mono text-foreground">{parcelReference}</span>
+        </p>
       </CardHeader>
       <CardContent>
         <form id={FORM_ID} action={action} className="space-y-4">

@@ -16,14 +16,14 @@ type StatusOpt = {
   color: string;
   type: "initial" | "intermediate" | "final";
 };
-type ClientOpt = { id: string; full_name: string; email: string | null };
+type TransportModeOpt = { id: string; label: string };
 
 type Props = {
   subdomain: string;
   defaultCurrency: string;
   initialStatusId: string | null;
   statuses: StatusOpt[];
-  clients: ClientOpt[];
+  transportModes: TransportModeOpt[];
 };
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -33,7 +33,7 @@ export function CreateParcelForm({
   defaultCurrency,
   initialStatusId,
   statuses,
-  clients,
+  transportModes,
 }: Props) {
   const [state, action, pending] = useActionState<
     CreateParcelState,
@@ -94,21 +94,29 @@ export function CreateParcelForm({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="clientId">Client associé</Label>
+          <Label htmlFor="transportModeId">Mode de transport</Label>
           <select
-            id="clientId"
-            name="clientId"
+            id="transportModeId"
+            name="transportModeId"
             defaultValue=""
             className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
           >
-            <option value="">— Aucun (en attente d&apos;affectation) —</option>
-            {clients.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.full_name}
-                {c.email ? ` · ${c.email}` : ""}
+            <option value="">— Aucun —</option>
+            {transportModes.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.label}
               </option>
             ))}
           </select>
+          {state?.errors?.transportModeId?.[0] ? (
+            <p className="text-xs text-destructive">
+              {state.errors.transportModeId[0]}
+            </p>
+          ) : null}
+          <p className="text-xs text-muted-foreground">
+            Le client sera rattaché lorsqu&apos;il saisira le numéro de tracking
+            depuis son espace.
+          </p>
         </div>
 
         <div className="space-y-2">

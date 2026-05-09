@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
-import { listClientsForTenant, listStatuses } from "@/lib/parcels/repo";
+import { listStatuses } from "@/lib/parcels/repo";
+import { listTransportModes } from "@/lib/transport-modes/repo";
 import { Button } from "@/components/ui/button";
 import { CreateParcelForm } from "../_create-parcel-form";
 
@@ -13,12 +14,16 @@ export default async function NewParcelPage({ params }: Props) {
   const { subdomain } = await params;
   const session = await requireTenantSession(subdomain);
 
-  const [statuses, clients] = await Promise.all([
+  const [statuses, transportModes] = await Promise.all([
     listStatuses(session.tenant.id),
-    listClientsForTenant(session.tenant.id),
+    listTransportModes(session.tenant.id),
   ]);
 
-  const initial = statuses.find((s) => s.type === "initial") ?? statuses[0];
+  // Le statut par défaut écarte volontairement le système "pending_client_response"
+  const initial =
+    statuses.find((s) => s.type === "initial") ??
+    statuses.find((s) => s.code !== "pending_client_response") ??
+    statuses[0];
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-3xl mx-auto space-y-4 sm:space-y-6">
@@ -41,13 +46,18 @@ export default async function NewParcelPage({ params }: Props) {
         subdomain={subdomain}
         defaultCurrency={session.tenant.default_currency}
         initialStatusId={initial?.id ?? null}
-        statuses={statuses.map((s) => ({
-          id: s.id,
-          label: s.label,
-          color: s.color,
-          type: s.type,
+        statuses={statuses
+          .filter((s) => s.code !== "pending_client_response")
+          .map((s) => ({
+            id: s.id,
+            label: s.label,
+            color: s.color,
+            type: s.type,
+          }))}
+        transportModes={transportModes.map((m) => ({
+          id: m.id,
+          label: m.label,
         }))}
-        clients={clients}
       />
     </div>
   );

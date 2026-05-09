@@ -18,6 +18,7 @@ export type ParcelStatus = {
   description: string | null;
   type: ParcelStatusType;
   position: number;
+  system_code: string | null;
   usage_count: number;
 };
 
@@ -25,7 +26,9 @@ export async function listStatuses(tenantId: string): Promise<ParcelStatus[]> {
   const admin = createSupabaseAdmin();
   const { data, error } = await admin
     .from("parcel_statuses")
-    .select("id, tenant_id, code, label, color, icon, description, type, position")
+    .select(
+      "id, tenant_id, code, label, color, icon, description, type, position, system_code",
+    )
     .eq("tenant_id", tenantId)
     .order("position", { ascending: true });
   if (error) throw new Error(error.message);
@@ -59,6 +62,9 @@ export type ParcelListRow = {
   description: string | null;
   destination_country: string | null;
   estimated_delivery_at: string | null;
+  transport_mode_id: string | null;
+  transport_mode_label: string | null;
+  is_client_initiated: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -75,9 +81,11 @@ export async function listParcels(
     .from("parcels")
     .select(
       `id, reference, client_id, status_id, description, destination_country,
-       estimated_delivery_at, created_at, updated_at,
+       estimated_delivery_at, transport_mode_id, is_client_initiated,
+       created_at, updated_at,
        clients(full_name),
-       parcel_statuses(label, color, type)`,
+       parcel_statuses(label, color, type),
+       transport_modes(label)`,
       { count: "exact" },
     )
     .eq("tenant_id", tenantId);
@@ -102,6 +110,7 @@ export async function listParcels(
       color: string;
       type: ParcelStatusType;
     }>(r.parcel_statuses);
+    const mode = pickOne<{ label: string }>(r.transport_modes);
     return {
       id: r.id as string,
       reference: r.reference as string,
@@ -114,6 +123,9 @@ export async function listParcels(
       description: (r.description as string | null) ?? null,
       destination_country: (r.destination_country as string | null) ?? null,
       estimated_delivery_at: (r.estimated_delivery_at as string | null) ?? null,
+      transport_mode_id: (r.transport_mode_id as string | null) ?? null,
+      transport_mode_label: mode?.label ?? null,
+      is_client_initiated: Boolean(r.is_client_initiated),
       created_at: r.created_at as string,
       updated_at: r.updated_at as string,
     };
@@ -137,6 +149,9 @@ export type ParcelDetail = {
   destination_country: string | null;
   estimated_delivery_at: string | null;
   shipped_at: string | null;
+  transport_mode_id: string | null;
+  transport_mode_label: string | null;
+  is_client_initiated: boolean;
   created_at: string;
 };
 
@@ -150,14 +165,17 @@ export async function getParcel(
     .select(
       `id, reference, client_id, status_id, description, weight_kg, volume_m3,
        estimated_price, currency, origin_country, destination_country,
-       estimated_delivery_at, shipped_at, created_at,
-       clients(full_name)`,
+       estimated_delivery_at, shipped_at, transport_mode_id, is_client_initiated,
+       created_at,
+       clients(full_name),
+       transport_modes(label)`,
     )
     .eq("tenant_id", tenantId)
     .eq("id", id)
     .maybeSingle();
   if (!data) return null;
   const client = pickOne<{ full_name: string }>(data.clients);
+  const mode = pickOne<{ label: string }>(data.transport_modes);
   return {
     id: data.id as string,
     reference: data.reference as string,
@@ -173,8 +191,31 @@ export async function getParcel(
     destination_country: (data.destination_country as string | null) ?? null,
     estimated_delivery_at: (data.estimated_delivery_at as string | null) ?? null,
     shipped_at: (data.shipped_at as string | null) ?? null,
+    transport_mode_id: (data.transport_mode_id as string | null) ?? null,
+    transport_mode_label: mode?.label ?? null,
+    is_client_initiated: Boolean(data.is_client_initiated),
     created_at: data.created_at as string,
   };
+}
+
+export async function insertParcelEvent(input: {
+  tenantId: string;
+  parcelId: string;
+  statusId: string | null;
+  comment: string | null;
+  actorId: string | null;
+  actorEmail: string | null;
+}): Promise<void> {
+  const admin = createSupabaseAdmin();
+  const { error } = await admin.from("parcel_events").insert({
+    tenant_id: input.tenantId,
+    parcel_id: input.parcelId,
+    status_id: input.statusId,
+    comment: input.comment,
+    actor_id: input.actorId,
+    actor_email: input.actorEmail,
+  });
+  if (error) throw new Error(error.message);
 }
 
 export type ParcelEvent = {
@@ -212,6 +253,23 @@ export async function listParcelEvents(
       actor_email: (r.actor_email as string | null) ?? null,
     };
   });
+}
+
+export type TransportMode = { id: string; label: string };
+
+export async function listTransportModes(
+  tenantId: string,
+): Promise<TransportMode[]> {
+  const admin = createSupabaseAdmin();
+  const { data } = await admin
+    .from("transport_modes")
+    .select("id, label")
+    .eq("tenant_id", tenantId)
+    .order("label", { ascending: true });
+  return (data ?? []).map((r) => ({
+    id: r.id as string,
+    label: r.label as string,
+  }));
 }
 
 export async function listClientsForTenant(

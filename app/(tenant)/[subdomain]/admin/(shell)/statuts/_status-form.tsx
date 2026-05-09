@@ -39,6 +39,7 @@ export function StatusForm(props: Props) {
 
   const initial = mode === "edit" ? props.status : null;
   const [color, setColor] = useState(initial?.color ?? "#6B7280");
+  const isSystem = (initial?.system_code ?? null) != null;
 
   useEffect(() => {
     if (state?.ok) {
@@ -86,9 +87,13 @@ export function StatusForm(props: Props) {
           placeholder="ex: in_customs"
           maxLength={40}
           required
+          readOnly={isSystem}
+          disabled={isSystem}
         />
         <p className="text-xs text-muted-foreground">
-          Identifiant technique en minuscules (chiffres, lettres et underscores).
+          {isSystem
+            ? "Statut système — code et type non modifiables."
+            : "Identifiant technique en minuscules (chiffres, lettres et underscores)."}
         </p>
         {state?.errors?.code?.[0] ? (
           <p className="text-xs text-destructive">{state.errors.code[0]}</p>
@@ -105,7 +110,8 @@ export function StatusForm(props: Props) {
             name="type"
             defaultValue={initial?.type ?? "intermediate"}
             required
-            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
+            disabled={isSystem}
+            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm disabled:opacity-60"
           >
             {PARCEL_STATUS_TYPES.map((t) => (
               <option key={t} value={t}>

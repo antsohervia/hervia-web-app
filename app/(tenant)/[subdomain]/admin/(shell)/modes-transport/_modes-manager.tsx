@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { GripVertical, Lock, Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -22,44 +22,41 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { PARCEL_STATUS_TYPE_LABELS } from "@/lib/validations/parcel-status";
-import type { ParcelStatus } from "@/lib/parcels/repo";
-import { StatusForm } from "./_status-form";
+import type { TransportMode } from "@/lib/transport-modes/repo";
+import { TransportModeForm } from "./_mode-form";
 import {
-  deleteStatusAction,
-  reorderStatusesAction,
+  deleteTransportModeAction,
+  reorderTransportModesAction,
 } from "./_actions";
 
-const MIN_STATUSES = 2;
-
-export function StatusesManager({
+export function TransportModesManager({
   subdomain,
-  initialStatuses,
+  initialModes,
 }: {
   subdomain: string;
-  initialStatuses: ParcelStatus[];
+  initialModes: TransportMode[];
 }) {
-  const [statuses, setStatuses] = useState(initialStatuses);
-  const [editing, setEditing] = useState<ParcelStatus | null>(null);
+  const [modes, setModes] = useState(initialModes);
+  const [editing, setEditing] = useState<TransportMode | null>(null);
   const [creating, setCreating] = useState(false);
   const [pending, startTransition] = useTransition();
 
   function move(index: number, dir: -1 | 1) {
-    const next = [...statuses];
+    const next = [...modes];
     const j = index + dir;
     if (j < 0 || j >= next.length) return;
     [next[index], next[j]] = [next[j], next[index]];
-    setStatuses(next);
+    setModes(next);
     persistOrder(next);
   }
 
-  function persistOrder(next: ParcelStatus[]) {
+  function persistOrder(next: TransportMode[]) {
     const fd = new FormData();
     fd.set("subdomain", subdomain);
-    fd.set("order", next.map((s) => s.id).join(","));
+    fd.set("order", next.map((m) => m.id).join(","));
     startTransition(async () => {
       try {
-        await reorderStatusesAction(fd);
+        await reorderTransportModesAction(fd);
       } catch (e) {
         toast.error(e instanceof Error ? e.message : "Erreur de tri");
       }
@@ -72,9 +69,9 @@ export function StatusesManager({
     fd.set("id", id);
     startTransition(async () => {
       try {
-        await deleteStatusAction(fd);
-        setStatuses((s) => s.filter((x) => x.id !== id));
-        toast.success("Statut supprimé");
+        await deleteTransportModeAction(fd);
+        setModes((s) => s.filter((x) => x.id !== id));
+        toast.success("Mode supprimé");
       } catch (e) {
         toast.error(e instanceof Error ? e.message : "Suppression impossible");
       }
@@ -85,42 +82,38 @@ export function StatusesManager({
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <p className="text-sm text-muted-foreground">
-          {statuses.length} statut{statuses.length > 1 ? "s" : ""} ·
-          utilisez les flèches pour réordonner.
+          {modes.length} mode{modes.length > 1 ? "s" : ""} · utilisez les
+          flèches pour réordonner.
         </p>
         <Dialog open={creating} onOpenChange={setCreating}>
           <DialogTrigger asChild>
-            <Button className="w-full sm:w-auto">
+            <Button className="w-full sm:w-auto min-h-11">
               <Plus className="size-4 mr-1" />
-              Ajouter un statut
+              Ajouter un mode
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Nouveau statut</DialogTitle>
+              <DialogTitle>Nouveau mode de transport</DialogTitle>
             </DialogHeader>
-            <StatusForm
+            <TransportModeForm
               subdomain={subdomain}
               mode="create"
-              onDone={() => {
-                setCreating(false);
-              }}
+              onDone={() => setCreating(false)}
             />
           </DialogContent>
         </Dialog>
       </div>
 
       <div className="rounded-md border bg-card divide-y">
-        {statuses.length === 0 ? (
+        {modes.length === 0 ? (
           <p className="p-6 text-sm text-muted-foreground">
-            Aucun statut. Créez-en un pour démarrer.
+            Aucun mode. Ajoutez-en un pour permettre aux clients de saisir un
+            colis.
           </p>
         ) : null}
-        {statuses.map((s, i) => (
-          <div
-            key={s.id}
-            className="p-3 flex items-center gap-2 sm:gap-3"
-          >
+        {modes.map((m, i) => (
+          <div key={m.id} className="p-3 flex items-center gap-2 sm:gap-3">
             <div className="flex flex-col">
               <button
                 type="button"
@@ -131,14 +124,10 @@ export function StatusesManager({
               >
                 ▲
               </button>
-              <GripVertical
-                className="size-4 text-muted-foreground mx-auto my-0.5 hidden sm:block"
-                aria-hidden
-              />
               <button
                 type="button"
                 onClick={() => move(i, 1)}
-                disabled={i === statuses.length - 1 || pending}
+                disabled={i === modes.length - 1 || pending}
                 className="size-8 sm:size-6 inline-flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30 text-sm"
                 aria-label="Descendre"
               >
@@ -146,58 +135,40 @@ export function StatusesManager({
               </button>
             </div>
 
-            <span
-              className="size-6 rounded-full border shrink-0"
-              style={{ background: s.color }}
-              aria-hidden
-            />
-
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span className="font-medium">{s.label}</span>
-                <span className="text-[10px] uppercase tracking-wide text-muted-foreground rounded bg-muted px-1.5 py-0.5">
-                  {PARCEL_STATUS_TYPE_LABELS[s.type]}
-                </span>
-                <code className="text-xs text-muted-foreground break-all">{s.code}</code>
-                {s.system_code ? (
-                  <span
-                    className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wide text-muted-foreground rounded bg-muted px-1.5 py-0.5"
-                    title="Statut système — non supprimable"
-                  >
-                    <Lock className="size-3" aria-hidden />
-                    Système
-                  </span>
-                ) : null}
+                <span className="font-medium">{m.label}</span>
+                <code className="text-xs text-muted-foreground break-all">{m.code}</code>
               </div>
-              {s.description ? (
-                <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                  {s.description}
-                </p>
-              ) : null}
               <p className="text-xs text-muted-foreground mt-0.5">
-                {s.usage_count} colis associé{s.usage_count > 1 ? "s" : ""}
+                {m.usage_count} colis associé{m.usage_count > 1 ? "s" : ""}
               </p>
             </div>
 
             <div className="flex items-center gap-1 shrink-0">
               <Dialog
-                open={editing?.id === s.id}
-                onOpenChange={(o) => setEditing(o ? s : null)}
+                open={editing?.id === m.id}
+                onOpenChange={(o) => setEditing(o ? m : null)}
               >
                 <DialogTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="Modifier" className="min-h-11 min-w-11">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Modifier"
+                    className="min-h-11 min-w-11"
+                  >
                     <Pencil className="size-4" />
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Modifier le statut</DialogTitle>
+                    <DialogTitle>Modifier le mode</DialogTitle>
                   </DialogHeader>
-                  {editing?.id === s.id ? (
-                    <StatusForm
+                  {editing?.id === m.id ? (
+                    <TransportModeForm
                       subdomain={subdomain}
                       mode="edit"
-                      status={editing}
+                      record={editing}
                       onDone={() => setEditing(null)}
                     />
                   ) : null}
@@ -210,19 +181,11 @@ export function StatusesManager({
                     variant="ghost"
                     size="icon"
                     aria-label="Supprimer"
-                    disabled={
-                      statuses.length <= MIN_STATUSES ||
-                      s.usage_count > 0 ||
-                      s.system_code != null
-                    }
+                    disabled={m.usage_count > 0}
                     title={
-                      s.system_code != null
-                        ? "Statut système — non supprimable"
-                        : statuses.length <= MIN_STATUSES
-                          ? "Au moins 2 statuts doivent rester actifs"
-                          : s.usage_count > 0
-                            ? `Utilisé par ${s.usage_count} colis`
-                            : "Supprimer"
+                      m.usage_count > 0
+                        ? `Utilisé par ${m.usage_count} colis`
+                        : "Supprimer"
                     }
                     className="min-h-11 min-w-11"
                   >
@@ -231,14 +194,14 @@ export function StatusesManager({
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Supprimer ce statut ?</AlertDialogTitle>
+                    <AlertDialogTitle>Supprimer ce mode ?</AlertDialogTitle>
                     <AlertDialogDescription>
                       Cette action est irréversible.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Annuler</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => onDelete(s.id)}>
+                    <AlertDialogAction onClick={() => onDelete(m.id)}>
                       Supprimer
                     </AlertDialogAction>
                   </AlertDialogFooter>
