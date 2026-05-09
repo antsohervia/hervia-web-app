@@ -104,8 +104,7 @@ export async function uploadLogoAction(
     mime: file.type,
   });
 
-  revalidatePath(`/${subdomain}/admin/apparence`);
-  revalidatePath(`/${subdomain}`);
+  revalidatePath(`/${subdomain}`, "layout");
   return { ok: true };
 }
 
@@ -122,8 +121,7 @@ export async function resetLogoAction(formData: FormData): Promise<void> {
 
   await logTenantAudit(admin, session, "tenant.logo.reset", {});
 
-  revalidatePath(`/${subdomain}/admin/apparence`);
-  revalidatePath(`/${subdomain}`);
+  revalidatePath(`/${subdomain}`, "layout");
 }
 
 export async function publishThemeAction(
@@ -159,8 +157,7 @@ export async function publishThemeAction(
 
   await logTenantAudit(admin, session, "tenant.theme.publish", parsed.data);
 
-  revalidatePath(`/${subdomain}/admin/apparence`);
-  revalidatePath(`/${subdomain}`);
+  revalidatePath(`/${subdomain}`, "layout");
   return { ok: true };
 }
 
@@ -196,6 +193,5 @@ export async function restoreThemeAction(formData: FormData): Promise<void> {
     history_id: historyId,
   });
 
-  revalidatePath(`/${subdomain}/admin/apparence`);
-  revalidatePath(`/${subdomain}`);
+  revalidatePath(`/${subdomain}`, "layout");
 }
