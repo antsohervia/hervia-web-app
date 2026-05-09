@@ -8,6 +8,7 @@ import {
   requireTenantSession,
 } from "@/lib/auth/tenant-dal";
 import { logTenantAudit } from "@/lib/parcels/audit";
+import { sendParcelStatusChangeEmail } from "@/lib/email/send";
 import {
   ChangeStatusSchema,
   CreateParcelSchema,
@@ -184,6 +185,22 @@ export async function changeParcelStatusAction(
     parcel_id: data.parcelId,
     status_id: data.statusId,
     reopen: isFinal,
+  });
+
+  // Notification email client (US-C4.1) — fire-and-forget : un échec
+  // SMTP ne doit pas bloquer la mise à jour métier.
+  await sendParcelStatusChangeEmail({
+    parcelId: data.parcelId,
+    tenant: {
+      id: session.tenant.id,
+      name: session.tenant.name,
+      subdomain: session.tenant.subdomain,
+      logo_url: session.tenant.logo_url,
+      primary_color: session.tenant.primary_color,
+    },
+    newStatusId: data.statusId,
+    occurredAt: new Date(occurredAt),
+    comment: data.comment,
   });
 
   revalidatePath(`/${subdomain}/admin/colis`);
