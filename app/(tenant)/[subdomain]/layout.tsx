@@ -16,7 +16,7 @@ export default async function TenantLayout({
   if (!tenant) notFound();
   if (tenant.status === "deleted") notFound();
   if (tenant.status === "suspended") {
-    redirect(`/${subdomain}/suspended`);
+    redirect("/suspended");
   }
 
   const impersonating = await getImpersonation();
