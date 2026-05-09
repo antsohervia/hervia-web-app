@@ -1,8 +1,7 @@
 import { requireTenantAdmin } from "@/lib/auth/tenant-dal";
-import { getTenantBranding, getThemeHistory } from "@/lib/branding/repo";
+import { getTenantBranding } from "@/lib/branding/repo";
 import { LogoCard } from "./_logo-card";
 import { ThemeStudio } from "./_theme-studio";
-import { ThemeHistory } from "./_theme-history";
 
 export const dynamic = "force-dynamic";
 
@@ -12,10 +11,7 @@ export default async function AppearancePage({ params }: Props) {
   const { subdomain } = await params;
   const session = await requireTenantAdmin(subdomain);
 
-  const [branding, history] = await Promise.all([
-    getTenantBranding(session.tenant.id),
-    getThemeHistory(session.tenant.id, 5),
-  ]);
+  const branding = await getTenantBranding(session.tenant.id);
 
   if (!branding) {
     return (
@@ -46,8 +42,6 @@ export default async function AppearancePage({ params }: Props) {
         currentPrimary={branding.primary_color}
         currentSecondary={branding.secondary_color}
       />
-
-      <ThemeHistory subdomain={subdomain} history={history} />
     </div>
   );
 }
