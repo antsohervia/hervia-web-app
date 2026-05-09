@@ -41,14 +41,14 @@ Dès l'activation de leur espace, les transitaires disposent d'un logo génériq
 
 ### Critères d'acceptation
 
-- [ ] Un bouton "Modifier le logo" est accessible depuis les paramètres de l'espace entreprise
-- [ ] Les formats acceptés sont : PNG, JPG, SVG — taille maximale 2 Mo
-- [ ] Un aperçu en temps réel est affiché avant confirmation, montrant le rendu sur fond clair ET fond sombre
+- [x] Un bouton "Modifier le logo" est accessible depuis les paramètres de l'espace entreprise
+- [x] Les formats acceptés sont : PNG, JPG, SVG — taille maximale 2 Mo
+- [x] Un aperçu en temps réel est affiché avant confirmation, montrant le rendu sur fond clair ET fond sombre
 - [ ] Le logo est validé : largeur minimale 100px, hauteur minimale 40px recommandée
 - [ ] Après upload et confirmation, le logo est immédiatement visible sur l'espace client
 - [ ] Le logo apparaît dans les emails de notification envoyés aux clients
-- [ ] Un bouton "Réinitialiser" permet de revenir au logo par défaut
-- [ ] L'aperçu du logo est affiché dans le contexte du thème actif (voir US-E1.3)
+- [x] Un bouton "Réinitialiser" permet de revenir au logo par défaut
+- [x] L'aperçu du logo est affiché dans le contexte du thème actif (voir US-E1.3)
 
 ### Règles métier
 
@@ -84,14 +84,14 @@ Au-delà du logo et du thème structurel, chaque transitaire a une couleur de ma
 
 ### Critères d'acceptation
 
-- [ ] Deux sélecteurs de couleur sont disponibles : couleur principale (obligatoire) et couleur secondaire (optionnelle)
-- [ ] Chaque sélecteur propose un color picker visuel ET un champ de saisie HEX
-- [ ] Un aperçu en temps réel montre l'application des couleurs sur les composants principaux : bouton CTA, badge de statut, barre de progression, lien, header de navigation
+- [x] Deux sélecteurs de couleur sont disponibles : couleur principale (obligatoire) et couleur secondaire (optionnelle)
+- [x] Chaque sélecteur propose un color picker visuel ET un champ de saisie HEX
+- [x] Un aperçu en temps réel montre l'application des couleurs sur les composants principaux : bouton CTA, badge de statut, barre de progression, lien, header de navigation
 - [ ] Le système vérifie le contraste minimum WCAG AA (ratio 4.5:1) entre la couleur choisie et le texte superposé (blanc ou noir selon la luminosité)
 - [ ] Si le contraste est insuffisant, un avertissement est affiché avec la valeur de contraste calculée et une suggestion de couleur corrigée
 - [ ] Les couleurs sont appliquées sur l'espace client immédiatement après sauvegarde
 - [ ] Une palette de couleurs prédéfinies est proposée en raccourci (12 couleurs courantes)
-- [ ] Une couleur par défaut est utilisée si aucune personnalisation n'est faite (bleu #1A56DB)
+- [x] Une couleur par défaut est utilisée si aucune personnalisation n'est faite (bleu #1A56DB)
 
 ### Règles métier
 
@@ -178,22 +178,22 @@ Les trois thèmes couvrent les grandes familles d'identités visuelles rencontr�
 ### Critères d'acceptation
 
 **Sélection et aperçu du thème :**
-- [ ] La page "Apparence" de l'espace admin présente les 3 thèmes sous forme de cartes visuelles côte à côte avec : miniature d'aperçu (screenshot simulé), nom du thème, description courte d'une ligne, badge "Actif" sur le thème en production
-- [ ] Un clic sur une carte de thème l'applique **dans la zone d'aperçu** (panneau droit) sans publier sur l'espace client en production
+- [x] La page "Apparence" de l'espace admin présente les 3 thèmes sous forme de cartes visuelles côte à côte avec : miniature d'aperçu (screenshot simulé), nom du thème, description courte d'une ligne, badge "Actif" sur le thème en production
+- [x] Un clic sur une carte de thème l'applique **dans la zone d'aperçu** (panneau droit) sans publier sur l'espace client en production
 - [ ] La zone d'aperçu simule l'espace client avec le logo uploadé et les couleurs de marque actuelles, sur trois vues navigables : page de connexion, tableau de bord (liste de colis fictifs), fiche détail d'un colis fictif avec timeline
-- [ ] Un toggle "Desktop / Mobile" permet de visualiser le rendu sur les deux formats dans la zone d'aperçu
-- [ ] L'aperçu est mis à jour instantanément (< 300ms) lors du changement de thème, sans rechargement de page
+- [x] Un toggle "Desktop / Mobile" permet de visualiser le rendu sur les deux formats dans la zone d'aperçu
+- [x] L'aperçu est mis à jour instantanément (< 300ms) lors du changement de thème, sans rechargement de page
 
 **Publication du thème :**
-- [ ] Un bouton "Publier ce thème" est visible uniquement si le thème prévisualisé est différent du thème actuellement en production
-- [ ] Avant publication, une modale de confirmation est affichée : "Ce changement sera visible immédiatement par tous vos clients. Confirmer la publication ?"
-- [ ] Après confirmation, le thème est appliqué en production en moins de 5 secondes
+- [x] Un bouton "Publier ce thème" est visible uniquement si le thème prévisualisé est différent du thème actuellement en production
+- [x] Avant publication, une modale de confirmation est affichée : "Ce changement sera visible immédiatement par tous vos clients. Confirmer la publication ?"
+- [x] Après confirmation, le thème est appliqué en production en moins de 5 secondes
 - [ ] Un message de succès confirme la publication avec la date et l'heure
 
 **Historique et retour arrière :**
-- [ ] Un journal des 5 dernières publications de thème est accessible (thème publié, date, heure, auteur de l'action)
-- [ ] Un bouton "Rétablir ce thème" permet de republier un thème précédent en un clic, avec la même modale de confirmation
-- [ ] Le thème par défaut (Clair) peut être rétabli à tout moment depuis l'historique
+- [x] Un journal des 5 dernières publications de thème est accessible (thème publié, date, heure, auteur de l'action)
+- [x] Un bouton "Rétablir ce thème" permet de republier un thème précédent en un clic, avec la même modale de confirmation
+- [x] Le thème par défaut (Clair) peut être rétabli à tout moment depuis l'historique
 
 ### Règles métier
 

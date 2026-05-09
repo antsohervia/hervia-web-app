@@ -43,19 +43,19 @@ Dès l'activation de son espace, le transitaire dispose d'une liste de statuts p
 ### Critères d'acceptation
 
 **Création d'un statut :**
-- [ ] Un bouton "Ajouter un statut" permet de créer un nouveau statut
-- [ ] Champs obligatoires : libellé du statut (max 60 caractères), couleur associée (color picker)
+- [x] Un bouton "Ajouter un statut" permet de créer un nouveau statut
+- [x] Champs obligatoires : libellé du statut (max 60 caractères), couleur associée (color picker)
 - [ ] Champs optionnels : icône (sélection depuis une bibliothèque prédéfinie de 30+ icônes), description interne (non visible par le client, max 200 caractères)
-- [ ] Un aperçu du rendu du statut (couleur + icône + libellé) est affiché avant confirmation
+- [x] Un aperçu du rendu du statut (couleur + icône + libellé) est affiché avant confirmation
 
 **Modification d'un statut existant :**
-- [ ] Tous les champs d'un statut sont modifiables à tout moment
+- [x] Tous les champs d'un statut sont modifiables à tout moment
 - [ ] Si le statut est actuellement utilisé sur des colis actifs, un avertissement est affiché : "Ce statut est utilisé sur X colis en cours. La modification s'appliquera immédiatement."
 
 **Suppression d'un statut :**
-- [ ] Un statut peut être supprimé uniquement s'il n'est plus utilisé sur aucun colis actif
-- [ ] Si le statut est encore utilisé, la suppression est bloquée avec un message indiquant les colis concernés
-- [ ] Il faut conserver un minimum de 2 statuts actifs dans la liste
+- [x] Un statut peut être supprimé uniquement s'il n'est plus utilisé sur aucun colis actif
+- [x] Si le statut est encore utilisé, la suppression est bloquée avec un message indiquant les colis concernés
+- [x] Il faut conserver un minimum de 2 statuts actifs dans la liste
 
 **Organisation :**
 - [ ] Les statuts sont réordonnables par glisser-déposer (drag & drop) pour définir l'ordre chronologique
@@ -94,14 +94,14 @@ Les opérateurs du transitaire (équipe logistique, customer service) utilisent 
 
 ### Critères d'acceptation
 
-- [ ] Depuis la liste des colis ou la fiche d'un colis, un bouton "Changer le statut" est accessible
+- [x] Depuis la liste des colis ou la fiche d'un colis, un bouton "Changer le statut" est accessible
 - [ ] Une liste déroulante affiche les statuts disponibles (définis en US-E2.1), avec la couleur et l'icône associées
-- [ ] Un champ texte optionnel "Commentaire" permet d'ajouter un message visible du client (ex. "Votre colis est en attente de dédouanement suite à un contrôle douanier.", max 500 caractères)
-- [ ] Un champ de date/heure optionnel permet de dater précisément le changement (par défaut : date et heure actuelles)
-- [ ] Une confirmation est demandée avant application (modale de confirmation avec résumé)
-- [ ] Après confirmation, le statut est mis à jour immédiatement sur la fiche colis et dans l'espace client
+- [x] Un champ texte optionnel "Commentaire" permet d'ajouter un message visible du client (ex. "Votre colis est en attente de dédouanement suite à un contrôle douanier.", max 500 caractères)
+- [x] Un champ de date/heure optionnel permet de dater précisément le changement (par défaut : date et heure actuelles)
+- [x] Une confirmation est demandée avant application (modale de confirmation avec résumé)
+- [x] Après confirmation, le statut est mis à jour immédiatement sur la fiche colis et dans l'espace client
 - [ ] Une notification est automatiquement déclenchée vers le client concerné (voir Épic C4)
-- [ ] Le changement est inscrit dans l'historique de la fiche colis avec : nouveau statut, commentaire, date/heure, nom de l'opérateur qui a effectué le changement
+- [x] Le changement est inscrit dans l'historique de la fiche colis avec : nouveau statut, commentaire, date/heure, nom de l'opérateur qui a effectué le changement
 
 ### Règles métier
 
@@ -135,10 +135,10 @@ Un colis est créé par le transitaire (pas par le client seul). Le transitaire 
 
 ### Critères d'acceptation
 
-- [ ] Un formulaire de création de colis est accessible depuis l'espace entreprise
-- [ ] Champs obligatoires : numéro de tracking (unique, max 50 caractères), client associé (sélection depuis la liste des clients), statut initial, date de création de l'expédition
-- [ ] Champs optionnels : description de la marchandise (max 200 caractères), poids (kg), volume (m³), estimation de prix (montant + devise), pays d'origine, pays de destination, date de livraison estimée
-- [ ] Le numéro de tracking est vérifié pour l'unicité dans le tenant
+- [x] Un formulaire de création de colis est accessible depuis l'espace entreprise
+- [x] Champs obligatoires : numéro de tracking (unique, max 50 caractères), client associé (sélection depuis la liste des clients), statut initial, date de création de l'expédition
+- [x] Champs optionnels : description de la marchandise (max 200 caractères), poids (kg), volume (m³), estimation de prix (montant + devise), pays d'origine, pays de destination, date de livraison estimée
+- [x] Le numéro de tracking est vérifié pour l'unicité dans le tenant
 - [ ] Le colis est immédiatement visible dans l'espace client du client associé
 - [ ] Une notification est envoyée au client pour l'informer qu'un nouveau colis a été enregistré à son nom
 

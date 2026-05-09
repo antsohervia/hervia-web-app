@@ -13,6 +13,7 @@ L'expérience d'authentification doit être simple, rassurante, et porter la mar
 
 **Enjeux :**
 - Offrir une connexion simple et sans friction pour des clients qui ne sont pas nécessairement à l'aise avec le numérique
+- Permettre au client de créer son compte de manière autonome depuis le sous-domaine de son transitaire et d'accéder immédiatement à son espace après activation par email
 - Garantir la sécurité et l'isolation des données (un client ne peut jamais voir les colis d'un autre client)
 - Permettre au client de récupérer l'accès en cas d'oubli de mot de passe, de manière autonome
 
@@ -26,11 +27,11 @@ L'expérience d'authentification doit être simple, rassurante, et porter la mar
 > En tant que client, je veux me connecter à mon espace personnel via l'adresse de mon transitaire avec mon email et mon mot de passe, afin d'accéder de manière sécurisée à mes informations de suivi.
 
 ### Contexte
-La page de connexion est le premier contact visuel du client avec la plateforme. Elle doit afficher le logo et les couleurs du transitaire pour rassurer le client qu'il est au bon endroit. La connexion se fait avec l'email et le mot de passe définis lors de la création de compte.
+La page de connexion est le premier contact visuel du client avec la plateforme. Elle doit afficher le logo et les couleurs du transitaire pour rassurer le client qu'il est au bon endroit. La connexion se fait avec l'email et le mot de passe définis lors de l'auto-inscription (US-C1.3) ou reçus à la création du compte par le transitaire (US-E3.2).
 
 ### Critères d'acceptation
 
-- [ ] La page de connexion (`[sous-domaine].trackapp.com/login`) affiche : le logo du transitaire, un titre de bienvenue avec le nom du transitaire, un formulaire email + mot de passe
+- [ ] La page de connexion (`[sous-domaine].trackapp.com/login`) affiche : le logo du transitaire, un titre de bienvenue avec le nom du transitaire, un formulaire email + mot de passe, un lien "Créer un compte" (vers le formulaire d'auto-inscription — US-C1.3) et un lien "Mot de passe oublié ?"
 - [ ] La connexion est validée côté serveur — un token de session est émis en cas de succès
 - [ ] En cas d'échec (mauvais identifiants) : un message d'erreur générique est affiché ("Email ou mot de passe incorrect") sans préciser lequel est faux
 - [ ] Après 5 tentatives échouées consécutives sur le même compte, le compte est temporairement bloqué pendant 15 minutes
@@ -54,7 +55,7 @@ La page de connexion est le premier contact visuel du client avec la plateforme.
 
 ### Dépendances
 
-- US-E3.2 (le compte client doit avoir été créé par le transitaire)
+- Le compte client doit exister, soit via auto-inscription (US-C1.3), soit via création par le transitaire (US-E3.2)
 - US-E1.1 / US-E1.2 (la marque blanche doit être configurée pour l'affichage)
 
 ---
@@ -67,7 +68,7 @@ La page de connexion est le premier contact visuel du client avec la plateforme.
 > En tant que client, je veux pouvoir réinitialiser mon mot de passe de manière autonome depuis la page de connexion, afin de retrouver l'accès à mon espace sans avoir à contacter mon transitaire.
 
 ### Contexte
-Les clients reçoivent un mot de passe temporaire lors de la création de leur compte. Beaucoup oublient de le changer ou l'oublient après une période d'inactivité. Un processus de réinitialisation autonome est indispensable pour ne pas surcharger le service client du transitaire.
+Que le client ait choisi son mot de passe lors de l'auto-inscription (US-C1.3) ou reçu un mot de passe temporaire à la création de son compte par le transitaire (US-E3.2), il peut l'oublier après une période d'inactivité. Un processus de réinitialisation autonome est indispensable pour ne pas surcharger le service client du transitaire.
 
 ### Critères d'acceptation
 
@@ -99,3 +100,53 @@ Les clients reçoivent un mot de passe temporaire lors de la création de leur c
 
 - US-C1.1 (fait partie du même flux d'authentification)
 - US-E1.1 (le logo du transitaire doit être configuré pour les emails)
+
+---
+
+## US-C1.3 — S'inscrire et activer son compte
+
+**Priorité :** Must Have
+
+### User story
+> En tant qu'importateur ou exportateur, je veux pouvoir créer moi-même mon compte client depuis le sous-domaine de mon transitaire et y accéder immédiatement après activation par email, afin de ne pas dépendre du transitaire pour démarrer le suivi de mes marchandises.
+
+### Contexte
+Pour fluidifier l'enrôlement, le client peut s'inscrire de manière autonome depuis la page de connexion du sous-domaine de son transitaire. Une fois le formulaire soumis, un email d'activation lui est envoyé. Dès qu'il clique sur le lien d'activation, son compte est actif et il accède directement à son espace client (auto-connexion). Cela évite la friction d'un appel ou email au transitaire pour obtenir un accès, tout en préservant la sécurité par la vérification de l'adresse email.
+
+### Critères d'acceptation
+
+- [ ] Un lien "Créer un compte" est disponible depuis la page de connexion (`[sous-domaine].trackapp.com/login`) et redirige vers `[sous-domaine].trackapp.com/signup`
+- [ ] La page d'inscription affiche le logo, les couleurs et le nom du transitaire (marque blanche)
+- [ ] Le formulaire demande : prénom + nom (ou raison sociale), adresse email, mot de passe + confirmation, rôle (importateur / exportateur), case "j'accepte les CGU"
+- [ ] Champs optionnels : numéro de téléphone (international), nom de la société
+- [ ] Le mot de passe choisi doit respecter : minimum 8 caractères, au moins 1 chiffre, au moins 1 lettre (mêmes règles que US-C1.2)
+- [ ] L'email est vérifié pour l'unicité dans le tenant (un email ne peut pas déjà être associé à un client du même transitaire)
+- [ ] À la soumission du formulaire, le compte est créé en statut `pending_activation` (non connectable)
+- [ ] Un email d'activation est envoyé dans les 2 minutes, avec le logo et le nom du transitaire, et un lien d'activation unique valable 24 heures
+- [ ] Au clic sur le lien d'activation, le compte passe en statut `active`, le client est automatiquement connecté et redirigé vers son tableau de bord (espace client)
+- [ ] Une notification (in-app + email récapitulatif) est envoyée au transitaire pour qu'il puisse rapprocher le compte de ses dossiers
+- [ ] La page d'inscription est responsive et utilisable sur mobile (écran 320px minimum)
+
+### Règles métier
+
+- L'inscription se fait toujours dans le contexte d'un tenant : un compte est lié à un transitaire ; un client qui veut accéder à plusieurs transitaires doit créer un compte sur chaque sous-domaine
+- Un compte non activé après 24 heures peut être recréé avec le même email — le compte précédent (`pending_activation`) est invalidé et remplacé
+- Le compte créé par auto-inscription est marqué comme tel dans la fiche client côté transitaire (badge "Auto-inscrit") pour le distinguer des comptes créés manuellement (US-E3.2)
+- Aucun changement de mot de passe n'est forcé après activation : le client a déjà choisi son mot de passe à l'inscription
+- L'email d'activation porte la marque blanche du transitaire (logo, couleur, nom)
+- L'auto-inscription pourra être désactivée par le transitaire depuis son espace d'administration en V2 — par défaut, elle est activée pour tous les tenants
+
+### Cas limites
+
+- Email déjà utilisé dans le tenant (compte existant, actif ou non) → la confirmation à l'écran reste générique ("Si cette adresse n'est pas déjà inscrite, vous recevrez un email d'activation"), et un email d'information est envoyé à l'adresse pour signaler la tentative (sécurité : ne pas révéler l'existence du compte)
+- Lien d'activation expiré (> 24h) → page d'erreur claire avec un bouton "Renvoyer un email d'activation"
+- Lien d'activation déjà utilisé → page d'erreur claire qui invite à se connecter directement
+- Tentative d'inscription avec un email déjà utilisé chez un autre tenant → autorisée (les tenants sont isolés)
+- Échec de l'envoi de l'email d'activation → message d'erreur invitant à réessayer ; le compte `pending_activation` est purgé si aucun email n'a pu partir
+- CGU non cochées → soumission bloquée avec message d'erreur sur la case
+- Mot de passe trop faible → validation en temps réel sur le champ avec indication des règles non respectées
+
+### Dépendances
+
+- US-E1.1 / US-E1.2 (la marque blanche doit être configurée pour la page d'inscription et l'email d'activation)
+- Conditionne US-C1.1 (un compte auto-inscrit peut ensuite se reconnecter normalement)
