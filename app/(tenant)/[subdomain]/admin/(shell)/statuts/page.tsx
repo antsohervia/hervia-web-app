@@ -12,9 +12,9 @@ export default async function StatusesPage({ params }: Props) {
   const statuses = await listStatuses(session.tenant.id);
 
   return (
-    <div className="p-8 max-w-5xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold">Statuts</h1>
+        <h1 className="text-xl sm:text-2xl font-semibold">Statuts</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Configurez les étapes du cycle de vie de vos colis.
         </p>

@@ -44,7 +44,7 @@ export default async function ParcelDetailPage({ params }: Props) {
   const currentStatus = statuses.find((s) => s.id === parcel.status_id) ?? null;
 
   return (
-    <div className="p-8 max-w-5xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-4 sm:space-y-6">
       <div className="flex items-center gap-2">
         <Button asChild variant="ghost" size="sm">
           <Link href="/admin/colis">
@@ -54,9 +54,11 @@ export default async function ParcelDetailPage({ params }: Props) {
         </Button>
       </div>
 
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-2xl font-semibold">{parcel.reference}</h1>
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-semibold break-words">
+            {parcel.reference}
+          </h1>
           <p className="text-sm text-muted-foreground mt-1">
             Client : {parcel.client_name ?? "non assigné"} · Créé le{" "}
             {dateFmt.format(new Date(parcel.created_at))}
@@ -72,7 +74,7 @@ export default async function ParcelDetailPage({ params }: Props) {
         ) : null}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         <Card className="md:col-span-1">
           <CardHeader>
             <CardTitle>Informations</CardTitle>
@@ -123,7 +125,7 @@ export default async function ParcelDetailPage({ params }: Props) {
           </CardContent>
         </Card>
 
-        <div className="md:col-span-2 space-y-6">
+        <div className="md:col-span-2 space-y-4 sm:space-y-6">
           <ChangeStatusCard
             subdomain={subdomain}
             parcelId={parcel.id}

@@ -20,9 +20,9 @@ export default async function AppearancePage({ params }: Props) {
   }
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-8">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6 lg:space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold">Apparence</h1>
+        <h1 className="text-xl sm:text-2xl font-semibold">Apparence</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Personnalisez votre espace client : logo, thème et couleurs de marque.
         </p>

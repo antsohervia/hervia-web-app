@@ -29,15 +29,17 @@ export default async function TenantAdminHome({ params }: Props) {
   ]);
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-8">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6 lg:space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold">Bienvenue, {session.tenant.name}</h1>
+        <h1 className="text-xl sm:text-2xl font-semibold">
+          Bienvenue, {session.tenant.name}
+        </h1>
         <p className="text-sm text-muted-foreground mt-1">
           Vue synthétique de votre activité.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -70,7 +72,7 @@ export default async function TenantAdminHome({ params }: Props) {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-sm">
         <Link
           href="/admin/colis"
           className="rounded-lg border bg-card p-5 hover:bg-accent transition"

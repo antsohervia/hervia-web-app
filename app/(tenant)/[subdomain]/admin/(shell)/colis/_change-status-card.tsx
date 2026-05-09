@@ -136,6 +136,7 @@ export function ChangeStatusCard({
             <AlertDialogTrigger asChild>
               <Button
                 type="button"
+                className="w-full sm:w-auto"
                 disabled={!isChanging || (isFinal && !canReopen)}
               >
                 <Send className="size-4 mr-1" />

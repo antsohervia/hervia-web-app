@@ -83,14 +83,14 @@ export function StatusesManager({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <p className="text-sm text-muted-foreground">
           {statuses.length} statut{statuses.length > 1 ? "s" : ""} ·
-          glissez-déposez ou utilisez les flèches pour réordonner.
+          utilisez les flèches pour réordonner.
         </p>
         <Dialog open={creating} onOpenChange={setCreating}>
           <DialogTrigger asChild>
-            <Button>
+            <Button className="w-full sm:w-auto">
               <Plus className="size-4 mr-1" />
               Ajouter un statut
             </Button>
@@ -119,24 +119,27 @@ export function StatusesManager({
         {statuses.map((s, i) => (
           <div
             key={s.id}
-            className="p-3 flex items-center gap-3"
+            className="p-3 flex items-center gap-2 sm:gap-3"
           >
             <div className="flex flex-col">
               <button
                 type="button"
                 onClick={() => move(i, -1)}
                 disabled={i === 0 || pending}
-                className="text-muted-foreground hover:text-foreground disabled:opacity-30 text-xs"
+                className="size-8 sm:size-6 inline-flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30 text-sm"
                 aria-label="Monter"
               >
                 ▲
               </button>
-              <GripVertical className="size-4 text-muted-foreground my-0.5" />
+              <GripVertical
+                className="size-4 text-muted-foreground mx-auto my-0.5 hidden sm:block"
+                aria-hidden
+              />
               <button
                 type="button"
                 onClick={() => move(i, 1)}
                 disabled={i === statuses.length - 1 || pending}
-                className="text-muted-foreground hover:text-foreground disabled:opacity-30 text-xs"
+                className="size-8 sm:size-6 inline-flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30 text-sm"
                 aria-label="Descendre"
               >
                 ▼
@@ -173,7 +176,7 @@ export function StatusesManager({
                 onOpenChange={(o) => setEditing(o ? s : null)}
               >
                 <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="icon" aria-label="Modifier">
                     <Pencil className="size-4" />
                   </Button>
                 </DialogTrigger>
@@ -196,7 +199,8 @@ export function StatusesManager({
                 <AlertDialogTrigger asChild>
                   <Button
                     variant="ghost"
-                    size="sm"
+                    size="icon"
+                    aria-label="Supprimer"
                     disabled={
                       statuses.length <= MIN_STATUSES || s.usage_count > 0
                     }

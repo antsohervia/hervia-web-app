@@ -45,7 +45,7 @@ export function CreateParcelForm({
   }, [state]);
 
   return (
-    <form action={action} className="space-y-5 rounded-lg border bg-card p-6">
+    <form action={action} className="space-y-5 rounded-lg border bg-card p-4 sm:p-6">
       <input type="hidden" name="subdomain" value={subdomain} />
 
       {state?.errors?._form?.[0] ? (
@@ -222,8 +222,8 @@ export function CreateParcelForm({
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-2 pt-2">
-        <Button type="submit" disabled={pending}>
+      <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 pt-2">
+        <Button type="submit" disabled={pending} className="w-full sm:w-auto">
           {pending ? "Création..." : "Créer le colis"}
         </Button>
       </div>

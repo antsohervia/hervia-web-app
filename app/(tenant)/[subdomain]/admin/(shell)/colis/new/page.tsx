@@ -21,7 +21,7 @@ export default async function NewParcelPage({ params }: Props) {
   const initial = statuses.find((s) => s.type === "initial") ?? statuses[0];
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-3xl mx-auto space-y-4 sm:space-y-6">
       <div className="flex items-center gap-2">
         <Button asChild variant="ghost" size="sm">
           <Link href="/admin/colis">
@@ -31,7 +31,7 @@ export default async function NewParcelPage({ params }: Props) {
         </Button>
       </div>
       <div>
-        <h1 className="text-2xl font-semibold">Nouveau colis</h1>
+        <h1 className="text-xl sm:text-2xl font-semibold">Nouveau colis</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Renseignez les informations de l&apos;expédition.
         </p>
