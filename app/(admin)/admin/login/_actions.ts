@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { ADMIN_ROLES } from "@/lib/auth/roles";
+import { setRememberCookie, clearRememberCookie } from "@/lib/auth/remember-me";
 
 export type LoginState = { error?: string };
 
@@ -12,9 +13,12 @@ export async function loginAction(
 ): Promise<LoginState> {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
+  const rememberMe = formData.get("remember") === "on";
   if (!email || !password) {
     return { error: "Email et mot de passe requis" };
   }
+
+  await setRememberCookie(rememberMe);
 
   const supabase = await createSupabaseServer();
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -40,5 +44,6 @@ export async function loginAction(
 export async function logoutAction(): Promise<void> {
   const supabase = await createSupabaseServer();
   await supabase.auth.signOut();
+  await clearRememberCookie();
   redirect("/admin/login");
 }
