@@ -101,7 +101,7 @@ export type ListClientParcelsResult = {
 export async function listClientParcels(
   clientId: string,
   tenantId: string,
-  params: ListClientParcelsParams = {},
+  params: ListClientParcelsParams & { locale?: string } = {},
 ): Promise<ListClientParcelsResult> {
   const admin = createSupabaseAdmin();
   const page = Math.max(1, params.page ?? 1);
@@ -112,8 +112,8 @@ export async function listClientParcels(
     .select(
       `id, reference, description, status_id, destination_country,
        estimated_delivery_at, shipped_at, created_at, updated_at,
-       parcel_statuses!inner(label, color, type),
-       transport_modes(label)`,
+       parcel_statuses!inner(label, label_translations, color, type),
+       transport_modes(label, label_translations)`,
       { count: "exact" },
     )
     .eq("tenant_id", tenantId)
@@ -138,26 +138,34 @@ export async function listClientParcels(
   const { data, count, error } = await query;
   if (error) throw new Error(error.message);
 
+  const locale = params.locale;
   const rows: ClientParcelRow[] = (data ?? []).map((r) => {
     const status = pickOne<{
       label: string;
+      label_translations: Record<string, string>;
       color: string;
       type: ParcelStatusType;
     }>(r.parcel_statuses);
-    const mode = pickOne<{ label: string }>(r.transport_modes);
+    const mode = pickOne<{ label: string; label_translations: Record<string, string> }>(r.transport_modes);
+    const statusLabel = status
+      ? (locale && status.label_translations?.[locale]) || status.label
+      : null;
+    const modeLabel = mode
+      ? (locale && mode.label_translations?.[locale]) || mode.label
+      : null;
     return {
       id: r.id as string,
       reference: r.reference as string,
       description: (r.description as string | null) ?? null,
       status_id: (r.status_id as string | null) ?? null,
-      status_label: status?.label ?? null,
+      status_label: statusLabel,
       status_color: status?.color ?? null,
       status_type: status?.type ?? null,
       destination_country: (r.destination_country as string | null) ?? null,
       estimated_delivery_at:
         (r.estimated_delivery_at as string | null) ?? null,
       shipped_at: (r.shipped_at as string | null) ?? null,
-      transport_mode_label: mode?.label ?? null,
+      transport_mode_label: modeLabel,
       created_at: r.created_at as string,
       updated_at: r.updated_at as string,
     };
@@ -224,6 +232,7 @@ export async function getClientParcelDetail(
   parcelId: string,
   clientId: string,
   tenantId: string,
+  locale?: string,
 ): Promise<ClientParcelDetail | null> {
   const admin = createSupabaseAdmin();
   const { data } = await admin
@@ -232,14 +241,17 @@ export async function getClientParcelDetail(
       `id, reference, description, status_id, estimated_price, currency,
        origin_country, destination_country, shipped_at, estimated_delivery_at,
        created_at, updated_at,
-       transport_modes(label)`,
+       transport_modes(label, label_translations)`,
     )
     .eq("tenant_id", tenantId)
     .eq("client_id", clientId)
     .eq("id", parcelId)
     .maybeSingle();
   if (!data) return null;
-  const mode = pickOne<{ label: string }>(data.transport_modes);
+  const mode = pickOne<{ label: string; label_translations: Record<string, string> }>(data.transport_modes);
+  const modeLabel = mode
+    ? (locale && mode.label_translations?.[locale]) || mode.label
+    : null;
   return {
     id: data.id as string,
     reference: data.reference as string,
@@ -252,7 +264,7 @@ export async function getClientParcelDetail(
     shipped_at: (data.shipped_at as string | null) ?? null,
     estimated_delivery_at:
       (data.estimated_delivery_at as string | null) ?? null,
-    transport_mode_label: mode?.label ?? null,
+    transport_mode_label: modeLabel,
     created_at: data.created_at as string,
     updated_at: data.updated_at as string,
   };

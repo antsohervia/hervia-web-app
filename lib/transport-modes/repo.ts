@@ -19,17 +19,19 @@ export type TransportMode = {
   tenant_id: string;
   code: string;
   label: string;
+  label_translations: Record<string, string>;
   position: number;
   usage_count: number;
 };
 
 export async function listTransportModes(
   tenantId: string,
+  locale?: string,
 ): Promise<TransportMode[]> {
   const admin = createSupabaseAdmin();
   const { data, error } = await admin
     .from("transport_modes")
-    .select("id, tenant_id, code, label, position")
+    .select("id, tenant_id, code, label, label_translations, position")
     .eq("tenant_id", tenantId)
     .order("position", { ascending: true });
   if (error) throw new Error(error.message);
@@ -53,7 +55,15 @@ export async function listTransportModes(
     }
   }
 
-  return modes.map((m) => ({ ...m, usage_count: usage.get(m.id) ?? 0 }));
+  return modes.map((m) => {
+    const translations = (m.label_translations ?? {}) as Record<string, string>;
+    return {
+      ...m,
+      label: locale && translations[locale] ? translations[locale] : m.label,
+      label_translations: translations,
+      usage_count: usage.get(m.id) ?? 0,
+    };
+  });
 }
 
 export async function getTransportMode(
@@ -140,6 +150,19 @@ export async function deleteTransportMode(
     .eq("tenant_id", tenantId)
     .eq("id", id);
   if (error) throw new Error(error.message);
+}
+
+export async function updateTransportModeLabelTranslations(
+  tenantId: string,
+  id: string,
+  translations: Record<string, string>,
+): Promise<void> {
+  const admin = createSupabaseAdmin();
+  await admin
+    .from("transport_modes")
+    .update({ label_translations: translations })
+    .eq("tenant_id", tenantId)
+    .eq("id", id);
 }
 
 export async function reorderTransportModes(
