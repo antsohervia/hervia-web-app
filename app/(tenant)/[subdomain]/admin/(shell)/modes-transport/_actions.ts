@@ -19,7 +19,9 @@ import {
   updateTransportMode,
   updateTransportModeLabelTranslations,
 } from "@/lib/transport-modes/repo";
+import { cookies } from "next/headers";
 import { autoTranslateLabel } from "@/lib/i18n/auto-translate";
+import { isValidLocale, defaultLocale } from "@/lib/i18n/config";
 
 export async function createTransportModeAction(
   _prev: TransportModeFormState | undefined,
@@ -57,8 +59,12 @@ export async function createTransportModeAction(
     label: parsed.data.label,
   });
 
+  const cookieStore = await cookies();
+  const rawLocale = cookieStore.get("NEXT_LOCALE")?.value;
+  const sourceLocale = isValidLocale(rawLocale) ? rawLocale : defaultLocale;
+
   if (createdId) {
-    autoTranslateLabel(parsed.data.label).then((translations) => {
+    autoTranslateLabel(parsed.data.label, sourceLocale).then((translations) => {
       if (Object.keys(translations).length > 0) {
         updateTransportModeLabelTranslations(
           session.tenant.id,
@@ -110,7 +116,11 @@ export async function updateTransportModeAction(
     code: parsed.data.code,
   });
 
-  autoTranslateLabel(parsed.data.label).then((translations) => {
+  const cookieStore2 = await cookies();
+  const rawLocale2 = cookieStore2.get("NEXT_LOCALE")?.value;
+  const sourceLocale2 = isValidLocale(rawLocale2) ? rawLocale2 : defaultLocale;
+
+  autoTranslateLabel(parsed.data.label, sourceLocale2).then((translations) => {
     if (Object.keys(translations).length > 0) {
       updateTransportModeLabelTranslations(
         session.tenant.id,

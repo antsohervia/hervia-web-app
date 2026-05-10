@@ -12,8 +12,10 @@ import {
   UpdateStatusSchema,
   type StatusFormState,
 } from "@/lib/validations/parcel-status";
+import { cookies } from "next/headers";
 import { autoTranslateLabel } from "@/lib/i18n/auto-translate";
 import { updateStatusLabelTranslations } from "@/lib/parcels/repo";
+import { isValidLocale, defaultLocale } from "@/lib/i18n/config";
 
 const MIN_STATUSES = 2;
 
@@ -88,8 +90,12 @@ export async function createStatusAction(
     .eq("code", parsed.data.code)
     .maybeSingle();
 
+  const cookieStore = await cookies();
+  const rawLocale = cookieStore.get("NEXT_LOCALE")?.value;
+  const sourceLocale = isValidLocale(rawLocale) ? rawLocale : defaultLocale;
+
   if (created?.id) {
-    autoTranslateLabel(parsed.data.label).then((translations) => {
+    autoTranslateLabel(parsed.data.label, sourceLocale).then((translations) => {
       if (Object.keys(translations).length > 0) {
         updateStatusLabelTranslations(
           session.tenant.id,
@@ -177,7 +183,11 @@ export async function updateStatusAction(
     code: parsed.data.code,
   });
 
-  autoTranslateLabel(parsed.data.label).then((translations) => {
+  const cookieStore2 = await cookies();
+  const rawLocale2 = cookieStore2.get("NEXT_LOCALE")?.value;
+  const sourceLocale2 = isValidLocale(rawLocale2) ? rawLocale2 : defaultLocale;
+
+  autoTranslateLabel(parsed.data.label, sourceLocale2).then((translations) => {
     if (Object.keys(translations).length > 0) {
       updateStatusLabelTranslations(
         session.tenant.id,
