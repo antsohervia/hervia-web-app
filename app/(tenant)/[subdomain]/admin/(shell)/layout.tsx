@@ -9,7 +9,7 @@ import {
   Languages,
 } from "lucide-react";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, getTranslations } from "next-intl/server";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
 import { LogoutButton } from "./_logout-button";
 import { MobileNav } from "./_mobile-nav";
@@ -24,8 +24,11 @@ export default async function TenantAdminShellLayout({
 }) {
   const { subdomain } = await params;
   const session = await requireTenantSession(subdomain);
-  const t = await getTranslations();
-  const messages = await getMessages();
+  const [t, locale, messages] = await Promise.all([
+    getTranslations(),
+    getLocale(),
+    getMessages(),
+  ]);
 
   const navItems = (
     <>
@@ -92,7 +95,7 @@ export default async function TenantAdminShellLayout({
   );
 
   return (
-    <NextIntlClientProvider messages={messages}>
+    <NextIntlClientProvider locale={locale} messages={messages}>
       <div className="min-h-screen lg:flex bg-muted/30">
         <MobileNav tenantName={session.tenant.name} logoUrl={session.tenant.logo_url}>
           {sessionInfo}

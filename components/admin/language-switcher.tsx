@@ -1,7 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Globe } from "lucide-react";
 import { locales, type Locale } from "@/lib/i18n/config";
@@ -12,17 +11,17 @@ const FLAG: Record<Locale, string> = { fr: "🇫🇷", en: "🇬🇧", zh: "🇨
 export function LanguageSwitcher() {
   const t = useTranslations("language");
   const locale = useLocale() as Locale;
-  const router = useRouter();
-  const [pending, startTransition] = useTransition();
+  const [pending, setPending] = useState(false);
 
   async function switchLocale(next: Locale) {
-    if (next === locale) return;
+    if (next === locale || pending) return;
+    setPending(true);
     await fetch("/api/locale", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ locale: next }),
     });
-    startTransition(() => router.refresh());
+    window.location.reload();
   }
 
   return (
