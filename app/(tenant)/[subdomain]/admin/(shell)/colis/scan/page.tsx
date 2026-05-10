@@ -1,3 +1,4 @@
+import { getLocale } from "next-intl/server";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
 import { listStatuses, listTransportModes } from "@/lib/parcels/repo";
 import { ScanClient } from "./_scan-client";
@@ -8,10 +9,13 @@ type Props = { params: Promise<{ subdomain: string }> };
 
 export default async function ScanPage({ params }: Props) {
   const { subdomain } = await params;
-  const session = await requireTenantSession(subdomain);
+  const [session, locale] = await Promise.all([
+    requireTenantSession(subdomain),
+    getLocale(),
+  ]);
   const [statuses, transportModes] = await Promise.all([
-    listStatuses(session.tenant.id),
-    listTransportModes(session.tenant.id),
+    listStatuses(session.tenant.id, locale),
+    listTransportModes(session.tenant.id, locale),
   ]);
 
   return (

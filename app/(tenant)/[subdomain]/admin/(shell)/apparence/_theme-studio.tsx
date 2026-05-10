@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
   AlertTriangle,
@@ -106,6 +107,8 @@ export function ThemeStudio({
   currentPrimary,
   currentSecondary,
 }: Props) {
+  const t = useTranslations("appearance.theme");
+  const tCommon = useTranslations("common");
   const [theme, setTheme] = useState<TenantTheme>(currentTheme);
   const [primary, setPrimary] = useState(currentPrimary);
   const [secondary, setSecondary] = useState(currentSecondary ?? "");
@@ -144,15 +147,15 @@ export function ThemeStudio({
     startTransition(async () => {
       const res = await publishThemeAction(undefined, fd);
       if (res?.ok) {
-        toast.success("Thème publié");
+        toast.success(t("published"));
         setConfirmOpen(false);
       } else if (res?.errors?._form?.[0]) {
         toast.error(res.errors._form[0]);
       } else if (res?.errors) {
         const first = Object.values(res.errors).flat()[0];
-        toast.error(first ?? "Erreur de publication");
+        toast.error(first ?? t("publishError"));
       } else {
-        toast.error("Erreur de publication");
+        toast.error(t("publishError"));
       }
     });
   }
@@ -160,22 +163,20 @@ export function ThemeStudio({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Thème et couleurs</CardTitle>
-        <CardDescription>
-          Trois thèmes prédéfinis. La couleur de marque se superpose au thème.
-        </CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {TENANT_THEMES.map((t) => {
-            const isCurrent = t === currentTheme;
-            const isSelected = t === theme;
-            const tp = THEME_PALETTE[t];
+          {TENANT_THEMES.map((th) => {
+            const isCurrent = th === currentTheme;
+            const isSelected = th === theme;
+            const tp = THEME_PALETTE[th];
             return (
               <button
-                key={t}
+                key={th}
                 type="button"
-                onClick={() => setTheme(t)}
+                onClick={() => setTheme(th)}
                 className={`text-left rounded-lg border-2 transition p-3 ${
                   isSelected
                     ? "border-primary"
@@ -197,19 +198,19 @@ export function ThemeStudio({
                       color: contrastWith(primary),
                     }}
                   >
-                    Bouton
+                    {t("themeButton")}
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">{TENANT_THEME_LABELS[t]}</span>
+                  <span className="font-medium">{TENANT_THEME_LABELS[th]}</span>
                   {isCurrent ? (
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700">
-                      Actif
+                      {t("active")}
                     </span>
                   ) : null}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {TENANT_THEME_DESCRIPTIONS[t]}
+                  {TENANT_THEME_DESCRIPTIONS[th]}
                 </p>
               </button>
             );
@@ -219,7 +220,7 @@ export function ThemeStudio({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="primaryColor">
-              Couleur principale <span className="text-destructive">*</span>
+              {t("primaryColor")} <span className="text-destructive">*</span>
             </Label>
             <div className="flex items-center gap-2">
               <input
@@ -227,25 +228,25 @@ export function ThemeStudio({
                 value={primary}
                 onChange={(e) => setPrimary(e.target.value.toUpperCase())}
                 className="h-9 w-12 rounded-md border cursor-pointer"
-                aria-label="Sélecteur couleur principale"
+                aria-label={t("primaryPicker")}
               />
               <Input
                 id="primaryColor"
                 value={primary}
                 onChange={(e) => setPrimary(e.target.value.toUpperCase())}
-                placeholder="#1A56DB"
+                placeholder={t("colorPlaceholder")}
                 className="font-mono"
               />
             </div>
             {!primaryValid ? (
               <p className="text-xs text-destructive">
-                Format attendu : #RRGGBB
+                {t("colorFormatError")}
               </p>
             ) : null}
           </div>
           <div className="space-y-2">
             <Label htmlFor="secondaryColor">
-              Couleur secondaire (optionnelle)
+              {t("secondaryColor")}
             </Label>
             <div className="flex items-center gap-2">
               <input
@@ -253,13 +254,13 @@ export function ThemeStudio({
                 value={secondary || "#FFFFFF"}
                 onChange={(e) => setSecondary(e.target.value.toUpperCase())}
                 className="h-9 w-12 rounded-md border cursor-pointer"
-                aria-label="Sélecteur couleur secondaire"
+                aria-label={t("secondaryPicker")}
               />
               <Input
                 id="secondaryColor"
                 value={secondary}
                 onChange={(e) => setSecondary(e.target.value.toUpperCase())}
-                placeholder="laisser vide"
+                placeholder={t("colorLeaveEmpty")}
                 className="font-mono"
               />
               {secondary ? (
@@ -269,7 +270,7 @@ export function ThemeStudio({
                   type="button"
                   onClick={() => setSecondary("")}
                 >
-                  Effacer
+                  {t("clear")}
                 </Button>
               ) : null}
             </div>
@@ -278,7 +279,7 @@ export function ThemeStudio({
 
         <div>
           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-            <Label>Aperçu</Label>
+            <Label>{t("previewLabel")}</Label>
             <div className="flex flex-wrap items-center gap-2">
               <div className="inline-flex rounded-md border text-xs">
                 <button
@@ -288,7 +289,7 @@ export function ThemeStudio({
                     previewPage === "login" ? "bg-accent" : ""
                   }`}
                 >
-                  Connexion
+                  {t("loginTab")}
                 </button>
                 <button
                   type="button"
@@ -297,7 +298,7 @@ export function ThemeStudio({
                     previewPage === "dashboard" ? "bg-accent" : ""
                   }`}
                 >
-                  Tableau de bord
+                  {t("dashboardTab")}
                 </button>
               </div>
               {isSmallScreen === false ? (
@@ -309,7 +310,7 @@ export function ThemeStudio({
                       device === "desktop" ? "bg-accent" : ""
                     }`}
                   >
-                    Desktop
+                    {t("desktop")}
                   </button>
                   <button
                     type="button"
@@ -318,7 +319,7 @@ export function ThemeStudio({
                       device === "mobile" ? "bg-accent" : ""
                     }`}
                   >
-                    Mobile
+                    {t("mobile")}
                   </button>
                 </div>
               ) : null}
@@ -377,19 +378,19 @@ export function ThemeStudio({
                 className="w-full sm:w-auto"
               >
                 <Send className="size-4 mr-1" />
-                Publier ce thème
+                {t("publishBtn")}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Confirmer la publication</AlertDialogTitle>
+                <AlertDialogTitle>{t("confirmTitle")}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Ce changement sera visible immédiatement par tous vos clients.
+                  {t("confirmDesc")}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel disabled={pending}>
-                  Annuler
+                  {tCommon("cancel")}
                 </AlertDialogCancel>
                 <Button
                   type="button"
@@ -397,7 +398,7 @@ export function ThemeStudio({
                   disabled={pending}
                 >
                   <Check className="size-4 mr-1" />
-                  {pending ? "Publication..." : "Publier"}
+                  {pending ? t("publishing") : t("publish")}
                 </Button>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -405,7 +406,7 @@ export function ThemeStudio({
           {!dirty ? (
             <span className="text-xs text-muted-foreground inline-flex items-center gap-1">
               <AlertTriangle className="size-3" />
-              Aucun changement à publier
+              {t("noChanges")}
             </span>
           ) : null}
         </div>
@@ -433,6 +434,7 @@ function LoginPreview({
   secondary,
   device,
 }: PreviewProps) {
+  const t = useTranslations("appearance.theme.mock");
   const isMobile = device === "mobile";
   const primaryFg = contrastWith(primary);
   const gradient = `linear-gradient(135deg, ${primary} 0%, ${
@@ -486,20 +488,20 @@ function LoginPreview({
 
           <div className="relative space-y-3">
             <h2 className="text-lg font-semibold leading-tight">
-              Suivez vos expéditions avec {tenantName}.
+              {t("tagline", { tenantName })}
             </h2>
             <ul className="space-y-2 text-[11px]/relaxed opacity-95">
               <li className="flex items-start gap-2">
                 <Package className="size-3.5 shrink-0 mt-0.5" />
-                <span>État de chaque colis en temps réel.</span>
+                <span>{t("bullet1")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <Sparkles className="size-3.5 shrink-0 mt-0.5" />
-                <span>Mises à jour par email.</span>
+                <span>{t("bullet2")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <ShieldCheck className="size-3.5 shrink-0 mt-0.5" />
-                <span>Espace privé aux couleurs de {tenantName}.</span>
+                <span>{t("bullet3", { tenantName })}</span>
               </li>
             </ul>
           </div>
@@ -537,13 +539,13 @@ function LoginPreview({
 
           <div className="mb-4">
             <h1 className="text-base font-semibold tracking-tight">
-              Connexion à votre espace
+              {t("loginTitle")}
             </h1>
             <p
               className="text-[11px] mt-1"
               style={{ color: palette.muted }}
             >
-              Accédez au suivi de vos colis.
+              {t("loginDesc")}
             </p>
           </div>
 
@@ -556,7 +558,7 @@ function LoginPreview({
                 className="text-[10px] font-medium"
                 style={{ color: palette.text }}
               >
-                Email
+                {t("email")}
               </div>
               <div
                 className="h-7 rounded-md border px-2 flex items-center text-[11px]"
@@ -566,7 +568,7 @@ function LoginPreview({
                   color: palette.muted,
                 }}
               >
-                vous@exemple.com
+                {t("emailPlaceholder")}
               </div>
             </div>
             <div className="space-y-1">
@@ -574,7 +576,7 @@ function LoginPreview({
                 className="text-[10px] font-medium"
                 style={{ color: palette.text }}
               >
-                Mot de passe
+                {t("password")}
               </div>
               <div
                 className="h-7 rounded-md border px-2 flex items-center text-[11px] tracking-widest"
@@ -584,7 +586,7 @@ function LoginPreview({
                   color: palette.muted,
                 }}
               >
-                ••••••••
+                {t("passwordPlaceholder")}
               </div>
             </div>
             <div className="flex items-center justify-between text-[10px]">
@@ -593,13 +595,13 @@ function LoginPreview({
                   className="size-3 rounded-sm border"
                   style={{ borderColor: palette.border }}
                 />
-                <span style={{ color: palette.text }}>Se souvenir de moi</span>
+                <span style={{ color: palette.text }}>{t("remember")}</span>
               </div>
               <span
                 className="underline-offset-2"
                 style={{ color: palette.muted }}
               >
-                Mot de passe oublié ?
+                {t("forgotPassword")}
               </span>
             </div>
             <button
@@ -607,18 +609,18 @@ function LoginPreview({
               className="w-full rounded-md py-1.5 text-xs font-medium"
               style={{ background: primary, color: primaryFg }}
             >
-              Se connecter
+              {t("signIn")}
             </button>
             <p
               className="text-center text-[10px]"
               style={{ color: palette.muted }}
             >
-              Pas encore de compte ?{" "}
+              {t("noAccount")}{" "}
               <span
                 className="font-medium"
                 style={{ color: palette.text }}
               >
-                Créer un compte
+                {t("createAccount")}
               </span>
             </p>
           </div>
@@ -636,6 +638,7 @@ function DashboardPreview({
   secondary,
   device,
 }: PreviewProps) {
+  const t = useTranslations("appearance.theme.mock");
   const isMobile = device === "mobile";
   const primaryFg = contrastWith(primary);
   const secondaryFg = secondary ? contrastWith(secondary) : null;
@@ -644,23 +647,23 @@ function DashboardPreview({
     {
       ref: "FR-2026-0421",
       desc: "Marseille → Casablanca",
-      label: "En transit",
+      label: t("statusInTransit"),
       color: primary,
-      date: "Livraison estimée 15/05",
+      date: t("dateEstimated"),
     },
     {
       ref: "FR-2026-0418",
       desc: "Lyon → Dakar",
-      label: secondary ? "Express" : "En préparation",
+      label: secondary ? t("statusExpress") : t("statusInPrep"),
       color: secondary ?? palette.muted,
-      date: "Créé le 02/05",
+      date: t("dateCreated"),
     },
     {
       ref: "FR-2026-0402",
       desc: "Paris → Tunis",
-      label: "Livré",
+      label: t("statusDelivered"),
       color: "#10B981",
-      date: "Livré le 28/04",
+      date: t("dateDelivered"),
     },
   ];
 
@@ -717,18 +720,18 @@ function DashboardPreview({
               {tenantName}
             </p>
             <h1 className="text-base font-semibold tracking-tight mt-1">
-              Bonjour, Marie
+              {t("greeting")}
             </h1>
             <p
               className="text-[11px] mt-1 max-w-sm"
               style={{ color: palette.muted }}
             >
-              Vos expéditions confiées à {tenantName} et leur statut.
+              {t("subtitle", { tenantName })}
             </p>
 
             <div className={`grid grid-cols-3 gap-2 mt-3`}>
               <KpiPreview
-                label="Total"
+                label={t("kpiTotal")}
                 value={12}
                 icon={<Package className="size-3" />}
                 tint={palette.cardElevated}
@@ -737,7 +740,7 @@ function DashboardPreview({
                 muted={palette.muted}
               />
               <KpiPreview
-                label="En cours"
+                label={t("kpiOngoing")}
                 value={4}
                 icon={<PackageOpen className="size-3" />}
                 tint={`color-mix(in srgb, ${primary} 14%, ${palette.card})`}
@@ -747,7 +750,7 @@ function DashboardPreview({
                 accent={primary}
               />
               <KpiPreview
-                label="Livrées"
+                label={t("kpiDelivered")}
                 value={8}
                 icon={<CheckCircle2 className="size-3" />}
                 tint={palette.cardElevated}
@@ -761,9 +764,9 @@ function DashboardPreview({
 
         <section className="space-y-2">
           <div className="flex items-end justify-between">
-            <h2 className="text-xs font-semibold">Mes expéditions</h2>
+            <h2 className="text-xs font-semibold">{t("shipments")}</h2>
             <p className="text-[10px]" style={{ color: palette.muted }}>
-              3 expéditions
+              {t("count")}
             </p>
           </div>
 
@@ -780,14 +783,14 @@ function DashboardPreview({
               }}
             >
               <Search className="size-3" />
-              Rechercher…
+              {t("search")}
             </div>
             <button
               type="button"
               className="rounded-md px-2.5 py-1 text-[10px] font-medium"
               style={{ background: primary, color: primaryFg }}
             >
-              Filtrer
+              {t("filter")}
             </button>
           </div>
 

@@ -300,17 +300,21 @@ export type TransportMode = { id: string; label: string };
 
 export async function listTransportModes(
   tenantId: string,
+  locale?: string,
 ): Promise<TransportMode[]> {
   const admin = createSupabaseAdmin();
   const { data } = await admin
     .from("transport_modes")
-    .select("id, label")
+    .select("id, label, label_translations")
     .eq("tenant_id", tenantId)
     .order("label", { ascending: true });
-  return (data ?? []).map((r) => ({
-    id: r.id as string,
-    label: r.label as string,
-  }));
+  return (data ?? []).map((r) => {
+    const translations = (r.label_translations ?? {}) as Record<string, string>;
+    return {
+      id: r.id as string,
+      label: (locale && translations[locale]) || (r.label as string),
+    };
+  });
 }
 
 export async function listClientsForTenant(

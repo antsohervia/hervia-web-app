@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Upload, RotateCcw } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -25,6 +26,7 @@ type Props = {
 };
 
 export function LogoCard({ subdomain, tenantName, logoUrl }: Props) {
+  const t = useTranslations("appearance.logo");
   const [state, action, pending] = useActionState<LogoState, FormData>(
     uploadLogoAction,
     {},
@@ -34,12 +36,12 @@ export function LogoCard({ subdomain, tenantName, logoUrl }: Props) {
 
   useEffect(() => {
     if (state?.ok) {
-      toast.success("Logo mis à jour");
+      toast.success(t("updated"));
       if (inputRef.current) inputRef.current.value = "";
       queueMicrotask(() => setPreview(null));
     }
     if (state?.error) toast.error(state.error);
-  }, [state]);
+  }, [state, t]);
 
   function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null;
@@ -52,10 +54,8 @@ export function LogoCard({ subdomain, tenantName, logoUrl }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Logo</CardTitle>
-        <CardDescription>
-          PNG, JPG ou SVG. 2 Mo maximum. Largeur recommandée : 100px et plus.
-        </CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {state?.error ? (
@@ -75,7 +75,7 @@ export function LogoCard({ subdomain, tenantName, logoUrl }: Props) {
               />
             ) : (
               <span className="text-xs text-muted-foreground">
-                Aperçu fond clair
+                {t("lightPreview")}
               </span>
             )}
           </div>
@@ -89,7 +89,7 @@ export function LogoCard({ subdomain, tenantName, logoUrl }: Props) {
               />
             ) : (
               <span className="text-xs text-slate-400">
-                Aperçu fond sombre
+                {t("darkPreview")}
               </span>
             )}
           </div>
@@ -107,7 +107,7 @@ export function LogoCard({ subdomain, tenantName, logoUrl }: Props) {
           />
           <Button type="submit" disabled={pending || !preview}>
             <Upload className="size-4 mr-1" />
-            {pending ? "Envoi..." : "Enregistrer"}
+            {pending ? t("uploading") : t("save")}
           </Button>
         </form>
 
@@ -116,7 +116,7 @@ export function LogoCard({ subdomain, tenantName, logoUrl }: Props) {
             <input type="hidden" name="subdomain" value={subdomain} />
             <Button type="submit" variant="ghost" size="sm">
               <RotateCcw className="size-4 mr-1" />
-              Réinitialiser au logo par défaut
+              {t("reset")}
             </Button>
           </form>
         ) : null}

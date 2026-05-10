@@ -59,5 +59,11 @@ export async function autoTranslateLabel(
   for (const r of results) {
     if (r) out[r.locale] = r.text;
   }
+
+  const count = Object.keys(out).length;
+  if (count > 0) {
+    console.log(`[DeepL] "${label}" → ${JSON.stringify(out)}`);
+  }
+
   return out;
 }

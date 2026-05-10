@@ -10,6 +10,7 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,6 +37,10 @@ type Props = {
 };
 
 export function ScanClient({ subdomain, statuses, transportModes }: Props) {
+  const t = useTranslations("scan");
+  const tCommon = useTranslations("common");
+  const tParcels = useTranslations("parcels");
+
   const [statusId, setStatusId] = useState(statuses[0]?.id ?? "");
   const [transportModeId, setTransportModeId] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -76,10 +81,10 @@ export function ScanClient({ subdomain, statuses, transportModes }: Props) {
         <Button asChild variant="ghost" size="sm" className="-ml-1">
           <Link href="/admin/colis">
             <ArrowLeft className="size-4 mr-1" />
-            Retour
+            {tCommon("back")}
           </Link>
         </Button>
-        <p className="text-sm text-muted-foreground">Aucun statut configuré.</p>
+        <p className="text-sm text-muted-foreground">{t("noStatuses")}</p>
       </div>
     );
   }
@@ -95,18 +100,18 @@ export function ScanClient({ subdomain, statuses, transportModes }: Props) {
         <Button asChild variant="ghost" size="sm" className="-ml-1">
           <Link href="/admin/colis">
             <ArrowLeft className="size-4 mr-1" />
-            Retour
+            {tCommon("back")}
           </Link>
         </Button>
         <h1 className="text-lg font-semibold flex items-center gap-2">
           <ScanBarcode className="size-5" />
-          Scan en lot
+          {tParcels("scanBatch")}
         </h1>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="scan-status">Statut cible</Label>
+          <Label htmlFor="scan-status">{t("targetStatus")}</Label>
           <select
             id="scan-status"
             value={statusId}
@@ -121,14 +126,14 @@ export function ScanClient({ subdomain, statuses, transportModes }: Props) {
           </select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="scan-transport">Mode de livraison</Label>
+          <Label htmlFor="scan-transport">{t("deliveryMode")}</Label>
           <select
             id="scan-transport"
             value={transportModeId}
             onChange={(e) => setTransportModeId(e.target.value)}
             className="flex h-11 sm:h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base sm:text-sm shadow-sm"
           >
-            <option value="">— Aucun</option>
+            <option value="">{t("noMode")}</option>
             {transportModes.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.label}
@@ -150,7 +155,7 @@ export function ScanClient({ subdomain, statuses, transportModes }: Props) {
               processRef(inputValue);
             }
           }}
-          placeholder="Scanner ou taper la référence..."
+          placeholder={t("inputPlaceholder")}
           autoComplete="off"
           autoCapitalize="characters"
           spellCheck={false}
@@ -169,27 +174,33 @@ export function ScanClient({ subdomain, statuses, transportModes }: Props) {
       {entries.length > 0 && (
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            {entries.length} scanné{entries.length > 1 ? "s" : ""}
+            {entries.length > 1
+              ? t("scannedPlural", { count: entries.length })
+              : t("scanned", { count: entries.length })}
             {pendingCount > 0 && (
               <>
                 {" · "}
                 <span className="inline-flex items-center gap-1">
                   <Loader2 className="size-3 animate-spin" />
-                  {pendingCount} en cours
+                  {t("inProgress", { count: pendingCount })}
                 </span>
               </>
             )}
             {okCount > 0 && (
               <>
                 {" · "}
-                <span className="text-green-600 font-medium">{okCount} ok</span>
+                <span className="text-green-600 font-medium">
+                  {t("successCount", { count: okCount })}
+                </span>
               </>
             )}
             {errCount > 0 && (
               <>
                 {" · "}
                 <span className="text-destructive font-medium">
-                  {errCount} erreur{errCount > 1 ? "s" : ""}
+                  {errCount > 1
+                    ? t("errorCountPlural", { count: errCount })
+                    : t("errorCount", { count: errCount })}
                 </span>
               </>
             )}
@@ -218,16 +229,16 @@ export function ScanClient({ subdomain, statuses, transportModes }: Props) {
                 </div>
                 <span className="text-xs text-muted-foreground shrink-0 max-w-[45%] truncate text-right">
                   {e.pending
-                    ? "enregistrement..."
+                    ? t("saving")
                     : e.ok
                       ? e.created
-                        ? `Créé · ${targetStatus?.label}`
+                        ? t("created", { label: targetStatus?.label ?? "" })
                         : targetStatus?.label
                       : e.errorType === "already_at_status"
-                        ? "Déjà à ce statut"
+                        ? t("alreadyAtStatus")
                         : e.errorType === "is_final"
-                          ? "Colis clôturé"
-                          : (e.errorMessage ?? "Erreur")}
+                          ? t("isFinal")
+                          : (e.errorMessage ?? t("genericError"))}
                 </span>
               </li>
             ))}
