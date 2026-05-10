@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
 import { listStatuses } from "@/lib/parcels/repo";
 import { listTransportModes } from "@/lib/transport-modes/repo";
@@ -13,13 +14,14 @@ type Props = { params: Promise<{ subdomain: string }> };
 export default async function NewParcelPage({ params }: Props) {
   const { subdomain } = await params;
   const session = await requireTenantSession(subdomain);
+  const t = await getTranslations("parcels");
+  const tCommon = await getTranslations("common");
 
   const [statuses, transportModes] = await Promise.all([
     listStatuses(session.tenant.id),
     listTransportModes(session.tenant.id),
   ]);
 
-  // Le statut par défaut écarte volontairement le système "pending_client_response"
   const initial =
     statuses.find((s) => s.type === "initial") ??
     statuses.find((s) => s.code !== "pending_client_response") ??
@@ -31,14 +33,14 @@ export default async function NewParcelPage({ params }: Props) {
         <Button asChild variant="ghost" size="sm">
           <Link href="/admin/colis">
             <ArrowLeft className="size-4 mr-1" />
-            Retour
+            {tCommon("back")}
           </Link>
         </Button>
       </div>
       <div>
-        <h1 className="text-xl sm:text-2xl font-semibold">Nouveau colis</h1>
+        <h1 className="text-xl sm:text-2xl font-semibold">{t("form.title")}</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Renseignez les informations de l&apos;expédition.
+          {t("form.subtitle")}
         </p>
       </div>
 

@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +40,8 @@ export function CreateParcelForm({
     CreateParcelState,
     FormData
   >(createParcelAction, {});
+  const t = useTranslations("parcels.form");
+  const tCommon = useTranslations("common");
 
   useEffect(() => {
     if (state?.errors?._form?.[0]) toast.error(state.errors._form[0]);
@@ -57,7 +60,7 @@ export function CreateParcelForm({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="reference">
-            Numéro de tracking <span className="text-destructive">*</span>
+            {t("tracking")} <span className="text-destructive">{tCommon("required")}</span>
           </Label>
           <Input
             id="reference"
@@ -75,7 +78,7 @@ export function CreateParcelForm({
 
         <div className="space-y-2">
           <Label htmlFor="shippedAt">
-            Date d&apos;expédition <span className="text-destructive">*</span>
+            {t("shippingDate")} <span className="text-destructive">{tCommon("required")}</span>
           </Label>
           <Input
             id="shippedAt"
@@ -94,14 +97,14 @@ export function CreateParcelForm({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="transportModeId">Mode de transport</Label>
+          <Label htmlFor="transportModeId">{t("transportMode")}</Label>
           <select
             id="transportModeId"
             name="transportModeId"
             defaultValue=""
             className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
           >
-            <option value="">— Aucun —</option>
+            <option value="">{tCommon("none")}</option>
             {transportModes.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.label}
@@ -113,15 +116,12 @@ export function CreateParcelForm({
               {state.errors.transportModeId[0]}
             </p>
           ) : null}
-          <p className="text-xs text-muted-foreground">
-            Le client sera rattaché lorsqu&apos;il saisira le numéro de tracking
-            depuis son espace.
-          </p>
+          <p className="text-xs text-muted-foreground">{t("clientNote")}</p>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="statusId">
-            Statut initial <span className="text-destructive">*</span>
+            {t("initialStatus")} <span className="text-destructive">{tCommon("required")}</span>
           </Label>
           <select
             id="statusId"
@@ -140,7 +140,7 @@ export function CreateParcelForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description de la marchandise</Label>
+        <Label htmlFor="description">{t("description")}</Label>
         <Textarea
           id="description"
           name="description"
@@ -151,7 +151,7 @@ export function CreateParcelForm({
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="weightKg">Poids (kg)</Label>
+          <Label htmlFor="weightKg">{t("weight")}</Label>
           <Input
             id="weightKg"
             name="weightKg"
@@ -161,7 +161,7 @@ export function CreateParcelForm({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="volumeM3">Volume (m³)</Label>
+          <Label htmlFor="volumeM3">{t("volume")}</Label>
           <Input
             id="volumeM3"
             name="volumeM3"
@@ -171,7 +171,7 @@ export function CreateParcelForm({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="estimatedDeliveryAt">Livraison estimée</Label>
+          <Label htmlFor="estimatedDeliveryAt">{t("estimatedDelivery")}</Label>
           <Input
             id="estimatedDeliveryAt"
             name="estimatedDeliveryAt"
@@ -182,7 +182,7 @@ export function CreateParcelForm({
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="estimatedPrice">Estimation de prix</Label>
+          <Label htmlFor="estimatedPrice">{t("estimatedPrice")}</Label>
           <Input
             id="estimatedPrice"
             name="estimatedPrice"
@@ -190,9 +190,7 @@ export function CreateParcelForm({
             step="0.01"
             min="0"
           />
-          <p className="text-xs text-muted-foreground">
-            Indicatif, non contractuel.
-          </p>
+          <p className="text-xs text-muted-foreground">{t("priceNote")}</p>
           {state?.errors?.estimatedPrice?.[0] ? (
             <p className="text-xs text-destructive">
               {state.errors.estimatedPrice[0]}
@@ -200,7 +198,7 @@ export function CreateParcelForm({
           ) : null}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="currency">Devise</Label>
+          <Label htmlFor="currency">{t("currency")}</Label>
           <Input
             id="currency"
             name="currency"
@@ -210,7 +208,7 @@ export function CreateParcelForm({
           />
         </div>
         <div className="space-y-2 sm:col-span-1">
-          <Label htmlFor="originCountry">Origine / Destination</Label>
+          <Label htmlFor="originCountry">{t("originDestination")}</Label>
           <div className="flex gap-2">
             <Input
               id="originCountry"
@@ -232,7 +230,7 @@ export function CreateParcelForm({
 
       <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 pt-2">
         <Button type="submit" disabled={pending} className="w-full sm:w-auto">
-          {pending ? "Création..." : "Créer le colis"}
+          {pending ? t("creating") : t("create")}
         </Button>
       </div>
     </form>

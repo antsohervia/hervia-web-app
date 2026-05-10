@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Plus, Package, ChevronRight, ScanBarcode } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
 import { listParcels, listStatuses } from "@/lib/parcels/repo";
 import { Button } from "@/components/ui/button";
@@ -14,8 +15,6 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const dateFmt = new Intl.DateTimeFormat("fr-FR", { dateStyle: "short" });
-
 type Props = {
   params: Promise<{ subdomain: string }>;
   searchParams: Promise<{ q?: string; status?: string; page?: string }>;
@@ -25,7 +24,11 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
   const { subdomain } = await params;
   const sp = await searchParams;
   const session = await requireTenantSession(subdomain);
+  const t = await getTranslations("parcels");
+  const tCommon = await getTranslations("common");
   const page = sp.page ? Math.max(1, parseInt(sp.page, 10)) : 1;
+
+  const dateFmt = new Intl.DateTimeFormat(undefined, { dateStyle: "short" });
 
   const [{ rows, total }, statuses] = await Promise.all([
     listParcels(session.tenant.id, {
@@ -41,22 +44,24 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
     <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl sm:text-2xl font-semibold">Colis</h1>
+          <h1 className="text-xl sm:text-2xl font-semibold">{t("title")}</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {total} colis enregistré{total > 1 ? "s" : ""}.
+            {total > 1
+              ? t("subtitlePlural", { count: total })
+              : t("subtitle", { count: total })}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <Button asChild variant="outline" className="w-full sm:w-auto">
             <Link href="/admin/colis/scan">
               <ScanBarcode className="size-4 mr-1" />
-              Scan en lot
+              {t("scanBatch")}
             </Link>
           </Button>
           <Button asChild className="w-full sm:w-auto">
             <Link href="/admin/colis/new">
               <Plus className="size-4 mr-1" />
-              Nouveau colis
+              {t("newParcel")}
             </Link>
           </Button>
         </div>
@@ -64,22 +69,24 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
 
       <form className="grid grid-cols-1 sm:flex sm:flex-wrap sm:items-end gap-3">
         <div className="space-y-1 sm:w-64">
-          <label className="text-xs text-muted-foreground">Recherche</label>
+          <label className="text-xs text-muted-foreground">{t("search")}</label>
           <input
             name="q"
             defaultValue={sp.q ?? ""}
-            placeholder="Numéro de tracking..."
+            placeholder={t("searchPlaceholder")}
             className="flex h-11 sm:h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base sm:text-sm shadow-sm"
           />
         </div>
         <div className="space-y-1">
-          <label className="text-xs text-muted-foreground">Statut</label>
+          <label className="text-xs text-muted-foreground">
+            {t("statusFilter")}
+          </label>
           <select
             name="status"
             defaultValue={sp.status ?? ""}
             className="flex h-11 sm:h-9 w-full sm:w-auto rounded-md border border-input bg-transparent px-3 py-1 text-base sm:text-sm shadow-sm"
           >
-            <option value="">Tous</option>
+            <option value="">{tCommon("all")}</option>
             {statuses.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.label}
@@ -88,16 +95,14 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
           </select>
         </div>
         <Button type="submit" variant="outline" className="w-full sm:w-auto">
-          Filtrer
+          {tCommon("filter")}
         </Button>
       </form>
 
       {rows.length === 0 ? (
         <div className="rounded-md border bg-card p-10 text-center">
           <Package className="size-6 mx-auto text-muted-foreground mb-2" />
-          <p className="text-sm text-muted-foreground">
-            Aucun colis pour le moment.
-          </p>
+          <p className="text-sm text-muted-foreground">{t("noData")}</p>
         </div>
       ) : (
         <>
@@ -121,7 +126,7 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
                       ) : null}
                       {r.is_client_initiated ? (
                         <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium border border-primary/40 text-primary">
-                          Initié par le client
+                          {t("initiatedByClient")}
                         </span>
                       ) : null}
                     </div>
@@ -148,13 +153,13 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Numéro de tracking</TableHead>
-                  <TableHead>Client</TableHead>
-                  <TableHead>Statut</TableHead>
-                  <TableHead>Mode</TableHead>
-                  <TableHead>Source</TableHead>
-                  <TableHead>Destination</TableHead>
-                  <TableHead>Livraison estimée</TableHead>
+                  <TableHead>{t("columns.tracking")}</TableHead>
+                  <TableHead>{t("columns.client")}</TableHead>
+                  <TableHead>{t("columns.status")}</TableHead>
+                  <TableHead>{t("columns.mode")}</TableHead>
+                  <TableHead>{t("columns.source")}</TableHead>
+                  <TableHead>{t("columns.destination")}</TableHead>
+                  <TableHead>{t("columns.estimatedDelivery")}</TableHead>
                   <TableHead className="w-12" />
                 </TableRow>
               </TableHeader>
@@ -181,11 +186,11 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
                     <TableCell>
                       {r.is_client_initiated ? (
                         <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium border border-primary/40 text-primary">
-                          Client
+                          {t("sourceClient")}
                         </span>
                       ) : (
                         <span className="text-xs text-muted-foreground">
-                          Tenant
+                          {t("sourceTenant")}
                         </span>
                       )}
                     </TableCell>
@@ -197,7 +202,9 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
                     </TableCell>
                     <TableCell>
                       <Button asChild variant="ghost" size="sm">
-                        <Link href={`/admin/colis/${r.id}`}>Voir</Link>
+                        <Link href={`/admin/colis/${r.id}`}>
+                          {tCommon("view")}
+                        </Link>
                       </Button>
                     </TableCell>
                   </TableRow>

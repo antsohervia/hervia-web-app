@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Package, Palette, Tags } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
 import { createSupabaseAdmin } from "@/lib/supabase/admin";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,7 @@ type Props = { params: Promise<{ subdomain: string }> };
 export default async function TenantAdminHome({ params }: Props) {
   const { subdomain } = await params;
   const session = await requireTenantSession(subdomain);
+  const t = await getTranslations("dashboard");
 
   const admin = createSupabaseAdmin();
   const [parcels, clients, statuses] = await Promise.all([
@@ -32,18 +34,16 @@ export default async function TenantAdminHome({ params }: Props) {
     <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6 lg:space-y-8">
       <div>
         <h1 className="text-xl sm:text-2xl font-semibold">
-          Bienvenue, {session.tenant.name}
+          {t("welcome", { name: session.tenant.name })}
         </h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Vue synthétique de votre activité.
-        </p>
+        <p className="text-sm text-muted-foreground mt-1">{t("subtitle")}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Colis
+              {t("parcels")}
             </CardTitle>
           </CardHeader>
           <CardContent className="text-3xl font-semibold">
@@ -53,7 +53,7 @@ export default async function TenantAdminHome({ params }: Props) {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Clients
+              {t("clients")}
             </CardTitle>
           </CardHeader>
           <CardContent className="text-3xl font-semibold">
@@ -63,7 +63,7 @@ export default async function TenantAdminHome({ params }: Props) {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Statuts configurés
+              {t("configuredStatuses")}
             </CardTitle>
           </CardHeader>
           <CardContent className="text-3xl font-semibold">
@@ -78,19 +78,17 @@ export default async function TenantAdminHome({ params }: Props) {
           className="rounded-lg border bg-card p-5 hover:bg-accent transition"
         >
           <Package className="size-5 mb-2" />
-          <p className="font-medium">Gérer les colis</p>
-          <p className="text-muted-foreground mt-1">
-            Créer, mettre à jour le statut, suivre les expéditions.
-          </p>
+          <p className="font-medium">{t("manageParcels")}</p>
+          <p className="text-muted-foreground mt-1">{t("manageParcelsDesc")}</p>
         </Link>
         <Link
           href="/admin/statuts"
           className="rounded-lg border bg-card p-5 hover:bg-accent transition"
         >
           <Tags className="size-5 mb-2" />
-          <p className="font-medium">Configurer les statuts</p>
+          <p className="font-medium">{t("configureStatuses")}</p>
           <p className="text-muted-foreground mt-1">
-            Aligner le workflow sur votre processus logistique.
+            {t("configureStatusesDesc")}
           </p>
         </Link>
         {session.role === "entreprise_admin" ? (
@@ -99,10 +97,8 @@ export default async function TenantAdminHome({ params }: Props) {
             className="rounded-lg border bg-card p-5 hover:bg-accent transition"
           >
             <Palette className="size-5 mb-2" />
-            <p className="font-medium">Apparence</p>
-            <p className="text-muted-foreground mt-1">
-              Logo, thème et couleurs de votre marque.
-            </p>
+            <p className="font-medium">{t("appearance")}</p>
+            <p className="text-muted-foreground mt-1">{t("appearanceDesc")}</p>
           </Link>
         ) : null}
       </div>
