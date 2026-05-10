@@ -1,7 +1,17 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+
+function slugify(str: string): string {
+  return str
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 40);
+}
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +42,8 @@ export function TransportModeForm(props: Props) {
   >(action, {});
 
   const initial = mode === "edit" ? props.record : null;
+  const [labelValue, setLabelValue] = useState(initial?.label ?? "");
+  const autoCode = useMemo(() => slugify(labelValue), [labelValue]);
 
   useEffect(() => {
     if (state?.ok) {
@@ -59,35 +71,47 @@ export function TransportModeForm(props: Props) {
         <Input
           id="label"
           name="label"
-          defaultValue={initial?.label}
+          value={mode === "create" ? labelValue : undefined}
+          defaultValue={mode === "edit" ? initial?.label : undefined}
+          onChange={mode === "create" ? (e) => setLabelValue(e.target.value) : undefined}
           maxLength={60}
           required
           placeholder="Ex : Maritime"
         />
+        {mode === "create" && autoCode ? (
+          <p className="text-xs text-muted-foreground">
+            Code généré :{" "}
+            <span className="font-mono text-foreground">{autoCode}</span>
+          </p>
+        ) : null}
         {state?.errors?.label?.[0] ? (
           <p className="text-xs text-destructive">{state.errors.label[0]}</p>
         ) : null}
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="code">
-          Code interne <span className="text-destructive">*</span>
-        </Label>
-        <Input
-          id="code"
-          name="code"
-          defaultValue={initial?.code}
-          placeholder="ex: maritime"
-          maxLength={40}
-          required
-        />
-        <p className="text-xs text-muted-foreground">
-          Identifiant en minuscules (chiffres, lettres, tirets, underscores).
-        </p>
-        {state?.errors?.code?.[0] ? (
-          <p className="text-xs text-destructive">{state.errors.code[0]}</p>
-        ) : null}
-      </div>
+      {mode === "create" ? (
+        <input type="hidden" name="code" value={autoCode} />
+      ) : (
+        <div className="space-y-2">
+          <Label htmlFor="code">
+            Code interne <span className="text-destructive">*</span>
+          </Label>
+          <Input
+            id="code"
+            name="code"
+            defaultValue={initial?.code}
+            placeholder="ex: maritime"
+            maxLength={40}
+            required
+          />
+          <p className="text-xs text-muted-foreground">
+            Identifiant en minuscules (chiffres, lettres, tirets, underscores).
+          </p>
+          {state?.errors?.code?.[0] ? (
+            <p className="text-xs text-destructive">{state.errors.code[0]}</p>
+          ) : null}
+        </div>
+      )}
 
       <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2">
         <Button

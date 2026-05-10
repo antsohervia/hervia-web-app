@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,16 @@ import {
 } from "@/lib/validations/parcel-status";
 import type { ParcelStatus } from "@/lib/parcels/repo";
 import { createStatusAction, updateStatusAction } from "./_actions";
+
+function slugify(str: string): string {
+  return str
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 40);
+}
 
 type Props =
   | {
@@ -39,6 +49,8 @@ export function StatusForm(props: Props) {
 
   const initial = mode === "edit" ? props.status : null;
   const [color, setColor] = useState(initial?.color ?? "#6B7280");
+  const [labelValue, setLabelValue] = useState(initial?.label ?? "");
+  const autoCode = useMemo(() => slugify(labelValue), [labelValue]);
   const isSystem = (initial?.system_code ?? null) != null;
 
   useEffect(() => {
@@ -67,38 +79,50 @@ export function StatusForm(props: Props) {
         <Input
           id="label"
           name="label"
-          defaultValue={initial?.label}
+          value={mode === "create" ? labelValue : undefined}
+          defaultValue={mode === "edit" ? initial?.label : undefined}
+          onChange={mode === "create" ? (e) => setLabelValue(e.target.value) : undefined}
           maxLength={60}
           required
         />
+        {mode === "create" && autoCode ? (
+          <p className="text-xs text-muted-foreground">
+            Code généré :{" "}
+            <span className="font-mono text-foreground">{autoCode}</span>
+          </p>
+        ) : null}
         {state?.errors?.label?.[0] ? (
           <p className="text-xs text-destructive">{state.errors.label[0]}</p>
         ) : null}
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="code">
-          Code interne <span className="text-destructive">*</span>
-        </Label>
-        <Input
-          id="code"
-          name="code"
-          defaultValue={initial?.code}
-          placeholder="ex: in_customs"
-          maxLength={40}
-          required
-          readOnly={isSystem}
-          disabled={isSystem}
-        />
-        <p className="text-xs text-muted-foreground">
-          {isSystem
-            ? "Statut système — code et type non modifiables."
-            : "Identifiant technique en minuscules (chiffres, lettres et underscores)."}
-        </p>
-        {state?.errors?.code?.[0] ? (
-          <p className="text-xs text-destructive">{state.errors.code[0]}</p>
-        ) : null}
-      </div>
+      {mode === "create" ? (
+        <input type="hidden" name="code" value={autoCode} />
+      ) : (
+        <div className="space-y-2">
+          <Label htmlFor="code">
+            Code interne <span className="text-destructive">*</span>
+          </Label>
+          <Input
+            id="code"
+            name="code"
+            defaultValue={initial?.code}
+            placeholder="ex: in_customs"
+            maxLength={40}
+            required
+            readOnly={isSystem}
+            disabled={isSystem}
+          />
+          <p className="text-xs text-muted-foreground">
+            {isSystem
+              ? "Statut système — code et type non modifiables."
+              : "Identifiant technique en minuscules (chiffres, lettres et underscores)."}
+          </p>
+          {state?.errors?.code?.[0] ? (
+            <p className="text-xs text-destructive">{state.errors.code[0]}</p>
+          ) : null}
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
