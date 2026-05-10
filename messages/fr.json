@@ -1,0 +1,170 @@
+{
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "parcels": "Colis",
+    "statuses": "Statuts",
+    "transportModes": "Modes de transport",
+    "appearance": "Apparence",
+    "translations": "Traductions"
+  },
+  "roles": {
+    "admin": "Administrateur",
+    "operator": "Opérateur",
+    "readOnly": "Mode lecture seule"
+  },
+  "menu": {
+    "open": "Ouvrir le menu",
+    "close": "Fermer le menu",
+    "closeButton": "Fermer"
+  },
+  "auth": {
+    "logout": "Déconnexion"
+  },
+  "language": {
+    "title": "Langue",
+    "fr": "Français",
+    "en": "English",
+    "zh": "中文 (简体)"
+  },
+  "dashboard": {
+    "welcome": "Bienvenue, {name}",
+    "subtitle": "Vue synthétique de votre activité.",
+    "parcels": "Colis",
+    "clients": "Clients",
+    "configuredStatuses": "Statuts configurés",
+    "manageParcels": "Gérer les colis",
+    "manageParcelsDesc": "Créer, mettre à jour le statut, suivre les expéditions.",
+    "configureStatuses": "Configurer les statuts",
+    "configureStatusesDesc": "Aligner le workflow sur votre processus logistique.",
+    "appearance": "Apparence",
+    "appearanceDesc": "Logo, thème et couleurs de votre marque."
+  },
+  "common": {
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "filter": "Filtrer",
+    "all": "Tous",
+    "none": "— Aucun —",
+    "back": "Retour",
+    "required": "*",
+    "noData": "Aucune donnée pour le moment.",
+    "generatedCode": "Code généré :"
+  },
+  "parcels": {
+    "title": "Colis",
+    "subtitle": "{count} colis enregistré",
+    "subtitlePlural": "{count} colis enregistrés",
+    "newParcel": "Nouveau colis",
+    "scanBatch": "Scan en lot",
+    "search": "Recherche",
+    "searchPlaceholder": "Numéro de tracking...",
+    "statusFilter": "Statut",
+    "noData": "Aucun colis pour le moment.",
+    "initiatedByClient": "Initié par le client",
+    "sourceClient": "Client",
+    "sourceTenant": "Tenant",
+    "columns": {
+      "tracking": "Numéro de tracking",
+      "client": "Client",
+      "status": "Statut",
+      "mode": "Mode",
+      "source": "Source",
+      "destination": "Destination",
+      "estimatedDelivery": "Livraison estimée"
+    },
+    "form": {
+      "title": "Nouveau colis",
+      "subtitle": "Renseignez les informations de l'expédition.",
+      "tracking": "Numéro de tracking",
+      "shippingDate": "Date d'expédition",
+      "transportMode": "Mode de transport",
+      "clientNote": "Le client sera rattaché lorsqu'il saisira le numéro de tracking depuis son espace.",
+      "initialStatus": "Statut initial",
+      "description": "Description de la marchandise",
+      "weight": "Poids (kg)",
+      "volume": "Volume (m³)",
+      "estimatedDelivery": "Livraison estimée",
+      "estimatedPrice": "Estimation de prix",
+      "priceNote": "Indicatif, non contractuel.",
+      "currency": "Devise",
+      "originDestination": "Origine / Destination",
+      "create": "Créer le colis",
+      "creating": "Création..."
+    }
+  },
+  "statuses": {
+    "title": "Statuts",
+    "subtitle": "Configurez les étapes du cycle de vie de vos colis.",
+    "add": "Ajouter un statut",
+    "createTitle": "Nouveau statut",
+    "editTitle": "Modifier le statut",
+    "created": "Statut créé",
+    "updated": "Statut mis à jour",
+    "deleted": "Statut supprimé",
+    "newStatus": "Nouveau statut",
+    "form": {
+      "label": "Libellé",
+      "internalCode": "Code interne",
+      "type": "Type",
+      "color": "Couleur",
+      "colorPicker": "Sélecteur de couleur",
+      "description": "Description interne",
+      "descriptionNote": "Non visible des clients. 200 caractères max.",
+      "preview": "Aperçu",
+      "systemStatus": "Statut système — code et type non modifiables.",
+      "codeDescription": "Identifiant technique en minuscules (chiffres, lettres et underscores)."
+    }
+  },
+  "transportModes": {
+    "title": "Modes de transport",
+    "subtitle": "Configurez les modes proposés au client lorsqu'il enregistre un colis.",
+    "add": "Ajouter un mode",
+    "createTitle": "Nouveau mode de transport",
+    "editTitle": "Modifier le mode",
+    "created": "Mode créé",
+    "updated": "Mode mis à jour",
+    "deleted": "Mode supprimé",
+    "deleteTitle": "Supprimer ce mode ?",
+    "deleteDescription": "Cette action est irréversible.",
+    "noData": "Aucun mode. Ajoutez-en un pour permettre aux clients de saisir un colis.",
+    "moveUp": "Monter",
+    "moveDown": "Descendre",
+    "usedBy": "Utilisé par {count} colis",
+    "sortHint": "{count} mode · utilisez les flèches pour réordonner.",
+    "sortHintPlural": "{count} modes · utilisez les flèches pour réordonner.",
+    "parcelsLinked": "{count} colis associé",
+    "parcelsLinkedPlural": "{count} colis associés",
+    "form": {
+      "label": "Libellé",
+      "labelPlaceholder": "Ex : Maritime",
+      "internalCode": "Code interne",
+      "codeDescription": "Identifiant en minuscules (chiffres, lettres, tirets, underscores).",
+      "codeHint": "Code généré :"
+    }
+  },
+  "appearance": {
+    "title": "Apparence",
+    "subtitle": "Personnalisez votre espace client : logo, thème et couleurs de marque.",
+    "unavailable": "Branding indisponible."
+  },
+  "translations": {
+    "title": "Traductions",
+    "subtitle": "Gérez les traductions de l'interface admin.",
+    "translateAll": "Traduire tout avec l'IA",
+    "translating": "Traduction en cours...",
+    "key": "Clé",
+    "value": "Valeur",
+    "aiGenerated": "IA",
+    "save": "Sauvegarder",
+    "saving": "Sauvegarde...",
+    "saved": "Sauvegardé",
+    "translateWithAI": "Traduire avec l'IA",
+    "aiError": "Erreur lors de la traduction IA.",
+    "saveError": "Erreur lors de la sauvegarde.",
+    "noApiKey": "Clé API Anthropic non configurée."
+  }
+}

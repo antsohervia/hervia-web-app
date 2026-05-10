@@ -1,0 +1,170 @@
+{
+  "nav": {
+    "dashboard": "控制台",
+    "parcels": "包裹",
+    "statuses": "状态",
+    "transportModes": "运输方式",
+    "appearance": "外观",
+    "translations": "翻译"
+  },
+  "roles": {
+    "admin": "管理员",
+    "operator": "操作员",
+    "readOnly": "只读模式"
+  },
+  "menu": {
+    "open": "打开菜单",
+    "close": "关闭菜单",
+    "closeButton": "关闭"
+  },
+  "auth": {
+    "logout": "退出登录"
+  },
+  "language": {
+    "title": "语言",
+    "fr": "Français",
+    "en": "English",
+    "zh": "中文 (简体)"
+  },
+  "dashboard": {
+    "welcome": "欢迎，{name}",
+    "subtitle": "您的业务综合概览。",
+    "parcels": "包裹",
+    "clients": "客户",
+    "configuredStatuses": "已配置状态",
+    "manageParcels": "管理包裹",
+    "manageParcelsDesc": "创建、更新状态、跟踪货运。",
+    "configureStatuses": "配置状态",
+    "configureStatusesDesc": "根据物流流程调整工作流程。",
+    "appearance": "外观",
+    "appearanceDesc": "品牌Logo、主题和颜色。"
+  },
+  "common": {
+    "save": "保存",
+    "saving": "保存中...",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "view": "查看",
+    "filter": "筛选",
+    "all": "全部",
+    "none": "— 无 —",
+    "back": "返回",
+    "required": "*",
+    "noData": "暂无数据。",
+    "generatedCode": "生成的代码："
+  },
+  "parcels": {
+    "title": "包裹",
+    "subtitle": "已登记 {count} 个包裹",
+    "subtitlePlural": "已登记 {count} 个包裹",
+    "newParcel": "新建包裹",
+    "scanBatch": "批量扫描",
+    "search": "搜索",
+    "searchPlaceholder": "追踪号...",
+    "statusFilter": "状态",
+    "noData": "暂无包裹。",
+    "initiatedByClient": "由客户发起",
+    "sourceClient": "客户",
+    "sourceTenant": "租户",
+    "columns": {
+      "tracking": "追踪号",
+      "client": "客户",
+      "status": "状态",
+      "mode": "方式",
+      "source": "来源",
+      "destination": "目的地",
+      "estimatedDelivery": "预计送达"
+    },
+    "form": {
+      "title": "新建包裹",
+      "subtitle": "填写货运信息。",
+      "tracking": "追踪号",
+      "shippingDate": "发货日期",
+      "transportMode": "运输方式",
+      "clientNote": "客户从其空间输入追踪号后将自动关联。",
+      "initialStatus": "初始状态",
+      "description": "货物描述",
+      "weight": "重量（千克）",
+      "volume": "体积（立方米）",
+      "estimatedDelivery": "预计送达",
+      "estimatedPrice": "价格估算",
+      "priceNote": "仅供参考，非合同价格。",
+      "currency": "货币",
+      "originDestination": "起始地 / 目的地",
+      "create": "创建包裹",
+      "creating": "创建中..."
+    }
+  },
+  "statuses": {
+    "title": "状态",
+    "subtitle": "配置包裹生命周期的各个阶段。",
+    "add": "添加状态",
+    "createTitle": "新建状态",
+    "editTitle": "编辑状态",
+    "created": "状态已创建",
+    "updated": "状态已更新",
+    "deleted": "状态已删除",
+    "newStatus": "新建状态",
+    "form": {
+      "label": "标签",
+      "internalCode": "内部代码",
+      "type": "类型",
+      "color": "颜色",
+      "colorPicker": "颜色选择器",
+      "description": "内部描述",
+      "descriptionNote": "客户不可见。最多200个字符。",
+      "preview": "预览",
+      "systemStatus": "系统状态 — 代码和类型不可修改。",
+      "codeDescription": "小写技术标识符（数字、字母和下划线）。"
+    }
+  },
+  "transportModes": {
+    "title": "运输方式",
+    "subtitle": "配置客户登记包裹时可选择的运输方式。",
+    "add": "添加方式",
+    "createTitle": "新建运输方式",
+    "editTitle": "编辑方式",
+    "created": "方式已创建",
+    "updated": "方式已更新",
+    "deleted": "方式已删除",
+    "deleteTitle": "删除此方式？",
+    "deleteDescription": "此操作不可撤销。",
+    "noData": "暂无方式。请添加一种方式以允许客户登记包裹。",
+    "moveUp": "上移",
+    "moveDown": "下移",
+    "usedBy": "被 {count} 个包裹使用",
+    "sortHint": "{count} 种方式 · 使用箭头重新排序。",
+    "sortHintPlural": "{count} 种方式 · 使用箭头重新排序。",
+    "parcelsLinked": "已关联 {count} 个包裹",
+    "parcelsLinkedPlural": "已关联 {count} 个包裹",
+    "form": {
+      "label": "标签",
+      "labelPlaceholder": "例如：海运",
+      "internalCode": "内部代码",
+      "codeDescription": "小写标识符（数字、字母、连字符、下划线）。",
+      "codeHint": "生成的代码："
+    }
+  },
+  "appearance": {
+    "title": "外观",
+    "subtitle": "自定义您的客户空间：Logo、主题和品牌颜色。",
+    "unavailable": "品牌设置不可用。"
+  },
+  "translations": {
+    "title": "翻译",
+    "subtitle": "管理管理界面的翻译。",
+    "translateAll": "用AI翻译全部",
+    "translating": "翻译中...",
+    "key": "键",
+    "value": "值",
+    "aiGenerated": "AI",
+    "save": "保存",
+    "saving": "保存中...",
+    "saved": "已保存",
+    "translateWithAI": "用AI翻译",
+    "aiError": "AI翻译出错。",
+    "saveError": "保存出错。",
+    "noApiKey": "未配置Anthropic API密钥。"
+  }
+}

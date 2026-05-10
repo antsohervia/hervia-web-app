@@ -1,0 +1,170 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "parcels": "Parcels",
+    "statuses": "Statuses",
+    "transportModes": "Transport Modes",
+    "appearance": "Appearance",
+    "translations": "Translations"
+  },
+  "roles": {
+    "admin": "Administrator",
+    "operator": "Operator",
+    "readOnly": "Read-only mode"
+  },
+  "menu": {
+    "open": "Open menu",
+    "close": "Close menu",
+    "closeButton": "Close"
+  },
+  "auth": {
+    "logout": "Log out"
+  },
+  "language": {
+    "title": "Language",
+    "fr": "Français",
+    "en": "English",
+    "zh": "中文 (简体)"
+  },
+  "dashboard": {
+    "welcome": "Welcome, {name}",
+    "subtitle": "Overview of your activity.",
+    "parcels": "Parcels",
+    "clients": "Clients",
+    "configuredStatuses": "Configured statuses",
+    "manageParcels": "Manage parcels",
+    "manageParcelsDesc": "Create, update status, track shipments.",
+    "configureStatuses": "Configure statuses",
+    "configureStatusesDesc": "Align your workflow to your logistics process.",
+    "appearance": "Appearance",
+    "appearanceDesc": "Logo, theme and brand colors."
+  },
+  "common": {
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "filter": "Filter",
+    "all": "All",
+    "none": "— None —",
+    "back": "Back",
+    "required": "*",
+    "noData": "No data yet.",
+    "generatedCode": "Generated code:"
+  },
+  "parcels": {
+    "title": "Parcels",
+    "subtitle": "{count} parcel registered",
+    "subtitlePlural": "{count} parcels registered",
+    "newParcel": "New parcel",
+    "scanBatch": "Batch scan",
+    "search": "Search",
+    "searchPlaceholder": "Tracking number...",
+    "statusFilter": "Status",
+    "noData": "No parcels yet.",
+    "initiatedByClient": "Initiated by client",
+    "sourceClient": "Client",
+    "sourceTenant": "Tenant",
+    "columns": {
+      "tracking": "Tracking number",
+      "client": "Client",
+      "status": "Status",
+      "mode": "Mode",
+      "source": "Source",
+      "destination": "Destination",
+      "estimatedDelivery": "Estimated delivery"
+    },
+    "form": {
+      "title": "New parcel",
+      "subtitle": "Fill in the shipment details.",
+      "tracking": "Tracking number",
+      "shippingDate": "Shipping date",
+      "transportMode": "Transport mode",
+      "clientNote": "The client will be linked when they enter the tracking number from their space.",
+      "initialStatus": "Initial status",
+      "description": "Goods description",
+      "weight": "Weight (kg)",
+      "volume": "Volume (m³)",
+      "estimatedDelivery": "Estimated delivery",
+      "estimatedPrice": "Price estimate",
+      "priceNote": "Indicative, non-contractual.",
+      "currency": "Currency",
+      "originDestination": "Origin / Destination",
+      "create": "Create parcel",
+      "creating": "Creating..."
+    }
+  },
+  "statuses": {
+    "title": "Statuses",
+    "subtitle": "Configure the lifecycle stages of your parcels.",
+    "add": "Add status",
+    "createTitle": "New status",
+    "editTitle": "Edit status",
+    "created": "Status created",
+    "updated": "Status updated",
+    "deleted": "Status deleted",
+    "newStatus": "New status",
+    "form": {
+      "label": "Label",
+      "internalCode": "Internal code",
+      "type": "Type",
+      "color": "Color",
+      "colorPicker": "Color picker",
+      "description": "Internal description",
+      "descriptionNote": "Not visible to clients. 200 characters max.",
+      "preview": "Preview",
+      "systemStatus": "System status — code and type cannot be modified.",
+      "codeDescription": "Technical identifier in lowercase (digits, letters and underscores)."
+    }
+  },
+  "transportModes": {
+    "title": "Transport Modes",
+    "subtitle": "Configure the modes available to clients when registering a parcel.",
+    "add": "Add mode",
+    "createTitle": "New transport mode",
+    "editTitle": "Edit mode",
+    "created": "Mode created",
+    "updated": "Mode updated",
+    "deleted": "Mode deleted",
+    "deleteTitle": "Delete this mode?",
+    "deleteDescription": "This action is irreversible.",
+    "noData": "No modes yet. Add one to allow clients to register parcels.",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "usedBy": "Used by {count} parcels",
+    "sortHint": "{count} mode · use arrows to reorder.",
+    "sortHintPlural": "{count} modes · use arrows to reorder.",
+    "parcelsLinked": "{count} parcel linked",
+    "parcelsLinkedPlural": "{count} parcels linked",
+    "form": {
+      "label": "Label",
+      "labelPlaceholder": "E.g.: Sea freight",
+      "internalCode": "Internal code",
+      "codeDescription": "Lowercase identifier (digits, letters, hyphens, underscores).",
+      "codeHint": "Generated code:"
+    }
+  },
+  "appearance": {
+    "title": "Appearance",
+    "subtitle": "Customize your client space: logo, theme and brand colors.",
+    "unavailable": "Branding unavailable."
+  },
+  "translations": {
+    "title": "Translations",
+    "subtitle": "Manage admin interface translations.",
+    "translateAll": "Translate all with AI",
+    "translating": "Translating...",
+    "key": "Key",
+    "value": "Value",
+    "aiGenerated": "AI",
+    "save": "Save",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "translateWithAI": "Translate with AI",
+    "aiError": "AI translation error.",
+    "saveError": "Save error.",
+    "noApiKey": "Anthropic API key not configured."
+  }
+}
