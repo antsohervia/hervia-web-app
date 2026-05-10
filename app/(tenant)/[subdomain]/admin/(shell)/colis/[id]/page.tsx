@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { getLocale } from "next-intl/server";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
 import {
   getParcel,
@@ -34,14 +35,15 @@ type Props = {
 export default async function ParcelDetailPage({ params }: Props) {
   const { subdomain, id } = await params;
   const session = await requireTenantSession(subdomain);
+  const locale = await getLocale();
 
-  const parcel = await getParcel(session.tenant.id, id);
+  const parcel = await getParcel(session.tenant.id, id, locale);
   if (!parcel) notFound();
 
   const [statuses, events, transportModes] = await Promise.all([
-    listStatuses(session.tenant.id),
-    listParcelEvents(parcel.id),
-    listTransportModes(session.tenant.id),
+    listStatuses(session.tenant.id, locale),
+    listParcelEvents(parcel.id, locale),
+    listTransportModes(session.tenant.id, locale),
   ]);
 
   const currentStatus = statuses.find((s) => s.id === parcel.status_id) ?? null;

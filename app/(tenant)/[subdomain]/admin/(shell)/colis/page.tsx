@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Plus, Package, ChevronRight, ScanBarcode } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
 import { listParcels, listStatuses } from "@/lib/parcels/repo";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
   const session = await requireTenantSession(subdomain);
   const t = await getTranslations("parcels");
   const tCommon = await getTranslations("common");
+  const locale = await getLocale();
   const page = sp.page ? Math.max(1, parseInt(sp.page, 10)) : 1;
 
   const dateFmt = new Intl.DateTimeFormat(undefined, { dateStyle: "short" });
@@ -36,8 +37,9 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
       statusId: sp.status,
       page,
       pageSize: 25,
+      locale,
     }),
-    listStatuses(session.tenant.id),
+    listStatuses(session.tenant.id, locale),
   ]);
 
   return (

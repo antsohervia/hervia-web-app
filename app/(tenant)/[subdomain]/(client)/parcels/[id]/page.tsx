@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CalendarClock, CheckCircle2 } from "lucide-react";
+import { getLocale } from "next-intl/server";
 import { requireClientSession } from "@/lib/auth/client-dal";
 import { getClientParcelDetail } from "@/lib/clients/repo";
 import { listParcelEvents, listStatuses } from "@/lib/parcels/repo";
@@ -23,17 +24,19 @@ export default async function ClientParcelDetailPage({ params }: Props) {
   const { subdomain, id } = await params;
   const session = await requireClientSession(subdomain);
   const brand = getClientBrand(session.tenant);
+  const locale = await getLocale();
 
   const parcel = await getClientParcelDetail(
     id,
     session.clientId,
     session.tenant.id,
+    locale,
   );
   if (!parcel) notFound();
 
   const [statuses, events] = await Promise.all([
-    listStatuses(session.tenant.id),
-    listParcelEvents(parcel.id),
+    listStatuses(session.tenant.id, locale),
+    listParcelEvents(parcel.id, locale),
   ]);
 
   const currentStatus = statuses.find((s) => s.id === parcel.status_id) ?? null;

@@ -6,6 +6,7 @@ import {
   PackageOpen,
   Search,
 } from "lucide-react";
+import { getLocale } from "next-intl/server";
 import { requireClientSession } from "@/lib/auth/client-dal";
 import { getClientParcelStats, listClientParcels } from "@/lib/clients/repo";
 import { listTransportModes } from "@/lib/transport-modes/repo";
@@ -63,6 +64,7 @@ export default async function ClientDashboardPage({
   const sp = await searchParams;
   const session = await requireClientSession(subdomain);
   const brand = getClientBrand(session.tenant);
+  const locale = await getLocale();
 
   const page = sp.page ? Math.max(1, parseInt(sp.page, 10)) : 1;
   const statusType =
@@ -77,9 +79,10 @@ export default async function ClientDashboardPage({
       dateTo: range.to,
       page,
       pageSize: 20,
+      locale,
     }),
     getClientParcelStats(session.clientId, session.tenant.id),
-    listTransportModes(session.tenant.id),
+    listTransportModes(session.tenant.id, locale),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
