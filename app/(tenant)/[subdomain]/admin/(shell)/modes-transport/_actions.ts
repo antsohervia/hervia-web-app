@@ -17,7 +17,9 @@ import {
   deleteTransportMode,
   reorderTransportModes,
   updateTransportMode,
+  updateTransportModeLabelTranslations,
 } from "@/lib/transport-modes/repo";
+import { autoTranslateLabel } from "@/lib/i18n/auto-translate";
 
 export async function createTransportModeAction(
   _prev: TransportModeFormState | undefined,
@@ -37,8 +39,10 @@ export async function createTransportModeAction(
     };
   }
 
+  let createdId: string | undefined;
   try {
-    await createTransportMode(session.tenant.id, parsed.data);
+    const result = await createTransportMode(session.tenant.id, parsed.data);
+    createdId = result.id;
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Échec de la création";
     if (msg.includes("duplicate") || msg.includes("23505")) {
@@ -52,6 +56,18 @@ export async function createTransportModeAction(
     code: parsed.data.code,
     label: parsed.data.label,
   });
+
+  if (createdId) {
+    autoTranslateLabel(parsed.data.label).then((translations) => {
+      if (Object.keys(translations).length > 0) {
+        updateTransportModeLabelTranslations(
+          session.tenant.id,
+          createdId!,
+          translations as Record<string, string>,
+        ).catch(() => {});
+      }
+    }).catch(() => {});
+  }
 
   revalidatePath(`/${subdomain}/admin/modes-transport`);
   return { ok: true };
@@ -93,6 +109,16 @@ export async function updateTransportModeAction(
     id: parsed.data.id,
     code: parsed.data.code,
   });
+
+  autoTranslateLabel(parsed.data.label).then((translations) => {
+    if (Object.keys(translations).length > 0) {
+      updateTransportModeLabelTranslations(
+        session.tenant.id,
+        parsed.data.id,
+        translations as Record<string, string>,
+      ).catch(() => {});
+    }
+  }).catch(() => {});
 
   revalidatePath(`/${subdomain}/admin/modes-transport`);
   return { ok: true };

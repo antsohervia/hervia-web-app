@@ -12,6 +12,8 @@ import {
   UpdateStatusSchema,
   type StatusFormState,
 } from "@/lib/validations/parcel-status";
+import { autoTranslateLabel } from "@/lib/i18n/auto-translate";
+import { updateStatusLabelTranslations } from "@/lib/parcels/repo";
 
 const MIN_STATUSES = 2;
 
@@ -78,6 +80,25 @@ export async function createStatusAction(
     label: parsed.data.label,
     type: parsed.data.type,
   });
+
+  const { data: created } = await admin
+    .from("parcel_statuses")
+    .select("id")
+    .eq("tenant_id", session.tenant.id)
+    .eq("code", parsed.data.code)
+    .maybeSingle();
+
+  if (created?.id) {
+    autoTranslateLabel(parsed.data.label).then((translations) => {
+      if (Object.keys(translations).length > 0) {
+        updateStatusLabelTranslations(
+          session.tenant.id,
+          created.id as string,
+          translations as Record<string, string>,
+        ).catch(() => {});
+      }
+    }).catch(() => {});
+  }
 
   revalidatePath(`/${subdomain}/admin/statuts`);
   return { ok: true };
@@ -155,6 +176,16 @@ export async function updateStatusAction(
     id: parsed.data.id,
     code: parsed.data.code,
   });
+
+  autoTranslateLabel(parsed.data.label).then((translations) => {
+    if (Object.keys(translations).length > 0) {
+      updateStatusLabelTranslations(
+        session.tenant.id,
+        parsed.data.id,
+        translations as Record<string, string>,
+      ).catch(() => {});
+    }
+  }).catch(() => {});
 
   revalidatePath(`/${subdomain}/admin/statuts`);
   return { ok: true };
