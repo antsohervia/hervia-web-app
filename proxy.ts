@@ -48,9 +48,13 @@ export async function proxy(request: NextRequest) {
   }
 
   // 3) tenant subdomain → rewrite to /[subdomain]/...
+  response.headers.set("x-tenant-subdomain", sub);
+  // API routes are global — don't prefix them with the subdomain
+  if (pathname.startsWith("/api/")) {
+    return response;
+  }
   const url = request.nextUrl.clone();
   url.pathname = `/${sub}${pathname === "/" ? "" : pathname}`;
-  response.headers.set("x-tenant-subdomain", sub);
   return NextResponse.rewrite(url, { headers: response.headers });
 }
 
