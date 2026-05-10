@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { GripVertical, Lock, Pencil, Plus, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -39,10 +41,17 @@ export function StatusesManager({
   subdomain: string;
   initialStatuses: ParcelStatus[];
 }) {
+  const t = useTranslations("statuses");
+  const tCommon = useTranslations("common");
+  const router = useRouter();
   const [statuses, setStatuses] = useState(initialStatuses);
   const [editing, setEditing] = useState<ParcelStatus | null>(null);
   const [creating, setCreating] = useState(false);
   const [pending, startTransition] = useTransition();
+
+  useEffect(() => {
+    setStatuses(initialStatuses);
+  }, [initialStatuses]);
 
   function move(index: number, dir: -1 | 1) {
     const next = [...statuses];
@@ -61,7 +70,7 @@ export function StatusesManager({
       try {
         await reorderStatusesAction(fd);
       } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Erreur de tri");
+        toast.error(e instanceof Error ? e.message : t("sortError"));
       }
     });
   }
@@ -74,9 +83,9 @@ export function StatusesManager({
       try {
         await deleteStatusAction(fd);
         setStatuses((s) => s.filter((x) => x.id !== id));
-        toast.success("Statut supprimé");
+        toast.success(t("deleted"));
       } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Suppression impossible");
+        toast.error(e instanceof Error ? e.message : t("deleteError"));
       }
     });
   }
@@ -85,25 +94,27 @@ export function StatusesManager({
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <p className="text-sm text-muted-foreground">
-          {statuses.length} statut{statuses.length > 1 ? "s" : ""} ·
-          utilisez les flèches pour réordonner.
+          {statuses.length > 1
+            ? t("sortHintPlural", { count: statuses.length })
+            : t("sortHint", { count: statuses.length })}
         </p>
         <Dialog open={creating} onOpenChange={setCreating}>
           <DialogTrigger asChild>
             <Button className="w-full sm:w-auto">
               <Plus className="size-4 mr-1" />
-              Ajouter un statut
+              {t("add")}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Nouveau statut</DialogTitle>
+              <DialogTitle>{t("createTitle")}</DialogTitle>
             </DialogHeader>
             <StatusForm
               subdomain={subdomain}
               mode="create"
               onDone={() => {
                 setCreating(false);
+                router.refresh();
               }}
             />
           </DialogContent>
@@ -112,9 +123,7 @@ export function StatusesManager({
 
       <div className="rounded-md border bg-card divide-y">
         {statuses.length === 0 ? (
-          <p className="p-6 text-sm text-muted-foreground">
-            Aucun statut. Créez-en un pour démarrer.
-          </p>
+          <p className="p-6 text-sm text-muted-foreground">{t("noData")}</p>
         ) : null}
         {statuses.map((s, i) => (
           <div
@@ -127,7 +136,7 @@ export function StatusesManager({
                 onClick={() => move(i, -1)}
                 disabled={i === 0 || pending}
                 className="size-8 sm:size-6 inline-flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30 text-sm"
-                aria-label="Monter"
+                aria-label={t("moveUp")}
               >
                 ▲
               </button>
@@ -140,7 +149,7 @@ export function StatusesManager({
                 onClick={() => move(i, 1)}
                 disabled={i === statuses.length - 1 || pending}
                 className="size-8 sm:size-6 inline-flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30 text-sm"
-                aria-label="Descendre"
+                aria-label={t("moveDown")}
               >
                 ▼
               </button>
@@ -162,10 +171,10 @@ export function StatusesManager({
                 {s.system_code ? (
                   <span
                     className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wide text-muted-foreground rounded bg-muted px-1.5 py-0.5"
-                    title="Statut système — non supprimable"
+                    title={t("systemNotDeletable")}
                   >
                     <Lock className="size-3" aria-hidden />
-                    Système
+                    {t("systemBadge")}
                   </span>
                 ) : null}
               </div>
@@ -175,7 +184,9 @@ export function StatusesManager({
                 </p>
               ) : null}
               <p className="text-xs text-muted-foreground mt-0.5">
-                {s.usage_count} colis associé{s.usage_count > 1 ? "s" : ""}
+                {s.usage_count > 1
+                  ? t("parcelsLinkedPlural", { count: s.usage_count })
+                  : t("parcelsLinked", { count: s.usage_count })}
               </p>
             </div>
 
@@ -185,20 +196,23 @@ export function StatusesManager({
                 onOpenChange={(o) => setEditing(o ? s : null)}
               >
                 <DialogTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="Modifier" className="min-h-11 min-w-11">
+                  <Button variant="ghost" size="icon" aria-label={tCommon("edit")} className="min-h-11 min-w-11">
                     <Pencil className="size-4" />
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Modifier le statut</DialogTitle>
+                    <DialogTitle>{t("editTitle")}</DialogTitle>
                   </DialogHeader>
                   {editing?.id === s.id ? (
                     <StatusForm
                       subdomain={subdomain}
                       mode="edit"
                       status={editing}
-                      onDone={() => setEditing(null)}
+                      onDone={() => {
+                        setEditing(null);
+                        router.refresh();
+                      }}
                     />
                   ) : null}
                 </DialogContent>
@@ -209,7 +223,7 @@ export function StatusesManager({
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label="Supprimer"
+                    aria-label={tCommon("delete")}
                     disabled={
                       statuses.length <= MIN_STATUSES ||
                       s.usage_count > 0 ||
@@ -217,12 +231,12 @@ export function StatusesManager({
                     }
                     title={
                       s.system_code != null
-                        ? "Statut système — non supprimable"
+                        ? t("systemNotDeletable")
                         : statuses.length <= MIN_STATUSES
-                          ? "Au moins 2 statuts doivent rester actifs"
+                          ? t("minActiveTip")
                           : s.usage_count > 0
-                            ? `Utilisé par ${s.usage_count} colis`
-                            : "Supprimer"
+                            ? t("usedBy", { count: s.usage_count })
+                            : tCommon("delete")
                     }
                     className="min-h-11 min-w-11"
                   >
@@ -231,15 +245,15 @@ export function StatusesManager({
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Supprimer ce statut ?</AlertDialogTitle>
+                    <AlertDialogTitle>{t("deleteTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Cette action est irréversible.
+                      {t("deleteDescription")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Annuler</AlertDialogCancel>
+                    <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
                     <AlertDialogAction onClick={() => onDelete(s.id)}>
-                      Supprimer
+                      {tCommon("delete")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>

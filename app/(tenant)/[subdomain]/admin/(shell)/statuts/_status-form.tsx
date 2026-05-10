@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -41,6 +42,8 @@ type Props =
 
 export function StatusForm(props: Props) {
   const { subdomain, mode, onDone } = props;
+  const t = useTranslations("statuses");
+  const tCommon = useTranslations("common");
   const action = mode === "create" ? createStatusAction : updateStatusAction;
   const [state, formAction, pending] = useActionState<
     StatusFormState,
@@ -55,11 +58,11 @@ export function StatusForm(props: Props) {
 
   useEffect(() => {
     if (state?.ok) {
-      toast.success(mode === "create" ? "Statut créé" : "Statut mis à jour");
+      toast.success(mode === "create" ? t("created") : t("updated"));
       onDone();
     }
     if (state?.errors?._form?.[0]) toast.error(state.errors._form[0]);
-  }, [state, onDone, mode]);
+  }, [state, onDone, mode, t]);
 
   return (
     <form action={formAction} className="space-y-4">
@@ -74,7 +77,7 @@ export function StatusForm(props: Props) {
 
       <div className="space-y-2">
         <Label htmlFor="label">
-          Libellé <span className="text-destructive">*</span>
+          {t("form.label")} <span className="text-destructive">{tCommon("required")}</span>
         </Label>
         <Input
           id="label"
@@ -87,7 +90,7 @@ export function StatusForm(props: Props) {
         />
         {mode === "create" && autoCode ? (
           <p className="text-xs text-muted-foreground">
-            Code généré :{" "}
+            {tCommon("generatedCode")}{" "}
             <span className="font-mono text-foreground">{autoCode}</span>
           </p>
         ) : null}
@@ -101,7 +104,7 @@ export function StatusForm(props: Props) {
       ) : (
         <div className="space-y-2">
           <Label htmlFor="code">
-            Code interne <span className="text-destructive">*</span>
+            {t("form.internalCode")} <span className="text-destructive">{tCommon("required")}</span>
           </Label>
           <Input
             id="code"
@@ -115,8 +118,8 @@ export function StatusForm(props: Props) {
           />
           <p className="text-xs text-muted-foreground">
             {isSystem
-              ? "Statut système — code et type non modifiables."
-              : "Identifiant technique en minuscules (chiffres, lettres et underscores)."}
+              ? t("form.systemStatus")
+              : t("form.codeDescription")}
           </p>
           {state?.errors?.code?.[0] ? (
             <p className="text-xs text-destructive">{state.errors.code[0]}</p>
@@ -127,7 +130,7 @@ export function StatusForm(props: Props) {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="type">
-            Type <span className="text-destructive">*</span>
+            {t("form.type")} <span className="text-destructive">{tCommon("required")}</span>
           </Label>
           <select
             id="type"
@@ -137,9 +140,9 @@ export function StatusForm(props: Props) {
             disabled={isSystem}
             className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm disabled:opacity-60"
           >
-            {PARCEL_STATUS_TYPES.map((t) => (
-              <option key={t} value={t}>
-                {PARCEL_STATUS_TYPE_LABELS[t]}
+            {PARCEL_STATUS_TYPES.map((type) => (
+              <option key={type} value={type}>
+                {PARCEL_STATUS_TYPE_LABELS[type]}
               </option>
             ))}
           </select>
@@ -149,7 +152,7 @@ export function StatusForm(props: Props) {
         </div>
         <div className="space-y-2">
           <Label htmlFor="color">
-            Couleur <span className="text-destructive">*</span>
+            {t("form.color")} <span className="text-destructive">{tCommon("required")}</span>
           </Label>
           <div className="flex items-center gap-2">
             <input
@@ -157,7 +160,7 @@ export function StatusForm(props: Props) {
               value={color}
               onChange={(e) => setColor(e.target.value.toUpperCase())}
               className="h-9 w-12 rounded-md border cursor-pointer"
-              aria-label="Sélecteur de couleur"
+              aria-label={t("form.colorPicker")}
             />
             <Input
               id="color"
@@ -175,7 +178,7 @@ export function StatusForm(props: Props) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description interne</Label>
+        <Label htmlFor="description">{t("form.description")}</Label>
         <Textarea
           id="description"
           name="description"
@@ -184,26 +187,26 @@ export function StatusForm(props: Props) {
           rows={2}
         />
         <p className="text-xs text-muted-foreground">
-          Non visible des clients. 200 caractères max.
+          {t("form.descriptionNote")}
         </p>
       </div>
 
       <div className="rounded-md border p-3 bg-muted/30">
-        <p className="text-xs text-muted-foreground mb-2">Aperçu</p>
+        <p className="text-xs text-muted-foreground mb-2">{t("form.preview")}</p>
         <span
           className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
           style={{ background: color, color: "#fff" }}
         >
-          {initial?.label ?? "Nouveau statut"}
+          {initial?.label ?? t("newStatus")}
         </span>
       </div>
 
       <div className="flex items-center justify-end gap-2">
         <Button type="button" variant="ghost" onClick={onDone}>
-          Annuler
+          {tCommon("cancel")}
         </Button>
         <Button type="submit" disabled={pending}>
-          {pending ? "Enregistrement..." : "Enregistrer"}
+          {pending ? tCommon("saving") : tCommon("save")}
         </Button>
       </div>
     </form>

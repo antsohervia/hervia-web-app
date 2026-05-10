@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 function slugify(str: string): string {
@@ -34,6 +35,8 @@ type Props =
 
 export function TransportModeForm(props: Props) {
   const { subdomain, mode, onDone } = props;
+  const t = useTranslations("transportModes");
+  const tCommon = useTranslations("common");
   const action =
     mode === "create" ? createTransportModeAction : updateTransportModeAction;
   const [state, formAction, pending] = useActionState<
@@ -47,11 +50,11 @@ export function TransportModeForm(props: Props) {
 
   useEffect(() => {
     if (state?.ok) {
-      toast.success(mode === "create" ? "Mode créé" : "Mode mis à jour");
+      toast.success(mode === "create" ? t("created") : t("updated"));
       onDone();
     }
     if (state?.errors?._form?.[0]) toast.error(state.errors._form[0]);
-  }, [state, onDone, mode]);
+  }, [state, onDone, mode, t]);
 
   return (
     <form action={formAction} className="space-y-4">
@@ -66,7 +69,7 @@ export function TransportModeForm(props: Props) {
 
       <div className="space-y-2">
         <Label htmlFor="label">
-          Libellé <span className="text-destructive">*</span>
+          {t("form.label")} <span className="text-destructive">{tCommon("required")}</span>
         </Label>
         <Input
           id="label"
@@ -76,11 +79,11 @@ export function TransportModeForm(props: Props) {
           onChange={mode === "create" ? (e) => setLabelValue(e.target.value) : undefined}
           maxLength={60}
           required
-          placeholder="Ex : Maritime"
+          placeholder={t("form.labelPlaceholder")}
         />
         {mode === "create" && autoCode ? (
           <p className="text-xs text-muted-foreground">
-            Code généré :{" "}
+            {t("form.codeHint")}{" "}
             <span className="font-mono text-foreground">{autoCode}</span>
           </p>
         ) : null}
@@ -94,7 +97,7 @@ export function TransportModeForm(props: Props) {
       ) : (
         <div className="space-y-2">
           <Label htmlFor="code">
-            Code interne <span className="text-destructive">*</span>
+            {t("form.internalCode")} <span className="text-destructive">{tCommon("required")}</span>
           </Label>
           <Input
             id="code"
@@ -105,7 +108,7 @@ export function TransportModeForm(props: Props) {
             required
           />
           <p className="text-xs text-muted-foreground">
-            Identifiant en minuscules (chiffres, lettres, tirets, underscores).
+            {t("form.codeDescription")}
           </p>
           {state?.errors?.code?.[0] ? (
             <p className="text-xs text-destructive">{state.errors.code[0]}</p>
@@ -120,10 +123,10 @@ export function TransportModeForm(props: Props) {
           onClick={onDone}
           className="w-full sm:w-auto"
         >
-          Annuler
+          {tCommon("cancel")}
         </Button>
         <Button type="submit" disabled={pending} className="w-full sm:w-auto">
-          {pending ? "Enregistrement..." : "Enregistrer"}
+          {pending ? tCommon("saving") : tCommon("save")}
         </Button>
       </div>
     </form>

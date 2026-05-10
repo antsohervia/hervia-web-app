@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Pencil, Plus, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -36,10 +38,17 @@ export function TransportModesManager({
   subdomain: string;
   initialModes: TransportMode[];
 }) {
+  const t = useTranslations("transportModes");
+  const tCommon = useTranslations("common");
+  const router = useRouter();
   const [modes, setModes] = useState(initialModes);
   const [editing, setEditing] = useState<TransportMode | null>(null);
   const [creating, setCreating] = useState(false);
   const [pending, startTransition] = useTransition();
+
+  useEffect(() => {
+    setModes(initialModes);
+  }, [initialModes]);
 
   function move(index: number, dir: -1 | 1) {
     const next = [...modes];
@@ -58,7 +67,7 @@ export function TransportModesManager({
       try {
         await reorderTransportModesAction(fd);
       } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Erreur de tri");
+        toast.error(e instanceof Error ? e.message : t("sortError"));
       }
     });
   }
@@ -71,9 +80,9 @@ export function TransportModesManager({
       try {
         await deleteTransportModeAction(fd);
         setModes((s) => s.filter((x) => x.id !== id));
-        toast.success("Mode supprimé");
+        toast.success(t("deleted"));
       } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Suppression impossible");
+        toast.error(e instanceof Error ? e.message : t("deleteError"));
       }
     });
   }
@@ -82,24 +91,28 @@ export function TransportModesManager({
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <p className="text-sm text-muted-foreground">
-          {modes.length} mode{modes.length > 1 ? "s" : ""} · utilisez les
-          flèches pour réordonner.
+          {modes.length > 1
+            ? t("sortHintPlural", { count: modes.length })
+            : t("sortHint", { count: modes.length })}
         </p>
         <Dialog open={creating} onOpenChange={setCreating}>
           <DialogTrigger asChild>
             <Button className="w-full sm:w-auto min-h-11">
               <Plus className="size-4 mr-1" />
-              Ajouter un mode
+              {t("add")}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Nouveau mode de transport</DialogTitle>
+              <DialogTitle>{t("createTitle")}</DialogTitle>
             </DialogHeader>
             <TransportModeForm
               subdomain={subdomain}
               mode="create"
-              onDone={() => setCreating(false)}
+              onDone={() => {
+                setCreating(false);
+                router.refresh();
+              }}
             />
           </DialogContent>
         </Dialog>
@@ -107,10 +120,7 @@ export function TransportModesManager({
 
       <div className="rounded-md border bg-card divide-y">
         {modes.length === 0 ? (
-          <p className="p-6 text-sm text-muted-foreground">
-            Aucun mode. Ajoutez-en un pour permettre aux clients de saisir un
-            colis.
-          </p>
+          <p className="p-6 text-sm text-muted-foreground">{t("noData")}</p>
         ) : null}
         {modes.map((m, i) => (
           <div key={m.id} className="p-3 flex items-center gap-2 sm:gap-3">
@@ -120,7 +130,7 @@ export function TransportModesManager({
                 onClick={() => move(i, -1)}
                 disabled={i === 0 || pending}
                 className="size-8 sm:size-6 inline-flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30 text-sm"
-                aria-label="Monter"
+                aria-label={t("moveUp")}
               >
                 ▲
               </button>
@@ -129,7 +139,7 @@ export function TransportModesManager({
                 onClick={() => move(i, 1)}
                 disabled={i === modes.length - 1 || pending}
                 className="size-8 sm:size-6 inline-flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30 text-sm"
-                aria-label="Descendre"
+                aria-label={t("moveDown")}
               >
                 ▼
               </button>
@@ -141,7 +151,9 @@ export function TransportModesManager({
                 <code className="text-xs text-muted-foreground break-all">{m.code}</code>
               </div>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {m.usage_count} colis associé{m.usage_count > 1 ? "s" : ""}
+                {m.usage_count > 1
+                  ? t("parcelsLinkedPlural", { count: m.usage_count })
+                  : t("parcelsLinked", { count: m.usage_count })}
               </p>
             </div>
 
@@ -154,7 +166,7 @@ export function TransportModesManager({
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label="Modifier"
+                    aria-label={tCommon("edit")}
                     className="min-h-11 min-w-11"
                   >
                     <Pencil className="size-4" />
@@ -162,14 +174,17 @@ export function TransportModesManager({
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Modifier le mode</DialogTitle>
+                    <DialogTitle>{t("editTitle")}</DialogTitle>
                   </DialogHeader>
                   {editing?.id === m.id ? (
                     <TransportModeForm
                       subdomain={subdomain}
                       mode="edit"
                       record={editing}
-                      onDone={() => setEditing(null)}
+                      onDone={() => {
+                        setEditing(null);
+                        router.refresh();
+                      }}
                     />
                   ) : null}
                 </DialogContent>
@@ -180,12 +195,12 @@ export function TransportModesManager({
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label="Supprimer"
+                    aria-label={tCommon("delete")}
                     disabled={m.usage_count > 0}
                     title={
                       m.usage_count > 0
-                        ? `Utilisé par ${m.usage_count} colis`
-                        : "Supprimer"
+                        ? t("usedBy", { count: m.usage_count })
+                        : tCommon("delete")
                     }
                     className="min-h-11 min-w-11"
                   >
@@ -194,15 +209,15 @@ export function TransportModesManager({
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Supprimer ce mode ?</AlertDialogTitle>
+                    <AlertDialogTitle>{t("deleteTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Cette action est irréversible.
+                      {t("deleteDescription")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Annuler</AlertDialogCancel>
+                    <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
                     <AlertDialogAction onClick={() => onDelete(m.id)}>
-                      Supprimer
+                      {tCommon("delete")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
