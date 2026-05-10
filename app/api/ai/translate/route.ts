@@ -1,15 +1,20 @@
 import { NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
 import { isValidLocale, locales, type Locale } from "@/lib/i18n/config";
 
-const LOCALE_NAMES: Record<Locale, string> = {
-  fr: "French",
-  en: "English",
-  zh: "Simplified Chinese",
+const DEEPL_TARGET: Record<Locale, string> = {
+  fr: "FR",
+  en: "EN-US",
+  zh: "ZH",
+};
+
+const DEEPL_SOURCE: Record<Locale, string> = {
+  fr: "FR",
+  en: "EN",
+  zh: "ZH",
 };
 
 export async function POST(request: Request) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.DEEPL_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "noApiKey" }, { status: 503 });
   }
@@ -34,48 +39,41 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid params" }, { status: 400 });
   }
 
-  const client = new Anthropic({ apiKey });
+  const entries = Object.entries(keys);
+  if (entries.length === 0) {
+    return NextResponse.json({ translations: {} });
+  }
 
-  const keyList = Object.entries(keys)
-    .map(([k, v]) => `${k}: ${v}`)
-    .join("\n");
+  const baseUrl = apiKey.endsWith(":fx")
+    ? "https://api-free.deepl.com/v2/translate"
+    : "https://api.deepl.com/v2/translate";
 
-  const message = await client.messages.create({
-    model: "claude-haiku-4-5-20251001",
-    max_tokens: 4096,
-    messages: [
-      {
-        role: "user",
-        content: `You are a professional translator. Translate the following UI strings from ${LOCALE_NAMES[sourceLocale]} to ${LOCALE_NAMES[targetLocale]}.
-
-Rules:
-- Keep the same key names (before the colon)
-- Preserve ICU placeholders like {name}, {count} exactly as-is
-- Keep translations concise and suitable for a logistics admin interface
-- Return ONLY a JSON object with key-value pairs, no explanation
-
-Strings to translate:
-${keyList}
-
-Return a JSON object like: {"key1": "translation1", "key2": "translation2"}`,
-      },
-    ],
+  const res = await fetch(baseUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `DeepL-Auth-Key ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      text: entries.map(([, v]) => v),
+      source_lang: DEEPL_SOURCE[sourceLocale],
+      target_lang: DEEPL_TARGET[targetLocale],
+    }),
   });
 
-  const text =
-    message.content[0].type === "text" ? message.content[0].text : "";
-
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) {
-    return NextResponse.json({ error: "Parse error" }, { status: 500 });
+  if (!res.ok) {
+    const err = await res.text().catch(() => "");
+    return NextResponse.json({ error: err || "DeepL error" }, { status: 502 });
   }
 
-  try {
-    const translations = JSON.parse(jsonMatch[0]) as Record<string, string>;
-    return NextResponse.json({ translations });
-  } catch {
-    return NextResponse.json({ error: "Parse error" }, { status: 500 });
+  const json = (await res.json()) as { translations: { text: string }[] };
+  const translations: Record<string, string> = {};
+  for (let i = 0; i < entries.length; i++) {
+    const translated = json.translations[i]?.text;
+    if (translated) translations[entries[i][0]] = translated;
   }
+
+  return NextResponse.json({ translations });
 }
 
 export { locales };
