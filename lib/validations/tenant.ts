@@ -128,6 +128,8 @@ export type CreateTenantState = {
     _form?: string[];
   };
   suggestions?: string[];
+  invitationLink?: string;
+  tenantId?: string;
   ok?: boolean;
 };
 
