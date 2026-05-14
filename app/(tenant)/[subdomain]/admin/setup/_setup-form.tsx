@@ -1,18 +1,23 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useState, useActionState, useEffect } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { SetupPasswordState } from "@/lib/validations/setup";
-import { setupPasswordAction } from "./_actions";
+import { setupPasswordAction, clearIntendedRoleAction } from "./_actions";
+import { createSupabaseBrowser } from "@/lib/supabase/client";
+
+type Method = "select" | "password";
 
 export function SetupForm({ subdomain }: { subdomain: string }) {
-  const [state, action, pending] = useActionState<
-    SetupPasswordState,
-    FormData
-  >(setupPasswordAction, {});
+  const [method, setMethod] = useState<Method>("select");
+  const [oauthPending, setOauthPending] = useState(false);
+  const [state, action, pending] = useActionState<SetupPasswordState, FormData>(
+    setupPasswordAction,
+    {},
+  );
 
   useEffect(() => {
     if (state?.redirectTo) {
@@ -20,11 +25,73 @@ export function SetupForm({ subdomain }: { subdomain: string }) {
     }
   }, [state?.redirectTo]);
 
+  async function handleSocialLogin(provider: "facebook" | "apple" | "google") {
+    setOauthPending(true);
+    await clearIntendedRoleAction();
+    const supabase = createSupabaseBrowser();
+    const origin = window.location.origin;
+    await supabase.auth.linkIdentity({
+      provider,
+      options: { redirectTo: `${origin}/auth/callback` },
+    });
+  }
+
+  if (method === "select") {
+    return (
+      <div className="rounded-lg border bg-card p-6 shadow-sm space-y-4">
+        <Button
+          type="button"
+          className="w-full"
+          disabled={oauthPending}
+          onClick={() => handleSocialLogin("google")}
+        >
+          Continuer avec Google
+        </Button>
+
+        <Button
+          type="button"
+          className="w-full"
+          variant="outline"
+          disabled={oauthPending}
+          onClick={() => handleSocialLogin("facebook")}
+        >
+          Continuer avec Facebook
+        </Button>
+
+        <Button
+          type="button"
+          className="w-full"
+          variant="outline"
+          disabled={oauthPending}
+          onClick={() => handleSocialLogin("apple")}
+        >
+          Continuer avec Apple
+        </Button>
+
+        <div className="relative my-1">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-card px-2 text-muted-foreground">ou</span>
+          </div>
+        </div>
+
+        <Button
+          type="button"
+          variant="ghost"
+          className="w-full"
+          disabled={oauthPending}
+          onClick={() => setMethod("password")}
+        >
+          Accéder avec un mot de passe
+        </Button>
+      </div>
+    );
+  }
+
   return (
-    <form
-      action={action}
-      className="rounded-lg border bg-card p-6 shadow-sm space-y-4"
-    >
+    <form action={action} className="rounded-lg border bg-card p-6 shadow-sm space-y-4">
       <input type="hidden" name="subdomain" value={subdomain} />
 
       {state?.errors?._form?.[0] ? (
@@ -47,9 +114,7 @@ export function SetupForm({ subdomain }: { subdomain: string }) {
         />
         <p className="text-xs text-muted-foreground">10 caractères minimum.</p>
         {state?.errors?.password?.[0] ? (
-          <p className="text-xs text-destructive">
-            {state.errors.password[0]}
-          </p>
+          <p className="text-xs text-destructive">{state.errors.password[0]}</p>
         ) : null}
       </div>
 
@@ -66,15 +131,21 @@ export function SetupForm({ subdomain }: { subdomain: string }) {
           minLength={10}
         />
         {state?.errors?.confirm?.[0] ? (
-          <p className="text-xs text-destructive">
-            {state.errors.confirm[0]}
-          </p>
+          <p className="text-xs text-destructive">{state.errors.confirm[0]}</p>
         ) : null}
       </div>
 
       <Button type="submit" disabled={pending} className="w-full">
         {pending ? "Activation..." : "Activer mon compte"}
       </Button>
+
+      <button
+        type="button"
+        onClick={() => setMethod("select")}
+        className="w-full text-xs text-muted-foreground underline-offset-4 hover:underline"
+      >
+        ← Retour
+      </button>
     </form>
   );
 }

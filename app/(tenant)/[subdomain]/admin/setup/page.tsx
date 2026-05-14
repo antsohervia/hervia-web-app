@@ -36,7 +36,7 @@ export default async function SetupPasswordPage({ params }: Props) {
           ) : null}
           <h1 className="text-2xl font-semibold">Bienvenue {user.email}</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Définissez votre mot de passe pour activer votre espace{" "}
+            Choisissez comment vous connecter à votre espace{" "}
             {tenant.name}.
           </p>
         </div>
