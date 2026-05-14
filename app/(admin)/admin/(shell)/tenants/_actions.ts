@@ -12,6 +12,7 @@ import {
 import { setImpersonation, clearImpersonation, getImpersonation } from "@/lib/auth/impersonation";
 import { env, isProduction } from "@/lib/env";
 import { logAudit } from "@/lib/audit/log";
+import { sendTenantInvitationEmail } from "@/lib/email/send";
 import {
   CreateTenantSchema,
   DeleteTenantSchema,
@@ -76,18 +77,22 @@ export async function createTenantAction(
     return { errors: { _form: [tErr?.message ?? "Échec création tenant"] } };
   }
 
-  const redirectTo = `${tenantOrigin(subdomain)}/auth/callback`;
-  const { data: invited, error: invErr } =
-    await admin.auth.admin.inviteUserByEmail(adminEmail, {
-      redirectTo,
-      data: {
-        tenant_id: tenant.id,
-        intended_role: "entreprise_admin",
-        tenant_name: name,
+  const callbackUrl = `${tenantOrigin(subdomain)}/auth/callback`;
+  const { data: linkData, error: invErr } =
+    await admin.auth.admin.generateLink({
+      type: "invite",
+      email: adminEmail,
+      options: {
+        redirectTo: callbackUrl,
+        data: {
+          tenant_id: tenant.id,
+          intended_role: "entreprise_admin",
+          tenant_name: name,
+        },
       },
     });
 
-  if (invErr || !invited?.user) {
+  if (invErr || !linkData?.user) {
     await admin.from("tenants").delete().eq("id", tenant.id);
     return {
       errors: {
@@ -96,7 +101,12 @@ export async function createTenantAction(
     };
   }
 
-  await admin.auth.admin.updateUserById(invited.user.id, {
+  await admin.auth.admin.updateUserById(linkData.user.id, {
+    user_metadata: {
+      tenant_id: tenant.id,
+      intended_role: "entreprise_admin",
+      tenant_name: name,
+    },
     app_metadata: {
       role: "entreprise_admin",
       tenant_id: tenant.id,
@@ -105,7 +115,7 @@ export async function createTenantAction(
 
   await admin.from("tenant_members").insert({
     tenant_id: tenant.id,
-    user_id: invited.user.id,
+    user_id: linkData.user.id,
     role: "entreprise_admin",
     invited_by: session.user.id,
   });
@@ -118,9 +128,24 @@ export async function createTenantAction(
     payload: { name, subdomain, adminEmail, country, defaultCurrency },
   });
 
+  // action_link passe par le serveur Supabase et redirige selon la config PKCE
+  // (code sans verifier ou fragments de hash), les deux échouent dans le callback.
+  // On construit le lien directement avec hashed_token pour que verifyOtp()
+  // soit appelé sans détour via Supabase.
+  const invitationLink = `${callbackUrl}?token_hash=${linkData.properties.hashed_token}&type=invite`;
+
+  await sendTenantInvitationEmail({
+    toEmail: adminEmail,
+    tenantName: name,
+    invitationLink,
+  });
+
   revalidatePath("/admin/tenants");
   revalidatePath("/admin/dashboard");
-  redirect(`/admin/tenants/${tenant.id}`);
+  return {
+    invitationLink,
+    tenantId: tenant.id,
+  };
 }
 
 export async function suspendTenantAction(

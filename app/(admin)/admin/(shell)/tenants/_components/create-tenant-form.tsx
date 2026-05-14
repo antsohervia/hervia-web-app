@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,8 @@ const COUNTRIES: { code: string; name: string }[] = [
 const CURRENCIES = ["EUR", "USD", "CHF", "MAD", "DZD", "TND", "XOF", "XAF"];
 
 export function CreateTenantForm() {
+  const router = useRouter();
+  const [copied, setCopied] = useState(false);
   const [state, action, pending] = useActionState<
     CreateTenantState,
     FormData
@@ -37,6 +40,22 @@ export function CreateTenantForm() {
       toast.error(state.errors._form[0]);
     }
   }, [state]);
+
+  if (state?.invitationLink && state?.tenantId) {
+    return (
+      <InvitationSuccess
+        link={state.invitationLink}
+        tenantId={state.tenantId}
+        copied={copied}
+        onCopy={() => {
+          navigator.clipboard.writeText(state.invitationLink!);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        }}
+        onViewTenant={() => router.push(`/admin/tenants/${state.tenantId}`)}
+      />
+    );
+  }
 
   return (
     <form action={action} className="space-y-5 max-w-xl">
@@ -124,6 +143,53 @@ export function CreateTenantForm() {
         </Button>
       </div>
     </form>
+  );
+}
+
+function InvitationSuccess({
+  link,
+  tenantId,
+  copied,
+  onCopy,
+  onViewTenant,
+}: {
+  link: string;
+  tenantId: string;
+  copied: boolean;
+  onCopy: () => void;
+  onViewTenant: () => void;
+}) {
+  return (
+    <div className="space-y-5 max-w-xl">
+      <Alert>
+        <AlertDescription>
+          Tenant créé. Un email d&apos;invitation a été envoyé. Copiez aussi ce lien
+          pour le partager via un autre canal (Messenger, WhatsApp, etc.).
+        </AlertDescription>
+      </Alert>
+
+      <div className="space-y-2">
+        <Label>Lien d&apos;invitation</Label>
+        <div className="flex gap-2">
+          <Input
+            readOnly
+            value={link}
+            className="font-mono text-xs"
+            onFocus={(e) => e.target.select()}
+          />
+          <Button type="button" variant="outline" onClick={onCopy} className="shrink-0">
+            {copied ? "Copié !" : "Copier"}
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Ce lien est à usage unique et expire dans 72 heures.
+        </p>
+      </div>
+
+      <Button onClick={onViewTenant} className="w-full sm:w-auto">
+        Voir le tenant
+      </Button>
+    </div>
   );
 }
 
