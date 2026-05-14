@@ -1,4 +1,211 @@
 {
+  "marketing": {
+    "meta": {
+      "title": "HERVIA — Le SaaS qui modernise les transitaires",
+      "description": "Plateforme tout-en-un pour les transitaires : suivi de colis en temps réel, espace client en marque blanche, automatisation des statuts. Essai gratuit.",
+      "ogAlt": "HERVIA — plateforme SaaS pour transitaires modernes"
+    },
+    "nav": {
+      "features": "Fonctionnalités",
+      "howItWorks": "Comment ça marche",
+      "pricing": "Tarifs",
+      "faq": "FAQ",
+      "login": "Se connecter",
+      "ctaPrimary": "Commencer gratuitement",
+      "ctaSecondary": "Demander une démo",
+      "openMenu": "Ouvrir le menu",
+      "closeMenu": "Fermer le menu"
+    },
+    "hero": {
+      "eyebrow": "Plateforme pour transitaires",
+      "title": "Le SaaS qui modernise votre activité de transit",
+      "subtitle": "HERVIA centralise vos expéditions, automatise le suivi de vos colis et offre à vos clients une expérience digne d'un transporteur premium. Sans code, sans intégration complexe.",
+      "ctaPrimary": "Commencer gratuitement",
+      "ctaSecondary": "Demander une démo",
+      "trust": "Adopté par les transitaires d'Europe, du Maghreb et d'Afrique de l'Ouest",
+      "mockupAlt": "Aperçu du tableau de bord HERVIA avec suivi de colis en temps réel",
+      "stats": [
+        { "value": "10k+", "label": "Colis suivis chaque mois" },
+        { "value": "99,9%", "label": "Disponibilité garantie" },
+        { "value": "3 langues", "label": "FR · EN · 中文" }
+      ],
+      "mockup": {
+        "browserUrl": "tracking.acme-logistics.com",
+        "greeting": "Bonjour, Marie",
+        "subtitle": "Vos expéditions et leur statut en un coup d'œil.",
+        "kpiTotal": "Total",
+        "kpiOngoing": "En cours",
+        "kpiDelivered": "Livrées",
+        "rows": [
+          { "ref": "FR-2026-04812", "route": "Marseille → Casablanca", "status": "En transit", "eta": "Livraison estimée 18/05" },
+          { "ref": "FR-2026-04811", "route": "Anvers → Dakar", "status": "Préparation", "eta": "Créé le 12/05" },
+          { "ref": "FR-2026-04810", "route": "Le Havre → Abidjan", "status": "Livré", "eta": "Livré le 09/05" }
+        ]
+      }
+    },
+    "benefits": {
+      "eyebrow": "Pourquoi HERVIA",
+      "title": "Tout ce dont un transitaire moderne a besoin",
+      "subtitle": "Les bénéfices concrets qui transforment votre quotidien opérationnel.",
+      "items": [
+        { "icon": "Zap", "title": "Simplicité d'utilisation", "body": "Une interface pensée pour vos équipes terrain. Aucune formation, vos opérateurs sont productifs en quelques minutes." },
+        { "icon": "Workflow", "title": "Automatisation des statuts", "body": "Scan en lot, transitions automatiques, notifications email : éliminez la saisie manuelle et les erreurs humaines." },
+        { "icon": "Clock", "title": "Gain de temps mesurable", "body": "Jusqu'à 6 heures économisées par semaine sur le suivi client. Vos équipes se concentrent sur la logistique, pas sur les emails." },
+        { "icon": "MapPin", "title": "Suivi temps réel", "body": "Vos clients consultent l'état de leur colis à tout moment, depuis n'importe quel appareil. Plus d'appels pour demander où en est l'expédition." },
+        { "icon": "ShieldCheck", "title": "Sécurité des données", "body": "Hébergement européen, chiffrement bout-en-bout, isolation multi-tenant. Conformité RGPD by design." },
+        { "icon": "Sparkles", "title": "Expérience client premium", "body": "Espace client en marque blanche aux couleurs de votre transitaire. Vos clients voient votre marque, pas la nôtre." }
+      ]
+    },
+    "features": {
+      "eyebrow": "Fonctionnalités",
+      "title": "Une plateforme complète, pensée pour les transitaires",
+      "subtitle": "Tous les outils essentiels pour piloter votre activité, dans une seule interface élégante.",
+      "items": [
+        {
+          "title": "Tableau de bord opérationnel",
+          "body": "Visualisez en un coup d'œil l'état de toutes vos expéditions : en cours, livrées, en attente. KPIs personnalisables, filtres avancés et export CSV intégré.",
+          "highlights": ["Vue d'ensemble en temps réel", "Filtres par client, statut, mode", "Export CSV en un clic"]
+        },
+        {
+          "title": "Espace client en marque blanche",
+          "body": "Offrez à vos clients un portail aux couleurs de votre marque : logo, couleurs, domaine personnalisé. Ils suivent leurs colis sans jamais voir HERVIA.",
+          "highlights": ["Logo et palette personnalisés", "Sous-domaine dédié", "Communications en marque blanche"]
+        },
+        {
+          "title": "Scan en lot ultra-rapide",
+          "body": "Mettez à jour des centaines de colis en quelques secondes avec le scanner mobile. Transitions de statut automatiques, journal d'audit complet.",
+          "highlights": ["Compatible douchette et caméra", "Validation en lot", "Audit trail détaillé"]
+        },
+        {
+          "title": "Statuts et modes sur mesure",
+          "body": "Configurez vos propres étapes de cycle de vie, modes de transport (maritime, aérien, routier) et couleurs. HERVIA s'adapte à votre processus, pas l'inverse.",
+          "highlights": ["Workflows personnalisables", "Modes de transport illimités", "Réordonnancement par glisser-déposer"]
+        }
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "Comment ça marche",
+      "title": "Opérationnel en moins de 30 minutes",
+      "subtitle": "Pas d'intégration complexe. Pas de migration interminable. Vous êtes en production le jour même.",
+      "steps": [
+        { "number": "01", "title": "Créez votre espace", "body": "Inscrivez votre entreprise en 2 minutes. Choisissez votre sous-domaine et vos identifiants administrateur." },
+        { "number": "02", "title": "Personnalisez votre marque", "body": "Uploadez votre logo, choisissez vos couleurs, configurez vos statuts et modes de transport." },
+        { "number": "03", "title": "Invitez vos clients", "body": "Vos clients reçoivent un email d'accès à leur espace personnalisé. Aucune installation requise." },
+        { "number": "04", "title": "Suivez en temps réel", "body": "Créez des colis, scannez des bordereaux, communiquez automatiquement. Tout est tracé, tout est centralisé." }
+      ]
+    },
+    "socialProof": {
+      "eyebrow": "Ils nous font confiance",
+      "title": "Des transitaires européens et africains nous ont déjà choisis",
+      "stats": [
+        { "value": "50+", "label": "Transitaires actifs" },
+        { "value": "10 000+", "label": "Colis suivis / mois" },
+        { "value": "99,9%", "label": "Disponibilité" },
+        { "value": "4,9/5", "label": "Satisfaction client" }
+      ],
+      "testimonials": [
+        {
+          "quote": "HERVIA a transformé notre relation client. Nos clients consultent leurs colis 24/7 sans plus jamais nous appeler pour un point de situation. Un gain de temps phénoménal pour nos équipes.",
+          "author": "Sophie Lambert",
+          "role": "Directrice des opérations",
+          "company": "Maritime Express SARL"
+        },
+        {
+          "quote": "On a remplacé deux outils et 30% de saisie manuelle par HERVIA. Le scan en lot est une révolution pour notre entrepôt. ROI atteint en moins de 3 mois.",
+          "author": "Karim El Mansouri",
+          "role": "CEO",
+          "company": "Atlas Transit Casablanca"
+        },
+        {
+          "quote": "Le portail en marque blanche est bluffant. Mes clients pensent que c'est mon développement maison. Et le support HERVIA répond en moins de 2 heures.",
+          "author": "Jean-Marc Diop",
+          "role": "Fondateur",
+          "company": "Sahel Logistics Dakar"
+        }
+      ],
+      "logosTitle": "Ils utilisent HERVIA au quotidien",
+      "logos": [
+        "Maritime Express",
+        "Atlas Transit",
+        "Sahel Logistics",
+        "Méditerranée Cargo",
+        "Côte d'Ivoire Fret",
+        "Tunis Shipping"
+      ]
+    },
+    "seoContent": {
+      "title": "Pourquoi choisir une solution SaaS pour votre activité de transit ?",
+      "intro": "Le métier de transitaire évolue à vitesse accélérée. Vos clients exigent désormais une transparence totale sur leurs expéditions, vos équipes croulent sous les emails de suivi et vos outils historiques peinent à suivre la croissance. HERVIA est la plateforme SaaS dédiée aux commissionnaires de transport qui veulent moderniser leur activité sans investir dans un développement sur mesure.",
+      "subsections": [
+        {
+          "title": "Les problèmes que HERVIA résout au quotidien",
+          "body": "Les transitaires perdent en moyenne 6 heures par semaine et par opérateur à répondre aux questions de suivi. Les tableurs Excel partagés génèrent des erreurs, les emails se perdent, les statuts ne sont pas à jour. HERVIA centralise tout dans une plateforme unique : vos clients consultent eux-mêmes l'état de leurs colis, vos opérateurs mettent à jour les statuts en quelques clics ou par scan, et toutes les communications sont automatisées."
+        },
+        {
+          "title": "Les bénéfices métiers d'une plateforme dédiée transit",
+          "body": "Contrairement aux ERP généralistes, HERVIA est conçu pour le métier de transitaire : modes de transport multiples (maritime, aérien, routier, ferroviaire), gestion multi-devises, statuts personnalisables selon votre workflow, espace client en marque blanche aux couleurs de votre cabinet. Vous différenciez votre offre face à la concurrence et facturez plus de prestations à plus forte valeur ajoutée."
+        },
+        {
+          "title": "Les gains opérationnels mesurables",
+          "body": "Nos transitaires partenaires observent en moyenne 40% de réduction des appels entrants de suivi, 60% de gain sur la saisie de statuts grâce au scan en lot, et un NPS client multiplié par 2. HERVIA s'amortit en moins de 3 mois pour un transitaire gérant 500 colis par mois. Au-delà des gains directs, la plateforme libère vos commerciaux pour développer le portefeuille au lieu de gérer des tâches administratives."
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Questions fréquentes",
+      "subtitle": "Les réponses aux questions les plus posées par les transitaires qui découvrent HERVIA.",
+      "items": [
+        { "q": "Qu'est-ce qu'HERVIA exactement ?", "a": "HERVIA est une plateforme SaaS dédiée aux transitaires (commissionnaires de transport) pour gérer le suivi de leurs colis et offrir un portail client en marque blanche. La plateforme est multi-tenant : chaque transitaire dispose de son propre espace, ses propres clients, ses propres données." },
+        { "q": "Combien coûte HERVIA ?", "a": "HERVIA propose un essai gratuit sans engagement. Les forfaits payants démarrent en fonction du volume de colis traités par mois et incluent un nombre illimité d'utilisateurs administrateurs et clients. Contactez-nous pour un devis adapté à votre activité." },
+        { "q": "Comment HERVIA s'intègre-t-il à mon système actuel ?", "a": "HERVIA fonctionne en stand-alone, sans intégration obligatoire. Vous importez vos colis manuellement ou via CSV. Pour les transitaires souhaitant une intégration avec leur ERP ou TMS, une API REST est disponible sur les forfaits Business." },
+        { "q": "Mes données sont-elles sécurisées ?", "a": "Oui. HERVIA est hébergé en Europe (Frankfurt), les données sont chiffrées au repos et en transit, l'isolation multi-tenant est garantie au niveau de la base de données, et les sauvegardes sont effectuées quotidiennement. Nous sommes conformes au RGPD." },
+        { "q": "Combien de temps pour mettre HERVIA en place ?", "a": "L'inscription prend 2 minutes, la configuration initiale (logo, couleurs, statuts) prend 15 à 30 minutes. Vous pouvez commencer à créer des colis et inviter vos clients dès le premier jour. Aucune formation n'est nécessaire pour vos équipes." },
+        { "q": "HERVIA gère-t-il plusieurs devises et pays ?", "a": "Oui. HERVIA supporte les devises EUR, USD, GBP, CHF, MAD, XOF, XAF, DZD, TND, et fonctionne dans plus de 10 pays (France, Belgique, Suisse, Luxembourg, Maroc, Algérie, Tunisie, Sénégal, Côte d'Ivoire, Cameroun). L'interface est disponible en français, anglais et chinois simplifié." },
+        { "q": "Mes clients ont-ils besoin d'installer une application ?", "a": "Non. Vos clients accèdent à leur espace personnel via un navigateur web (mobile, tablette ou ordinateur). L'interface est responsive et fonctionne sur tous les appareils modernes." },
+        { "q": "Puis-je personnaliser totalement l'apparence pour mes clients ?", "a": "Oui. Vous uploadez votre logo, choisissez vos couleurs principale et secondaire, et HERVIA applique automatiquement votre charte à tous les écrans visibles par vos clients. Votre nom de domaine personnalisé est également supporté." }
+      ]
+    },
+    "ctaFooter": {
+      "title": "Prêt à moderniser votre activité de transit ?",
+      "subtitle": "Rejoignez les transitaires qui ont déjà fait le choix d'HERVIA. Essai gratuit, sans carte bancaire, sans engagement.",
+      "ctaPrimary": "Commencer gratuitement",
+      "ctaSecondary": "Demander une démo"
+    },
+    "footer": {
+      "tagline": "Le SaaS des transitaires modernes. Suivi, automatisation et expérience client premium.",
+      "columns": [
+        {
+          "title": "Produit",
+          "links": [
+            { "label": "Fonctionnalités", "href": "#features" },
+            { "label": "Comment ça marche", "href": "#how-it-works" },
+            { "label": "FAQ", "href": "#faq" }
+          ]
+        },
+        {
+          "title": "Société",
+          "links": [
+            { "label": "Contact", "href": "mailto:contact@hervia.co" },
+            { "label": "Support", "href": "mailto:support@hervia.co" }
+          ]
+        },
+        {
+          "title": "Légal",
+          "links": [
+            { "label": "Conditions générales", "href": "/legal/terms" },
+            { "label": "Confidentialité", "href": "/legal/privacy" },
+            { "label": "Mentions légales", "href": "/legal/imprint" },
+            { "label": "Cookies", "href": "/legal/cookies" }
+          ]
+        }
+      ],
+      "social": "Suivez-nous",
+      "legal": "© {year} HERVIA. Tous droits réservés.",
+      "contact": "contact@hervia.co",
+      "madeIn": "Conçu en Europe · Hébergé en Europe"
+    }
+  },
   "nav": {
     "dashboard": "Tableau de bord",
     "parcels": "Colis",

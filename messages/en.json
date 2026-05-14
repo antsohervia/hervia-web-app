@@ -1,4 +1,211 @@
 {
+  "marketing": {
+    "meta": {
+      "title": "HERVIA — The SaaS that modernizes freight forwarders",
+      "description": "All-in-one platform for freight forwarders: real-time parcel tracking, white-label client portal, automated workflows. Free trial.",
+      "ogAlt": "HERVIA — SaaS platform for modern freight forwarders"
+    },
+    "nav": {
+      "features": "Features",
+      "howItWorks": "How it works",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "login": "Sign in",
+      "ctaPrimary": "Start for free",
+      "ctaSecondary": "Request a demo",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu"
+    },
+    "hero": {
+      "eyebrow": "Platform for freight forwarders",
+      "title": "The SaaS that modernizes your freight forwarding business",
+      "subtitle": "HERVIA centralizes your shipments, automates parcel tracking and delivers a premium experience to your clients. No code, no complex integration.",
+      "ctaPrimary": "Start for free",
+      "ctaSecondary": "Request a demo",
+      "trust": "Trusted by freight forwarders across Europe, North Africa and West Africa",
+      "mockupAlt": "HERVIA dashboard preview with real-time parcel tracking",
+      "stats": [
+        { "value": "10k+", "label": "Parcels tracked monthly" },
+        { "value": "99.9%", "label": "Guaranteed uptime" },
+        { "value": "3 languages", "label": "EN · FR · 中文" }
+      ],
+      "mockup": {
+        "browserUrl": "tracking.acme-logistics.com",
+        "greeting": "Hello, Marie",
+        "subtitle": "Your shipments and their status at a glance.",
+        "kpiTotal": "Total",
+        "kpiOngoing": "In transit",
+        "kpiDelivered": "Delivered",
+        "rows": [
+          { "ref": "FR-2026-04812", "route": "Marseille → Casablanca", "status": "In transit", "eta": "ETA May 18" },
+          { "ref": "FR-2026-04811", "route": "Antwerp → Dakar", "status": "Preparing", "eta": "Created May 12" },
+          { "ref": "FR-2026-04810", "route": "Le Havre → Abidjan", "status": "Delivered", "eta": "Delivered May 9" }
+        ]
+      }
+    },
+    "benefits": {
+      "eyebrow": "Why HERVIA",
+      "title": "Everything a modern freight forwarder needs",
+      "subtitle": "Concrete benefits that transform your operational day-to-day.",
+      "items": [
+        { "icon": "Zap", "title": "Effortless to use", "body": "An interface designed for field teams. No training needed — operators are productive in minutes." },
+        { "icon": "Workflow", "title": "Automated workflows", "body": "Batch scanning, automatic transitions, email notifications: eliminate manual data entry and human error." },
+        { "icon": "Clock", "title": "Measurable time savings", "body": "Save up to 6 hours per week on client follow-up. Your teams focus on logistics, not on emails." },
+        { "icon": "MapPin", "title": "Real-time tracking", "body": "Your clients check shipment status anytime, from any device. No more calls asking where the parcel is." },
+        { "icon": "ShieldCheck", "title": "Enterprise-grade security", "body": "European hosting, end-to-end encryption, multi-tenant isolation. GDPR-compliant by design." },
+        { "icon": "Sparkles", "title": "Premium client experience", "body": "White-label client portal in your forwarder's colors. Your clients see your brand, never ours." }
+      ]
+    },
+    "features": {
+      "eyebrow": "Features",
+      "title": "A complete platform, built for freight forwarders",
+      "subtitle": "All the essential tools to run your business, in one elegant interface.",
+      "items": [
+        {
+          "title": "Operational dashboard",
+          "body": "See the status of all your shipments at a glance: ongoing, delivered, pending. Custom KPIs, advanced filters and built-in CSV export.",
+          "highlights": ["Real-time overview", "Filter by client, status, mode", "One-click CSV export"]
+        },
+        {
+          "title": "White-label client portal",
+          "body": "Offer your clients a portal in your brand colors: logo, palette, custom domain. They track parcels without ever seeing HERVIA.",
+          "highlights": ["Custom logo and palette", "Dedicated subdomain", "White-label emails"]
+        },
+        {
+          "title": "Ultra-fast batch scanning",
+          "body": "Update hundreds of parcels in seconds with the mobile scanner. Automatic status transitions, full audit trail.",
+          "highlights": ["Barcode reader & camera support", "Bulk validation", "Detailed audit trail"]
+        },
+        {
+          "title": "Custom statuses and modes",
+          "body": "Configure your own lifecycle steps, transport modes (sea, air, road) and colors. HERVIA adapts to your process — not the other way around.",
+          "highlights": ["Custom workflows", "Unlimited transport modes", "Drag-and-drop reordering"]
+        }
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "How it works",
+      "title": "Up and running in under 30 minutes",
+      "subtitle": "No complex integration. No endless migration. You're in production the same day.",
+      "steps": [
+        { "number": "01", "title": "Create your workspace", "body": "Register your company in 2 minutes. Pick your subdomain and admin credentials." },
+        { "number": "02", "title": "Customize your brand", "body": "Upload your logo, choose your colors, configure your statuses and transport modes." },
+        { "number": "03", "title": "Invite your clients", "body": "Your clients receive an email link to their personal space. No installation needed." },
+        { "number": "04", "title": "Track in real time", "body": "Create parcels, scan labels, communicate automatically. Everything traced, everything centralized." }
+      ]
+    },
+    "socialProof": {
+      "eyebrow": "Trusted by",
+      "title": "European and African freight forwarders have already chosen us",
+      "stats": [
+        { "value": "50+", "label": "Active freight forwarders" },
+        { "value": "10,000+", "label": "Parcels tracked / month" },
+        { "value": "99.9%", "label": "Uptime" },
+        { "value": "4.9/5", "label": "Client satisfaction" }
+      ],
+      "testimonials": [
+        {
+          "quote": "HERVIA transformed our client relationship. Customers check their parcels 24/7 and never call us for a status update anymore. A massive time saver for our teams.",
+          "author": "Sophie Lambert",
+          "role": "Head of Operations",
+          "company": "Maritime Express SARL"
+        },
+        {
+          "quote": "We replaced two tools and 30% of manual data entry with HERVIA. The batch scanner is a game-changer for our warehouse. ROI achieved in under 3 months.",
+          "author": "Karim El Mansouri",
+          "role": "CEO",
+          "company": "Atlas Transit Casablanca"
+        },
+        {
+          "quote": "The white-label portal is stunning. My clients think it's our in-house development. And HERVIA support replies in under 2 hours.",
+          "author": "Jean-Marc Diop",
+          "role": "Founder",
+          "company": "Sahel Logistics Dakar"
+        }
+      ],
+      "logosTitle": "They use HERVIA every day",
+      "logos": [
+        "Maritime Express",
+        "Atlas Transit",
+        "Sahel Logistics",
+        "Mediterranean Cargo",
+        "Côte d'Ivoire Fret",
+        "Tunis Shipping"
+      ]
+    },
+    "seoContent": {
+      "title": "Why choose a SaaS platform for your freight forwarding business?",
+      "intro": "The freight forwarding industry is evolving at an accelerated pace. Your clients now expect complete transparency on their shipments, your teams are drowning in tracking emails, and your legacy tools can't keep up with growth. HERVIA is the SaaS platform built specifically for freight forwarders who want to modernize without investing in custom development.",
+      "subsections": [
+        {
+          "title": "The problems HERVIA solves every day",
+          "body": "Freight forwarders spend on average 6 hours per week per operator answering tracking questions. Shared Excel spreadsheets create errors, emails get lost, statuses are out of date. HERVIA centralizes everything in a single platform: your clients self-serve parcel status, your operators update statuses in a few clicks or via scanning, and all communications are automated."
+        },
+        {
+          "title": "The business benefits of a dedicated freight platform",
+          "body": "Unlike generic ERPs, HERVIA is purpose-built for freight forwarders: multiple transport modes (sea, air, road, rail), multi-currency support, custom statuses matching your workflow, white-label client portal in your firm's colors. You differentiate from competitors and bill more high-value services."
+        },
+        {
+          "title": "Measurable operational gains",
+          "body": "Our partner forwarders see on average 40% fewer inbound tracking calls, 60% time savings on status updates thanks to batch scanning, and a 2x NPS increase. HERVIA pays for itself in under 3 months for a forwarder handling 500 parcels per month. Beyond direct savings, the platform frees your sales team to grow the portfolio instead of doing admin work."
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Frequently asked questions",
+      "subtitle": "Answers to the most common questions from freight forwarders discovering HERVIA.",
+      "items": [
+        { "q": "What exactly is HERVIA?", "a": "HERVIA is a SaaS platform built for freight forwarders to manage parcel tracking and deliver a white-label client portal. The platform is multi-tenant: each forwarder has their own workspace, their own clients, their own data." },
+        { "q": "How much does HERVIA cost?", "a": "HERVIA offers a free trial with no commitment. Paid plans start based on the monthly parcel volume and include unlimited admin and client users. Contact us for a quote tailored to your activity." },
+        { "q": "How does HERVIA integrate with my current system?", "a": "HERVIA works stand-alone, with no required integration. You import parcels manually or via CSV. For forwarders who need ERP or TMS integration, a REST API is available on Business plans." },
+        { "q": "Is my data secure?", "a": "Yes. HERVIA is hosted in Europe (Frankfurt), data is encrypted at rest and in transit, multi-tenant isolation is enforced at the database level, and backups run daily. We are GDPR-compliant." },
+        { "q": "How long does HERVIA take to set up?", "a": "Sign-up takes 2 minutes; initial configuration (logo, colors, statuses) takes 15 to 30 minutes. You can start creating parcels and inviting clients on day one. No training needed for your teams." },
+        { "q": "Does HERVIA support multiple currencies and countries?", "a": "Yes. HERVIA supports EUR, USD, GBP, CHF, MAD, XOF, XAF, DZD, TND, and works in over 10 countries (France, Belgium, Switzerland, Luxembourg, Morocco, Algeria, Tunisia, Senegal, Côte d'Ivoire, Cameroon). The interface is available in French, English and Simplified Chinese." },
+        { "q": "Do my clients need to install an app?", "a": "No. Your clients access their personal workspace via a web browser (mobile, tablet, desktop). The interface is responsive and works on all modern devices." },
+        { "q": "Can I fully customize the look for my clients?", "a": "Yes. Upload your logo, choose your primary and secondary colors, and HERVIA automatically applies your branding to every client-facing screen. Custom domain names are also supported." }
+      ]
+    },
+    "ctaFooter": {
+      "title": "Ready to modernize your freight forwarding business?",
+      "subtitle": "Join the forwarders who already chose HERVIA. Free trial, no credit card, no commitment.",
+      "ctaPrimary": "Start for free",
+      "ctaSecondary": "Request a demo"
+    },
+    "footer": {
+      "tagline": "The SaaS for modern freight forwarders. Tracking, automation, and a premium client experience.",
+      "columns": [
+        {
+          "title": "Product",
+          "links": [
+            { "label": "Features", "href": "#features" },
+            { "label": "How it works", "href": "#how-it-works" },
+            { "label": "FAQ", "href": "#faq" }
+          ]
+        },
+        {
+          "title": "Company",
+          "links": [
+            { "label": "Contact", "href": "mailto:contact@hervia.co" },
+            { "label": "Support", "href": "mailto:support@hervia.co" }
+          ]
+        },
+        {
+          "title": "Legal",
+          "links": [
+            { "label": "Terms of service", "href": "/legal/terms" },
+            { "label": "Privacy policy", "href": "/legal/privacy" },
+            { "label": "Imprint", "href": "/legal/imprint" },
+            { "label": "Cookies", "href": "/legal/cookies" }
+          ]
+        }
+      ],
+      "social": "Follow us",
+      "legal": "© {year} HERVIA. All rights reserved.",
+      "contact": "contact@hervia.co",
+      "madeIn": "Built in Europe · Hosted in Europe"
+    }
+  },
   "nav": {
     "dashboard": "Dashboard",
     "parcels": "Parcels",

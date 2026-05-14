@@ -1,4 +1,211 @@
 {
+  "marketing": {
+    "meta": {
+      "title": "HERVIA — 为货运代理打造的现代化 SaaS 平台",
+      "description": "为货运代理量身定制的一体化平台：实时包裹追踪、白标客户门户、自动化工作流。免费试用。",
+      "ogAlt": "HERVIA — 现代货运代理 SaaS 平台"
+    },
+    "nav": {
+      "features": "功能",
+      "howItWorks": "如何运作",
+      "pricing": "定价",
+      "faq": "常见问题",
+      "login": "登录",
+      "ctaPrimary": "免费开始",
+      "ctaSecondary": "预约演示",
+      "openMenu": "打开菜单",
+      "closeMenu": "关闭菜单"
+    },
+    "hero": {
+      "eyebrow": "货运代理平台",
+      "title": "现代化您的货运代理业务的 SaaS 平台",
+      "subtitle": "HERVIA 集中管理您的货运,自动化包裹追踪,为您的客户提供高端承运商般的体验。无需编码,无需复杂集成。",
+      "ctaPrimary": "免费开始",
+      "ctaSecondary": "预约演示",
+      "trust": "欧洲、北非、西非数十家货运代理的信赖之选",
+      "mockupAlt": "HERVIA 实时包裹追踪控制台预览",
+      "stats": [
+        { "value": "10k+", "label": "每月追踪包裹数" },
+        { "value": "99.9%", "label": "服务可用性保证" },
+        { "value": "3 种语言", "label": "中文 · 法语 · 英语" }
+      ],
+      "mockup": {
+        "browserUrl": "tracking.acme-logistics.com",
+        "greeting": "您好,Marie",
+        "subtitle": "一目了然查看所有货运及状态。",
+        "kpiTotal": "总数",
+        "kpiOngoing": "运输中",
+        "kpiDelivered": "已送达",
+        "rows": [
+          { "ref": "FR-2026-04812", "route": "马赛 → 卡萨布兰卡", "status": "运输中", "eta": "预计 5/18 送达" },
+          { "ref": "FR-2026-04811", "route": "安特卫普 → 达喀尔", "status": "准备中", "eta": "5/12 创建" },
+          { "ref": "FR-2026-04810", "route": "勒阿弗尔 → 阿比让", "status": "已送达", "eta": "5/9 送达" }
+        ]
+      }
+    },
+    "benefits": {
+      "eyebrow": "为何选择 HERVIA",
+      "title": "现代货运代理所需的全部功能",
+      "subtitle": "切实变革您日常运营的具体优势。",
+      "items": [
+        { "icon": "Zap", "title": "简单易用", "body": "专为前线团队设计的界面。无需培训,操作员几分钟内即可上手。" },
+        { "icon": "Workflow", "title": "自动化工作流", "body": "批量扫描、自动状态切换、邮件通知:消除手动录入和人为错误。" },
+        { "icon": "Clock", "title": "可量化的时间节省", "body": "每周节省最多 6 小时的客户跟进时间。您的团队专注于物流,而非邮件回复。" },
+        { "icon": "MapPin", "title": "实时追踪", "body": "您的客户可随时随地从任何设备查看包裹状态。再也不会接到询问进度的电话。" },
+        { "icon": "ShieldCheck", "title": "企业级数据安全", "body": "欧洲托管、端到端加密、多租户隔离。从设计上符合 GDPR 合规。" },
+        { "icon": "Sparkles", "title": "高端客户体验", "body": "客户门户采用您品牌色调的白标设计。客户看到的是您的品牌,而非我们的。" }
+      ]
+    },
+    "features": {
+      "eyebrow": "功能",
+      "title": "为货运代理量身打造的完整平台",
+      "subtitle": "运营业务所需的所有核心工具,集成于一个优雅的界面。",
+      "items": [
+        {
+          "title": "运营控制台",
+          "body": "一目了然查看所有货运状态:运输中、已送达、待处理。可自定义 KPI、高级筛选和内置 CSV 导出。",
+          "highlights": ["实时全局视图", "按客户、状态、模式筛选", "一键 CSV 导出"]
+        },
+        {
+          "title": "白标客户门户",
+          "body": "为客户提供您品牌色调的门户:Logo、配色、自定义域名。他们追踪包裹时永远看不到 HERVIA。",
+          "highlights": ["自定义 Logo 与配色", "专属子域名", "白标邮件通知"]
+        },
+        {
+          "title": "极速批量扫描",
+          "body": "使用移动扫描器在几秒内更新数百个包裹。自动状态切换、完整审计日志。",
+          "highlights": ["兼容扫码枪和摄像头", "批量验证", "详细审计轨迹"]
+        },
+        {
+          "title": "自定义状态与运输模式",
+          "body": "配置您专属的生命周期阶段、运输模式(海运、空运、陆运)和颜色。HERVIA 适配您的流程,而非反之。",
+          "highlights": ["自定义工作流", "无限运输模式", "拖拽重新排序"]
+        }
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "如何运作",
+      "title": "30 分钟内上线运营",
+      "subtitle": "无需复杂集成。无需漫长迁移。当天即可投入生产。",
+      "steps": [
+        { "number": "01", "title": "创建您的空间", "body": "2 分钟注册您的企业。选择子域名和管理员凭据。" },
+        { "number": "02", "title": "定制您的品牌", "body": "上传 Logo、选择配色、配置状态和运输模式。" },
+        { "number": "03", "title": "邀请您的客户", "body": "客户将收到访问其专属空间的邮件。无需安装任何应用。" },
+        { "number": "04", "title": "实时追踪", "body": "创建包裹、扫描单据、自动沟通。一切可追溯,一切已集中。" }
+      ]
+    },
+    "socialProof": {
+      "eyebrow": "深受信赖",
+      "title": "欧洲及非洲货运代理已选择我们",
+      "stats": [
+        { "value": "50+", "label": "活跃货运代理" },
+        { "value": "10,000+", "label": "每月追踪包裹" },
+        { "value": "99.9%", "label": "服务可用性" },
+        { "value": "4.9/5", "label": "客户满意度" }
+      ],
+      "testimonials": [
+        {
+          "quote": "HERVIA 改变了我们的客户关系。客户 24/7 查看包裹,再也不打电话询问进度。为团队节省了大量时间。",
+          "author": "Sophie Lambert",
+          "role": "运营总监",
+          "company": "Maritime Express SARL"
+        },
+        {
+          "quote": "我们用 HERVIA 替代了两个工具和 30% 的手动录入。批量扫描对我们的仓库是一场革命。3 个月内实现投资回报。",
+          "author": "Karim El Mansouri",
+          "role": "CEO",
+          "company": "Atlas Transit Casablanca"
+        },
+        {
+          "quote": "白标门户令人惊艳。客户都以为是我们自己开发的。而 HERVIA 客服在 2 小时内必有回复。",
+          "author": "Jean-Marc Diop",
+          "role": "创始人",
+          "company": "Sahel Logistics Dakar"
+        }
+      ],
+      "logosTitle": "他们每天都在使用 HERVIA",
+      "logos": [
+        "Maritime Express",
+        "Atlas Transit",
+        "Sahel Logistics",
+        "Mediterranean Cargo",
+        "Côte d'Ivoire Fret",
+        "Tunis Shipping"
+      ]
+    },
+    "seoContent": {
+      "title": "为什么选择 SaaS 平台来运营您的货运代理业务?",
+      "intro": "货运代理行业正在加速演变。客户如今要求货运全程透明,您的团队被跟进邮件淹没,而老旧工具难以跟上业务增长。HERVIA 是专为希望现代化、却不愿投入定制开发的货运代理打造的 SaaS 平台。",
+      "subsections": [
+        {
+          "title": "HERVIA 每天为您解决的问题",
+          "body": "货运代理平均每周每位操作员花费 6 小时回答追踪问题。共享 Excel 表格产生错误,邮件丢失,状态滞后。HERVIA 将一切集中于单一平台:客户自助查看包裹状态,操作员通过几次点击或扫描更新状态,所有通信自动化处理。"
+        },
+        {
+          "title": "专属货运平台的业务收益",
+          "body": "与通用 ERP 不同,HERVIA 专为货运代理打造:多种运输模式(海运、空运、陆运、铁路)、多币种支持、根据您工作流程的自定义状态、采用您事务所色调的白标客户门户。您与竞争对手形成差异化,并以更高附加值收取更多服务费。"
+        },
+        {
+          "title": "可量化的运营收益",
+          "body": "我们的合作货运代理平均实现:跟进电话减少 40%,得益于批量扫描的状态更新效率提升 60%,NPS 客户净推荐值翻倍。对于每月处理 500 件包裹的货运代理,HERVIA 在 3 个月内即可收回投入。除了直接收益,平台还释放您的销售团队,让他们专注于发展客户而非行政事务。"
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "常见问题",
+      "title": "常见问题解答",
+      "subtitle": "了解 HERVIA 的货运代理最常问的问题及答案。",
+      "items": [
+        { "q": "HERVIA 究竟是什么?", "a": "HERVIA 是为货运代理打造的 SaaS 平台,用于管理包裹追踪并提供白标客户门户。该平台为多租户架构:每家货运代理拥有独立空间、独立客户、独立数据。" },
+        { "q": "HERVIA 的价格是多少?", "a": "HERVIA 提供免费试用,无任何承诺。付费方案根据每月包裹量起价,并包含无限管理员和客户用户。请联系我们获取适配您业务的报价。" },
+        { "q": "HERVIA 如何集成到我现有的系统?", "a": "HERVIA 独立运行,无需强制集成。您可手动或通过 CSV 导入包裹。如需与 ERP 或 TMS 集成,Business 套餐提供 REST API。" },
+        { "q": "我的数据安全吗?", "a": "是的。HERVIA 托管于欧洲(法兰克福),数据在传输和存储时加密,数据库层面强制多租户隔离,每日自动备份。完全符合 GDPR。" },
+        { "q": "HERVIA 部署需要多长时间?", "a": "注册需 2 分钟,初始配置(Logo、配色、状态)需 15-30 分钟。您第一天就能开始创建包裹并邀请客户。团队无需培训。" },
+        { "q": "HERVIA 支持多币种和多国家吗?", "a": "支持。HERVIA 支持 EUR、USD、GBP、CHF、MAD、XOF、XAF、DZD、TND,适用于 10 多个国家(法国、比利时、瑞士、卢森堡、摩洛哥、阿尔及利亚、突尼斯、塞内加尔、科特迪瓦、喀麦隆)。界面支持法语、英语和简体中文。" },
+        { "q": "客户需要安装应用吗?", "a": "不需要。客户通过浏览器(手机、平板、电脑)访问其专属空间。界面采用响应式设计,兼容所有现代设备。" },
+        { "q": "我可以完全定制客户看到的界面外观吗?", "a": "可以。上传您的 Logo,选择主色和辅助色,HERVIA 会自动将您的品牌风格应用至所有客户可见的界面。也支持自定义域名。" }
+      ]
+    },
+    "ctaFooter": {
+      "title": "准备好现代化您的货运代理业务了吗?",
+      "subtitle": "加入已选择 HERVIA 的货运代理。免费试用,无需信用卡,无任何承诺。",
+      "ctaPrimary": "免费开始",
+      "ctaSecondary": "预约演示"
+    },
+    "footer": {
+      "tagline": "现代货运代理的 SaaS 解决方案。追踪、自动化、高端客户体验。",
+      "columns": [
+        {
+          "title": "产品",
+          "links": [
+            { "label": "功能", "href": "#features" },
+            { "label": "如何运作", "href": "#how-it-works" },
+            { "label": "常见问题", "href": "#faq" }
+          ]
+        },
+        {
+          "title": "公司",
+          "links": [
+            { "label": "联系我们", "href": "mailto:contact@hervia.co" },
+            { "label": "技术支持", "href": "mailto:support@hervia.co" }
+          ]
+        },
+        {
+          "title": "法律",
+          "links": [
+            { "label": "服务条款", "href": "/legal/terms" },
+            { "label": "隐私政策", "href": "/legal/privacy" },
+            { "label": "公司信息", "href": "/legal/imprint" },
+            { "label": "Cookies", "href": "/legal/cookies" }
+          ]
+        }
+      ],
+      "social": "关注我们",
+      "legal": "© {year} HERVIA。保留所有权利。",
+      "contact": "contact@hervia.co",
+      "madeIn": "欧洲设计 · 欧洲托管"
+    }
+  },
   "nav": {
     "dashboard": "控制台",
     "parcels": "包裹",
