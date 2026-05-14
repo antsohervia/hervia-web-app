@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import type { EmailOtpType } from "@supabase/supabase-js";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { createSupabaseAdmin } from "@/lib/supabase/admin";
 import { requestOrigin } from "@/lib/auth/callback-url";
@@ -12,16 +13,24 @@ export async function GET(
   const origin = requestOrigin(req);
   const { searchParams } = new URL(req.url);
   const code = searchParams.get("code");
+  const token_hash = searchParams.get("token_hash");
+  const type = searchParams.get("type") as EmailOtpType | null;
   const next = searchParams.get("next");
 
-  if (!code) {
-    return NextResponse.redirect(new URL("/login", origin));
-  }
-
   const supabase = await createSupabaseServer();
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
-  if (error) {
-    return NextResponse.redirect(new URL("/login?error=callback", origin));
+
+  if (code) {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) {
+      return NextResponse.redirect(new URL("/login?error=callback", origin));
+    }
+  } else if (token_hash && type) {
+    const { error } = await supabase.auth.verifyOtp({ token_hash, type });
+    if (error) {
+      return NextResponse.redirect(new URL("/login?error=callback", origin));
+    }
+  } else {
+    return NextResponse.redirect(new URL("/login", origin));
   }
 
   const {
