@@ -5,7 +5,12 @@ import {
   getClientBrand,
   getClientThemeStyle,
 } from "@/lib/branding/client-theme";
-import { ClientLogoutButton } from "./_logout-button";
+import { ClientUserMenu } from "./_user-menu";
+import { NotificationsBell } from "./_notifications-bell";
+import {
+  getClientNotificationsUnreadCount,
+  listClientNotifications,
+} from "./_notifications-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +25,10 @@ export default async function ClientShellLayout({
   const session = await requireClientSession(subdomain);
   const brand = getClientBrand(session.tenant);
   const style = getClientThemeStyle(brand);
+  const [notifList, notifUnread] = await Promise.all([
+    listClientNotifications(subdomain),
+    getClientNotificationsUnreadCount(subdomain),
+  ]);
   const initials = session.fullName
     .split(/\s+/)
     .filter(Boolean)
@@ -75,28 +84,25 @@ export default async function ClientShellLayout({
             </div>
           </Link>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div
-              className="hidden md:flex items-center gap-2 rounded-full px-3 py-1.5 border"
-              style={{
-                borderColor: brand.palette.border,
-                background: brand.palette.cardElevated,
-              }}
-            >
-              <span
-                className="size-7 rounded-full flex items-center justify-center text-xs font-semibold"
-                style={{
-                  background: brand.primary,
-                  color: brand.primaryForeground,
-                }}
-              >
-                {initials || "·"}
-              </span>
-              <span className="text-sm font-medium truncate max-w-[160px]">
-                {session.fullName}
-              </span>
-            </div>
-            <ClientLogoutButton />
+          <div className="flex items-center gap-1 sm:gap-2">
+            <NotificationsBell
+              subdomain={subdomain}
+              clientId={session.clientId}
+              brandPrimary={brand.primary}
+              brandBorder={brand.palette.border}
+              brandMuted={brand.palette.muted}
+              initialItems={notifList.items}
+              initialUnreadCount={notifUnread}
+              initialHasMore={notifList.hasMore}
+            />
+            <ClientUserMenu
+              fullName={session.fullName}
+              email={session.email}
+              initials={initials}
+              brandPrimary={brand.primary}
+              brandPrimaryForeground={brand.primaryForeground}
+              brandBorder={brand.palette.border}
+            />
           </div>
         </div>
       </header>
