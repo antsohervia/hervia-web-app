@@ -98,7 +98,7 @@ Certains clients peuvent manquer les emails (spam, boîte pleine) ou préfèrent
 
 - Les notifications in-app sont générées par les mêmes événements que les emails (synchronisées)
 - Un client qui a désactivé les notifications email continue de recevoir les notifications in-app (les deux canaux sont indépendants)
-- Le compteur de notifications non lues est mis à jour en temps quasi-réel (polling toutes les 30 secondes ou WebSocket selon l'implémentation technique)
+- Le compteur de notifications non lues est mis à jour en temps réel via Supabase Realtime (`postgres_changes` sur la table `notifications`, filtré par `client_id`) — pas de polling
 
 ### Cas limites
 
