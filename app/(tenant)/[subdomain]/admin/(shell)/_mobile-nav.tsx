@@ -10,10 +10,11 @@ import { Button } from "@/components/ui/button";
 type Props = {
   tenantName: string;
   logoUrl?: string | null;
+  accentColor?: string | null;
   children: ReactNode;
 };
 
-export function MobileNav({ tenantName, logoUrl, children }: Props) {
+export function MobileNav({ tenantName, logoUrl, accentColor, children }: Props) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const t = useTranslations("menu");
@@ -33,20 +34,38 @@ export function MobileNav({ tenantName, logoUrl, children }: Props) {
 
   return (
     <>
-      <header className="lg:hidden sticky top-0 z-30 flex items-center gap-2 border-b bg-card px-3 h-14">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setOpen(true)}
-          aria-label={t("open")}
-          className="size-11"
-        >
-          <Menu className="size-5" />
-        </Button>
-        <Link href="/admin" className="font-semibold truncate flex-1">
-          {tenantName}
-        </Link>
-      </header>
+      <div className="lg:hidden sticky top-0 z-30">
+        {accentColor ? (
+          <div
+            aria-hidden
+            className="h-1 w-full"
+            style={{ background: accentColor }}
+          />
+        ) : null}
+        <header className="flex items-center gap-2 border-b bg-card px-3 h-14">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setOpen(true)}
+            aria-label={t("open")}
+            className="size-11"
+          >
+            <Menu className="size-5" />
+          </Button>
+          <Link href="/admin" className="flex items-center gap-2 flex-1 min-w-0">
+            {logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={logoUrl}
+                alt={tenantName}
+                className="h-7 w-auto object-contain max-w-[140px]"
+              />
+            ) : (
+              <span className="font-semibold truncate">{tenantName}</span>
+            )}
+          </Link>
+        </header>
+      </div>
 
       {open ? (
         <div className="lg:hidden fixed inset-0 z-40">

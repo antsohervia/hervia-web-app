@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import {
   Package,
@@ -13,9 +14,29 @@ import {
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
+import {
+  getClientBrand,
+  getClientThemeStyle,
+} from "@/lib/branding/client-theme";
 import { LogoutButton } from "./_logout-button";
 import { MobileNav } from "./_mobile-nav";
+import { NavLink } from "./_nav-link";
 import { LanguageSwitcher } from "@/components/admin/language-switcher";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ subdomain: string }>;
+}): Promise<Metadata> {
+  const { subdomain } = await params;
+  const session = await requireTenantSession(subdomain);
+  return {
+    title: {
+      default: `${session.tenant.name} — Admin`,
+      template: `%s · ${session.tenant.name}`,
+    },
+  };
+}
 
 export default async function TenantAdminShellLayout({
   children,
@@ -32,69 +53,48 @@ export default async function TenantAdminShellLayout({
     getMessages(),
   ]);
 
+  const brand = getClientBrand(session.tenant);
+  const style = getClientThemeStyle(brand);
+
   const firstName =
     session.fullName?.trim().split(/\s+/)[0] ?? session.email ?? t("roles.readOnly");
 
   const navItems = (
     <>
-      <Link
-        href="/admin"
-        className="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-accent text-sm min-h-11"
-      >
+      <NavLink href="/admin" exact>
         <LayoutDashboard className="size-5 lg:size-4" />
         {t("nav.dashboard")}
-      </Link>
-      <Link
-        href="/admin/colis"
-        className="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-accent text-sm min-h-11"
-      >
+      </NavLink>
+      <NavLink href="/admin/colis">
         <Package className="size-5 lg:size-4" />
         {t("nav.parcels")}
-      </Link>
-      <Link
-        href="/admin/statuts"
-        className="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-accent text-sm min-h-11"
-      >
+      </NavLink>
+      <NavLink href="/admin/statuts">
         <Tags className="size-5 lg:size-4" />
         {t("nav.statuses")}
-      </Link>
-      <Link
-        href="/admin/modes-transport"
-        className="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-accent text-sm min-h-11"
-      >
+      </NavLink>
+      <NavLink href="/admin/modes-transport">
         <Truck className="size-5 lg:size-4" />
         {t("nav.transportModes")}
-      </Link>
-      <Link
-        href="/admin/utilisateurs"
-        className="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-accent text-sm min-h-11"
-      >
+      </NavLink>
+      <NavLink href="/admin/utilisateurs">
         <Users className="size-5 lg:size-4" />
         {t("nav.users")}
-      </Link>
-      <Link
-        href="/admin/reglages"
-        className="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-accent text-sm min-h-11"
-      >
+      </NavLink>
+      <NavLink href="/admin/reglages">
         <Settings className="size-5 lg:size-4" />
         {t("nav.settings")}
-      </Link>
+      </NavLink>
       {session.role === "entreprise_admin" ? (
         <>
-          <Link
-            href="/admin/apparence"
-            className="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-accent text-sm min-h-11"
-          >
+          <NavLink href="/admin/apparence">
             <Palette className="size-5 lg:size-4" />
             {t("nav.appearance")}
-          </Link>
-          <Link
-            href="/admin/traductions"
-            className="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-accent text-sm min-h-11"
-          >
+          </NavLink>
+          <NavLink href="/admin/traductions">
             <Languages className="size-5 lg:size-4" />
             {t("nav.translations")}
-          </Link>
+          </NavLink>
         </>
       ) : null}
     </>
@@ -113,8 +113,19 @@ export default async function TenantAdminShellLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <div className="min-h-screen lg:flex bg-muted/30">
-        <MobileNav tenantName={session.tenant.name} logoUrl={session.tenant.logo_url}>
+      <div
+        className={
+          brand.isDark
+            ? "dark min-h-screen lg:flex bg-muted/30"
+            : "min-h-screen lg:flex bg-muted/30"
+        }
+        style={style}
+      >
+        <MobileNav
+          tenantName={session.tenant.name}
+          logoUrl={session.tenant.logo_url}
+          accentColor={brand.primary}
+        >
           {sessionInfo}
           <nav className="flex-1 p-2 overflow-y-auto">{navItems}</nav>
           <LanguageSwitcher />
@@ -124,6 +135,11 @@ export default async function TenantAdminShellLayout({
         </MobileNav>
 
         <aside className="hidden lg:flex lg:w-60 lg:flex-col lg:border-r lg:bg-card lg:sticky lg:top-0 lg:h-screen">
+          <div
+            aria-hidden
+            className="h-1 w-full"
+            style={{ background: brand.primary }}
+          />
           <div className="px-4 py-5 border-b">
             <Link href="/admin" className="block">
               {session.tenant.logo_url ? (

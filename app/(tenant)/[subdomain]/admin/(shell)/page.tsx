@@ -1,9 +1,15 @@
 import Link from "next/link";
-import { Package, Palette, Tags } from "lucide-react";
+import {
+  ArrowRight,
+  Package,
+  Palette,
+  Tags,
+  Users as UsersIcon,
+} from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
 import { createSupabaseAdmin } from "@/lib/supabase/admin";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getClientBrand } from "@/lib/branding/client-theme";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +19,7 @@ export default async function TenantAdminHome({ params }: Props) {
   const { subdomain } = await params;
   const session = await requireTenantSession(subdomain);
   const t = await getTranslations("dashboard");
+  const brand = getClientBrand(session.tenant);
 
   const admin = createSupabaseAdmin();
   const [parcels, clients, statuses] = await Promise.all([
@@ -32,78 +39,187 @@ export default async function TenantAdminHome({ params }: Props) {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6 lg:space-y-8">
-      <div>
-        <h1 className="text-xl sm:text-2xl font-semibold">
-          {t("welcome", {
-            name: session.fullName ?? session.tenant.name,
-          })}
-        </h1>
-        <p className="text-sm text-muted-foreground mt-1">{t("subtitle")}</p>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {t("parcels")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-3xl font-semibold">
-            {parcels.count ?? 0}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {t("clients")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-3xl font-semibold">
-            {clients.count ?? 0}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {t("configuredStatuses")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-3xl font-semibold">
-            {statuses.count ?? 0}
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-sm">
-        <Link
-          href="/admin/colis"
-          className="rounded-lg border bg-card p-5 hover:bg-accent transition"
-        >
-          <Package className="size-5 mb-2" />
-          <p className="font-medium">{t("manageParcels")}</p>
-          <p className="text-muted-foreground mt-1">{t("manageParcelsDesc")}</p>
-        </Link>
-        <Link
-          href="/admin/statuts"
-          className="rounded-lg border bg-card p-5 hover:bg-accent transition"
-        >
-          <Tags className="size-5 mb-2" />
-          <p className="font-medium">{t("configureStatuses")}</p>
-          <p className="text-muted-foreground mt-1">
-            {t("configureStatusesDesc")}
-          </p>
-        </Link>
-        {session.role === "entreprise_admin" ? (
-          <Link
-            href="/admin/apparence"
-            className="rounded-lg border bg-card p-5 hover:bg-accent transition"
+      <section
+        className="relative overflow-hidden rounded-2xl border p-6 sm:p-8"
+        style={{
+          borderColor: brand.palette.border,
+          background: `linear-gradient(135deg, color-mix(in srgb, ${brand.primary} 12%, ${brand.palette.card}) 0%, ${brand.palette.card} 70%)`,
+        }}
+      >
+        <div
+          aria-hidden
+          className="absolute -top-24 -right-24 size-72 rounded-full opacity-30"
+          style={{ background: brand.primary, filter: "blur(80px)" }}
+        />
+        <div className="relative">
+          <p
+            className="text-xs uppercase tracking-[0.18em] font-semibold"
+            style={{ color: brand.primary }}
           >
-            <Palette className="size-5 mb-2" />
-            <p className="font-medium">{t("appearance")}</p>
-            <p className="text-muted-foreground mt-1">{t("appearanceDesc")}</p>
-          </Link>
+            {session.tenant.name}
+          </p>
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight mt-2">
+            {t("welcome", { name: session.fullName ?? session.tenant.name })}
+          </h1>
+          <p
+            className="text-sm mt-1.5 max-w-xl"
+            style={{ color: brand.palette.muted }}
+          >
+            {t("subtitle")}
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
+            <KpiCard
+              label={t("parcels")}
+              value={parcels.count ?? 0}
+              icon={<Package className="size-4" />}
+              tint={`color-mix(in srgb, ${brand.primary} 14%, ${brand.palette.card})`}
+              border={`color-mix(in srgb, ${brand.primary} 30%, ${brand.palette.border})`}
+              fg={brand.palette.text}
+              accent={brand.primary}
+            />
+            <KpiCard
+              label={t("clients")}
+              value={clients.count ?? 0}
+              icon={<UsersIcon className="size-4" />}
+              tint={brand.palette.cardElevated}
+              border={brand.palette.border}
+              fg={brand.palette.text}
+              muted={brand.palette.muted}
+            />
+            <KpiCard
+              label={t("configuredStatuses")}
+              value={statuses.count ?? 0}
+              icon={<Tags className="size-4" />}
+              tint={brand.palette.cardElevated}
+              border={brand.palette.border}
+              fg={brand.palette.text}
+              muted={brand.palette.muted}
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <QuickAction
+          href="/admin/colis"
+          title={t("manageParcels")}
+          description={t("manageParcelsDesc")}
+          icon={<Package className="size-5" />}
+          brand={brand}
+        />
+        <QuickAction
+          href="/admin/statuts"
+          title={t("configureStatuses")}
+          description={t("configureStatusesDesc")}
+          icon={<Tags className="size-5" />}
+          brand={brand}
+        />
+        {session.role === "entreprise_admin" ? (
+          <QuickAction
+            href="/admin/apparence"
+            title={t("appearance")}
+            description={t("appearanceDesc")}
+            icon={<Palette className="size-5" />}
+            brand={brand}
+          />
         ) : null}
-      </div>
+      </section>
     </div>
+  );
+}
+
+function KpiCard({
+  label,
+  value,
+  icon,
+  tint,
+  border,
+  fg,
+  muted,
+  accent,
+}: {
+  label: string;
+  value: number;
+  icon: React.ReactNode;
+  tint: string;
+  border: string;
+  fg: string;
+  muted?: string;
+  accent?: string;
+}) {
+  return (
+    <div
+      className="rounded-xl border px-4 py-3.5"
+      style={{ background: tint, borderColor: border, color: fg }}
+    >
+      <div
+        className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider"
+        style={{ color: accent ?? muted }}
+      >
+        {icon}
+        {label}
+      </div>
+      <p className="text-2xl sm:text-3xl font-semibold tracking-tight mt-1">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function QuickAction({
+  href,
+  title,
+  description,
+  icon,
+  brand,
+}: {
+  href: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  brand: ReturnType<typeof getClientBrand>;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group relative overflow-hidden rounded-xl border p-5 transition-all hover:shadow-sm"
+      style={{
+        borderColor: brand.palette.border,
+        background: brand.palette.card,
+      }}
+    >
+      <span
+        aria-hidden
+        className="absolute left-0 top-0 bottom-0 w-1 transition-all group-hover:w-1.5"
+        style={{ background: brand.primary }}
+      />
+      <div className="pl-2">
+        <div
+          className="inline-flex items-center justify-center size-9 rounded-lg mb-3"
+          style={{
+            background: `color-mix(in srgb, ${brand.primary} 14%, transparent)`,
+            color: brand.primary,
+          }}
+        >
+          {icon}
+        </div>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="font-semibold tracking-tight">{title}</p>
+            <p
+              className="text-xs sm:text-sm mt-1 line-clamp-2"
+              style={{ color: brand.palette.muted }}
+            >
+              {description}
+            </p>
+          </div>
+          <ArrowRight
+            className="size-4 shrink-0 mt-1 transition-transform group-hover:translate-x-0.5"
+            style={{ color: brand.palette.muted }}
+          />
+        </div>
+      </div>
+    </Link>
   );
 }
