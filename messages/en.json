@@ -211,6 +211,7 @@
     "parcels": "Parcels",
     "statuses": "Statuses",
     "transportModes": "Transport Modes",
+    "users": "Users",
     "appearance": "Appearance",
     "translations": "Translations"
   },
@@ -462,6 +463,62 @@
     "alreadyAtStatus": "Already at this status",
     "isFinal": "Parcel closed",
     "genericError": "Error"
+  },
+  "users": {
+    "title": "Users",
+    "subtitle": "{count} member in this workspace.",
+    "subtitlePlural": "{count} members in this workspace.",
+    "invite": "Invite a member",
+    "inviteTitle": "Invite a new member",
+    "inviteDescription": "An invitation email will be sent with a link valid for 72h. You can also copy this link to share it another way.",
+    "roles": {
+      "entreprise_admin": "Administrator",
+      "entreprise_member": "Operator"
+    },
+    "form": {
+      "email": "Email",
+      "role": "Role",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving...",
+      "send": "Send invitation",
+      "sending": "Sending..."
+    },
+    "table": {
+      "email": "Email",
+      "role": "Role",
+      "lastSignIn": "Last sign-in",
+      "invitedAt": "Invited on",
+      "actions": "Actions",
+      "you": "you",
+      "noActive": "No active members yet."
+    },
+    "actions": {
+      "changeRole": "Change role",
+      "changeRoleFor": "Account: {email}",
+      "roleUpdated": "Role updated",
+      "remove": "Remove",
+      "removing": "Removing...",
+      "removed": "Member removed",
+      "removeTitle": "Remove this member?",
+      "removeDescription": "{email} will no longer have access to this workspace. Their account is not deleted and can be re-invited later.",
+      "resend": "Resend invitation",
+      "resendTitle": "Resend invitation",
+      "resendDescription": "A new link will be generated for {email} and the invitation email will be sent again."
+    },
+    "invitations": {
+      "title": "Pending invitations",
+      "subtitle": "These people haven't activated their account yet.",
+      "successTitle": "Invitation sent",
+      "resentTitle": "Invitation resent",
+      "successDescription": "An invitation email was sent. You can also copy the link below to share via another channel.",
+      "linkSent": "Email sent to {email}.",
+      "link": "Invitation link",
+      "copy": "Copy",
+      "copied": "Copied!",
+      "validity": "This link is single-use and expires in 72 hours.",
+      "close": "Close"
+    }
   },
   "translations": {
     "title": "Translations",

@@ -211,6 +211,7 @@
     "parcels": "Colis",
     "statuses": "Statuts",
     "transportModes": "Modes de transport",
+    "users": "Utilisateurs",
     "appearance": "Apparence",
     "translations": "Traductions"
   },
@@ -462,6 +463,62 @@
     "alreadyAtStatus": "Déjà à ce statut",
     "isFinal": "Colis clôturé",
     "genericError": "Erreur"
+  },
+  "users": {
+    "title": "Utilisateurs",
+    "subtitle": "{count} membre dans cet espace.",
+    "subtitlePlural": "{count} membres dans cet espace.",
+    "invite": "Inviter un membre",
+    "inviteTitle": "Inviter un nouveau membre",
+    "inviteDescription": "Un email d'invitation sera envoyé avec un lien valable 72h. Vous pourrez aussi copier ce lien pour le partager autrement.",
+    "roles": {
+      "entreprise_admin": "Administrateur",
+      "entreprise_member": "Opérateur"
+    },
+    "form": {
+      "email": "Email",
+      "role": "Rôle",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "send": "Envoyer l'invitation",
+      "sending": "Envoi..."
+    },
+    "table": {
+      "email": "Email",
+      "role": "Rôle",
+      "lastSignIn": "Dernière connexion",
+      "invitedAt": "Invité le",
+      "actions": "Actions",
+      "you": "vous",
+      "noActive": "Aucun membre actif pour le moment."
+    },
+    "actions": {
+      "changeRole": "Modifier le rôle",
+      "changeRoleFor": "Compte : {email}",
+      "roleUpdated": "Rôle mis à jour",
+      "remove": "Retirer",
+      "removing": "Retrait...",
+      "removed": "Membre retiré",
+      "removeTitle": "Retirer ce membre ?",
+      "removeDescription": "{email} n'aura plus accès à cet espace. Son compte n'est pas supprimé et peut être réinvité plus tard.",
+      "resend": "Renvoyer l'invitation",
+      "resendTitle": "Renvoyer l'invitation",
+      "resendDescription": "Un nouveau lien sera généré pour {email} et l'email d'invitation lui sera renvoyé."
+    },
+    "invitations": {
+      "title": "Invitations en attente",
+      "subtitle": "Ces personnes n'ont pas encore activé leur compte.",
+      "successTitle": "Invitation envoyée",
+      "resentTitle": "Invitation renvoyée",
+      "successDescription": "Un email d'invitation a été envoyé. Vous pouvez aussi copier le lien ci-dessous pour le partager via un autre canal.",
+      "linkSent": "Email envoyé à {email}.",
+      "link": "Lien d'invitation",
+      "copy": "Copier",
+      "copied": "Copié !",
+      "validity": "Ce lien est à usage unique et expire dans 72 heures.",
+      "close": "Fermer"
+    }
   },
   "translations": {
     "title": "Traductions",

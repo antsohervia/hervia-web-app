@@ -211,6 +211,7 @@
     "parcels": "包裹",
     "statuses": "状态",
     "transportModes": "运输方式",
+    "users": "用户",
     "appearance": "外观",
     "translations": "翻译"
   },
@@ -462,6 +463,62 @@
     "alreadyAtStatus": "已处于该状态",
     "isFinal": "包裹已完结",
     "genericError": "错误"
+  },
+  "users": {
+    "title": "用户",
+    "subtitle": "此工作区有 {count} 位成员。",
+    "subtitlePlural": "此工作区有 {count} 位成员。",
+    "invite": "邀请成员",
+    "inviteTitle": "邀请新成员",
+    "inviteDescription": "将发送一封邀请邮件,链接有效期为 72 小时。您也可以复制此链接通过其他方式分享。",
+    "roles": {
+      "entreprise_admin": "管理员",
+      "entreprise_member": "操作员"
+    },
+    "form": {
+      "email": "邮箱",
+      "role": "角色",
+      "cancel": "取消",
+      "save": "保存",
+      "saving": "保存中...",
+      "send": "发送邀请",
+      "sending": "发送中..."
+    },
+    "table": {
+      "email": "邮箱",
+      "role": "角色",
+      "lastSignIn": "最近登录",
+      "invitedAt": "邀请时间",
+      "actions": "操作",
+      "you": "您",
+      "noActive": "暂无活跃成员。"
+    },
+    "actions": {
+      "changeRole": "更改角色",
+      "changeRoleFor": "账号:{email}",
+      "roleUpdated": "角色已更新",
+      "remove": "移除",
+      "removing": "移除中...",
+      "removed": "成员已移除",
+      "removeTitle": "移除该成员?",
+      "removeDescription": "{email} 将无法再访问此工作区。账号不会被删除,稍后可以重新邀请。",
+      "resend": "重新发送邀请",
+      "resendTitle": "重新发送邀请",
+      "resendDescription": "将为 {email} 生成新的链接并再次发送邀请邮件。"
+    },
+    "invitations": {
+      "title": "待处理的邀请",
+      "subtitle": "这些用户尚未激活账号。",
+      "successTitle": "邀请已发送",
+      "resentTitle": "邀请已重新发送",
+      "successDescription": "邀请邮件已发送。您也可以复制下方链接通过其他渠道分享。",
+      "linkSent": "邮件已发送至 {email}。",
+      "link": "邀请链接",
+      "copy": "复制",
+      "copied": "已复制!",
+      "validity": "此链接为一次性使用,72 小时后过期。",
+      "close": "关闭"
+    }
   },
   "translations": {
     "title": "翻译",
