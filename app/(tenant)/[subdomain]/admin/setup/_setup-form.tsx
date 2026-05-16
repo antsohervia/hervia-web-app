@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { SetupPasswordState } from "@/lib/validations/setup";
-import { setupPasswordAction, clearIntendedRoleAction } from "./_actions";
+import { setupPasswordAction } from "./_actions";
 import { createSupabaseBrowser } from "@/lib/supabase/client";
 
 type Method = "select" | "password";
@@ -14,6 +14,7 @@ type Method = "select" | "password";
 export function SetupForm({ subdomain }: { subdomain: string }) {
   const [method, setMethod] = useState<Method>("select");
   const [oauthPending, setOauthPending] = useState(false);
+  const [oauthError, setOauthError] = useState<string | null>(null);
   const [state, action, pending] = useActionState<SetupPasswordState, FormData>(
     setupPasswordAction,
     {},
@@ -26,19 +27,29 @@ export function SetupForm({ subdomain }: { subdomain: string }) {
   }, [state?.redirectTo]);
 
   async function handleSocialLogin(provider: "facebook" | "apple" | "google") {
+    setOauthError(null);
     setOauthPending(true);
-    await clearIntendedRoleAction();
     const supabase = createSupabaseBrowser();
     const origin = window.location.origin;
-    await supabase.auth.linkIdentity({
+    const { error } = await supabase.auth.linkIdentity({
       provider,
       options: { redirectTo: `${origin}/auth/callback` },
     });
+    if (error) {
+      setOauthError(error.message);
+      setOauthPending(false);
+    }
   }
 
   if (method === "select") {
     return (
       <div className="rounded-lg border bg-card p-6 shadow-sm space-y-4">
+        {oauthError ? (
+          <Alert variant="destructive">
+            <AlertDescription>{oauthError}</AlertDescription>
+          </Alert>
+        ) : null}
+
         <Button
           type="button"
           className="w-full"

@@ -7,18 +7,6 @@ import {
   type SetupPasswordState,
 } from "@/lib/validations/setup";
 
-export async function clearIntendedRoleAction(): Promise<void> {
-  const supabase = await createSupabaseServer();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
-  const admin = createSupabaseAdmin();
-  const newMeta = { ...(user.user_metadata ?? {}) };
-  delete newMeta.intended_role;
-  await admin.auth.admin.updateUserById(user.id, { user_metadata: newMeta });
-}
-
 export async function setupPasswordAction(
   _prev: SetupPasswordState | undefined,
   formData: FormData,
