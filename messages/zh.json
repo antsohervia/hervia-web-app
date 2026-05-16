@@ -580,5 +580,29 @@
     "aiError": "AI翻译出错。",
     "saveError": "保存出错。",
     "noApiKey": "未配置Anthropic API密钥。"
+  },
+  "errors": {
+    "notFound": {
+      "code": "404",
+      "title": "页面未找到",
+      "description": "您查找的页面不存在、已被移动或不再可用。",
+      "cta": "返回首页",
+      "back": "上一页"
+    },
+    "forbidden": {
+      "code": "403",
+      "title": "访问被拒绝",
+      "description": "您没有访问此页面的权限。如果您认为这是错误，请联系您的管理员。",
+      "cta": "返回首页",
+      "back": "上一页"
+    },
+    "serverError": {
+      "code": "500",
+      "title": "发生错误",
+      "description": "一个意外问题导致我们无法显示此页面。我们的团队已收到通知 — 您可以重试或返回首页。",
+      "retry": "重试",
+      "cta": "返回首页",
+      "digest": "错误参考"
+    }
   }
 }

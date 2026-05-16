@@ -580,5 +580,29 @@
     "aiError": "AI translation error.",
     "saveError": "Save error.",
     "noApiKey": "Anthropic API key not configured."
+  },
+  "errors": {
+    "notFound": {
+      "code": "404",
+      "title": "Page not found",
+      "description": "The page you are looking for doesn't exist, has been moved, or is no longer available.",
+      "cta": "Back to home",
+      "back": "Previous page"
+    },
+    "forbidden": {
+      "code": "403",
+      "title": "Access denied",
+      "description": "You don't have permission to access this page. If you think this is a mistake, contact your administrator.",
+      "cta": "Back to home",
+      "back": "Previous page"
+    },
+    "serverError": {
+      "code": "500",
+      "title": "Something went wrong",
+      "description": "An unexpected issue is preventing us from displaying this page. Our team has been notified — you can try again or return home.",
+      "retry": "Try again",
+      "cta": "Back to home",
+      "digest": "Error reference"
+    }
   }
 }

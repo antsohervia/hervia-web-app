@@ -580,5 +580,29 @@
     "aiError": "Erreur lors de la traduction IA.",
     "saveError": "Erreur lors de la sauvegarde.",
     "noApiKey": "Clé API Anthropic non configurée."
+  },
+  "errors": {
+    "notFound": {
+      "code": "404",
+      "title": "Page introuvable",
+      "description": "La page que vous cherchez n'existe pas, a été déplacée ou n'est plus disponible.",
+      "cta": "Retour à l'accueil",
+      "back": "Page précédente"
+    },
+    "forbidden": {
+      "code": "403",
+      "title": "Accès refusé",
+      "description": "Vous n'avez pas les permissions nécessaires pour accéder à cette page. Si vous pensez qu'il s'agit d'une erreur, contactez votre administrateur.",
+      "cta": "Retour à l'accueil",
+      "back": "Page précédente"
+    },
+    "serverError": {
+      "code": "500",
+      "title": "Une erreur est survenue",
+      "description": "Un problème inattendu nous empêche d'afficher cette page. Nos équipes ont été notifiées — vous pouvez réessayer ou revenir à l'accueil.",
+      "retry": "Réessayer",
+      "cta": "Retour à l'accueil",
+      "digest": "Référence de l'erreur"
+    }
   }
 }
