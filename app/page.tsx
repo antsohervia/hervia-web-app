@@ -54,12 +54,6 @@ export default async function Home() {
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:bg-brand focus:px-4 focus:py-2 focus:text-brand-foreground focus:shadow-lg"
-      >
-        Aller au contenu
-      </a>
       <Nav />
       <main
         id="main"
