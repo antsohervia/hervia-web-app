@@ -200,8 +200,8 @@
           "links": [
             { "label": "Terms of service", "href": "/legal/terms" },
             { "label": "Privacy policy", "href": "/legal/privacy" },
-            { "label": "Imprint", "href": "/legal/imprint" },
-            { "label": "Cookies", "href": "/legal/cookies" }
+            { "label": "About the app", "href": "/legal/app-details" },
+            { "label": "Data deletion", "href": "/legal/data-deletion" }
           ]
         }
       ],

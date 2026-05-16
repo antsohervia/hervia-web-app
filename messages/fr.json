@@ -200,8 +200,8 @@
           "links": [
             { "label": "Conditions générales", "href": "/legal/terms" },
             { "label": "Confidentialité", "href": "/legal/privacy" },
-            { "label": "Mentions légales", "href": "/legal/imprint" },
-            { "label": "Cookies", "href": "/legal/cookies" }
+            { "label": "À propos de l'application", "href": "/legal/app-details" },
+            { "label": "Suppression des données", "href": "/legal/data-deletion" }
           ]
         }
       ],
