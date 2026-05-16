@@ -50,6 +50,8 @@ export async function GET(
     return NextResponse.redirect(new URL("/", origin));
   }
 
+  const isAdminContext = next?.startsWith("/admin") ?? false;
+
   const { data: member } = await admin
     .from("tenant_members")
     .select("role")
@@ -59,9 +61,30 @@ export async function GET(
 
   // Branche tenant-admin : si membre du tenant, suit le flux historique.
   if (member) {
-    const target =
-      next ?? (user.user_metadata?.intended_role ? "/admin/setup" : "/admin");
+    const hasOAuthIdentity = (user.identities ?? []).some(
+      (identity) => identity.provider !== "email",
+    );
+    const intendedRole = user.user_metadata?.intended_role;
+
+    // Onboarding finalisé via OAuth linking : on retire l'intended_role.
+    if (intendedRole && hasOAuthIdentity) {
+      const newMeta = { ...(user.user_metadata ?? {}) };
+      delete newMeta.intended_role;
+      await admin.auth.admin.updateUserById(user.id, { user_metadata: newMeta });
+    }
+
+    const stillNeedsSetup = Boolean(intendedRole) && !hasOAuthIdentity;
+    const target = next ?? (stillNeedsSetup ? "/admin/setup" : "/admin");
     return NextResponse.redirect(new URL(target, origin));
+  }
+
+  // Login admin via OAuth pour un compte non rattaché au tenant : on coupe ici
+  // pour éviter de basculer sur la branche client et donner un message clair.
+  if (isAdminContext) {
+    await supabase.auth.signOut();
+    return NextResponse.redirect(
+      new URL("/admin/login?error=no_link", origin),
+    );
   }
 
   // Branche client : activation post-confirmation email + redirect dashboard.
