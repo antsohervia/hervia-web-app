@@ -11,6 +11,8 @@ export type TenantSession = {
   tenant: TenantDetail;
   userId: string;
   email: string | null;
+  fullName: string | null;
+  phone: string | null;
   role: TenantMemberRole;
   impersonating: boolean;
 };
@@ -33,6 +35,8 @@ export async function requireTenantSession(
       tenant,
       userId: "impersonation",
       email: null,
+      fullName: null,
+      phone: null,
       role: "entreprise_admin",
       impersonating: true,
     };
@@ -54,10 +58,27 @@ export async function requireTenantSession(
 
   if (!member) redirect("/admin/login?error=forbidden");
 
+  const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+  const rawName =
+    typeof meta.display_name === "string"
+      ? meta.display_name
+      : typeof meta.full_name === "string"
+        ? meta.full_name
+        : typeof meta.name === "string"
+          ? meta.name
+          : null;
+  const fullName = rawName?.trim() ? rawName.trim() : null;
+
+  const rawPhone =
+    typeof meta.phone === "string" ? meta.phone : user.phone ?? null;
+  const phone = rawPhone?.trim() ? rawPhone.trim() : null;
+
   return {
     tenant,
     userId: user.id,
     email: user.email ?? null,
+    fullName,
+    phone,
     role: member.role as TenantMemberRole,
     impersonating: false,
   };

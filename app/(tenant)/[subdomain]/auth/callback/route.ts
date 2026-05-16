@@ -64,12 +64,38 @@ export async function GET(
     const hasOAuthIdentity = (user.identities ?? []).some(
       (identity) => identity.provider !== "email",
     );
-    const intendedRole = user.user_metadata?.intended_role;
+    const currentMeta = (user.user_metadata ?? {}) as Record<string, unknown>;
+    const intendedRole = currentMeta.intended_role;
+    const newMeta = { ...currentMeta };
+    let metaChanged = false;
 
     // Onboarding finalisé via OAuth linking : on retire l'intended_role.
     if (intendedRole && hasOAuthIdentity) {
-      const newMeta = { ...(user.user_metadata ?? {}) };
       delete newMeta.intended_role;
+      metaChanged = true;
+    }
+
+    // Première liaison OAuth ou premier login : on copie le nom fourni par le
+    // provider (Google : `full_name`/`name`) dans notre clé `display_name`
+    // qu'on contrôle. On ne le fait qu'une fois pour ne pas écraser une
+    // édition manuelle ultérieure de l'utilisateur.
+    const hasDisplayName =
+      typeof newMeta.display_name === "string" &&
+      newMeta.display_name.trim().length > 0;
+    if (!hasDisplayName) {
+      const providerName =
+        typeof newMeta.full_name === "string"
+          ? newMeta.full_name
+          : typeof newMeta.name === "string"
+            ? newMeta.name
+            : null;
+      if (providerName?.trim()) {
+        newMeta.display_name = providerName.trim();
+        metaChanged = true;
+      }
+    }
+
+    if (metaChanged) {
       await admin.auth.admin.updateUserById(user.id, { user_metadata: newMeta });
     }
 
