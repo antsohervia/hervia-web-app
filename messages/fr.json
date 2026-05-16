@@ -551,6 +551,14 @@
         "linking": "Redirection vers Google...",
         "linked": "Compte Google connecté"
       },
+      "facebook": {
+        "title": "Connexion avec Facebook",
+        "linkedDescription": "Vous pouvez vous connecter avec Facebook.",
+        "unlinkedDescription": "Liez votre compte Facebook pour vous connecter en un clic.",
+        "link": "Lier mon compte Facebook",
+        "linking": "Redirection vers Facebook...",
+        "linked": "Compte Facebook connecté"
+      },
       "password": {
         "title": "Mot de passe",
         "description": "Choisissez un mot de passe d'au moins 10 caractères.",

@@ -39,13 +39,13 @@ export function LoginForm({
     }
   }, [state?.redirectTo]);
 
-  async function handleGoogleLogin() {
+  async function handleOAuthLogin(provider: "google" | "facebook") {
     setOauthError(null);
     setOauthPending(true);
     const supabase = createSupabaseBrowser();
     const origin = window.location.origin;
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
+      provider,
       options: { redirectTo: `${origin}/auth/callback?next=/admin` },
     });
     if (error) {
@@ -66,9 +66,19 @@ export function LoginForm({
         type="button"
         className="w-full"
         disabled={oauthPending || pending}
-        onClick={handleGoogleLogin}
+        onClick={() => handleOAuthLogin("google")}
       >
         Continuer avec Google
+      </Button>
+
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full"
+        disabled={oauthPending || pending}
+        onClick={() => handleOAuthLogin("facebook")}
+      >
+        Continuer avec Facebook
       </Button>
 
       <div className="relative">

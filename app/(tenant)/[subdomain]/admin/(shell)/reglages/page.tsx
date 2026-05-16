@@ -5,6 +5,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ProfileForm } from "./_components/profile-form";
 import { PasswordForm } from "./_components/password-form";
 import { GoogleLink } from "./_components/google-link";
+import { FacebookLink } from "./_components/facebook-link";
 
 export default async function SettingsPage({
   params,
@@ -16,12 +17,14 @@ export default async function SettingsPage({
   const t = await getTranslations("settings");
 
   let hasGoogle = false;
+  let hasFacebook = false;
   let hasPassword = false;
   if (!session.impersonating) {
     const admin = createSupabaseAdmin();
     const { data } = await admin.auth.admin.getUserById(session.userId);
     const identities = data?.user?.identities ?? [];
     hasGoogle = identities.some((i) => i.provider === "google");
+    hasFacebook = identities.some((i) => i.provider === "facebook");
     hasPassword = identities.some((i) => i.provider === "email");
   }
 
@@ -51,6 +54,16 @@ export default async function SettingsPage({
         <div className="space-y-3">
           <h3 className="text-sm font-medium">{t("security.google.title")}</h3>
           <GoogleLink linked={hasGoogle} disabled={session.impersonating} />
+        </div>
+
+        <div className="space-y-3 border-t pt-6">
+          <h3 className="text-sm font-medium">
+            {t("security.facebook.title")}
+          </h3>
+          <FacebookLink
+            linked={hasFacebook}
+            disabled={session.impersonating}
+          />
         </div>
 
         <div className="space-y-3 border-t pt-6">

@@ -551,6 +551,14 @@
         "linking": "Redirecting to Google...",
         "linked": "Google account linked"
       },
+      "facebook": {
+        "title": "Facebook sign-in",
+        "linkedDescription": "You can sign in with Facebook.",
+        "unlinkedDescription": "Link your Facebook account to sign in with one click.",
+        "link": "Link Facebook account",
+        "linking": "Redirecting to Facebook...",
+        "linked": "Facebook account linked"
+      },
       "password": {
         "title": "Password",
         "description": "Pick a password of at least 10 characters.",
