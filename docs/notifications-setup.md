@@ -28,28 +28,34 @@ Sur Vercel : Dashboard → Project → Settings → Environment Variables, scope
 
 ---
 
-## 3. Côté Supabase — settings DB (GUC)
+## 3. Côté Supabase — table `notification_settings`
 
-Ces 4 settings sont lus par la fonction trigger `notify_on_parcel_event` via `current_setting('app.xxx', true)`. Ils ne peuvent pas vivre dans une migration (le secret est sensible et l'URL varie par env).
+Ces 4 settings sont lus par la fonction trigger `notify_on_parcel_event` via `public.notification_setting('key')`. Ils vivent dans la table `notification_settings` (RLS verrouillée : seul `service_role` + le trigger SECURITY DEFINER y accèdent).
+
+> **Pourquoi pas `alter database postgres set app.xxx`** : Supabase Cloud bloque cette commande (le rôle `postgres` n'y est pas superuser). La table de config est le pattern portable.
 
 **Comment les poser** : Supabase Studio → SQL Editor, ou `psql "$DATABASE_URL" -c "..."`.
 
 ### Production
 
 ```sql
-alter database postgres set app.notifications_dispatch_url = 'https://app.trackapp.com/api/notifications/dispatch';
-alter database postgres set app.notifications_secret       = '<le-secret-généré-à-l-étape-1>';
-alter database postgres set app.notifications_app_domain   = 'trackapp.com';
-alter database postgres set app.notifications_url_scheme   = 'https';
+insert into public.notification_settings (key, value) values
+  ('dispatch_url', 'https://app.trackapp.com/api/notifications/dispatch'),
+  ('secret',       '<le-secret-généré-à-l-étape-1>'),
+  ('app_domain',   'trackapp.com'),
+  ('url_scheme',   'https')
+on conflict (key) do update set value = excluded.value;
 ```
 
 ### Staging
 
 ```sql
-alter database postgres set app.notifications_dispatch_url = 'https://staging.trackapp.com/api/notifications/dispatch';
-alter database postgres set app.notifications_secret       = '<secret-staging>';
-alter database postgres set app.notifications_app_domain   = 'staging.trackapp.com';
-alter database postgres set app.notifications_url_scheme   = 'https';
+insert into public.notification_settings (key, value) values
+  ('dispatch_url', 'https://staging.trackapp.com/api/notifications/dispatch'),
+  ('secret',       '<secret-staging>'),
+  ('app_domain',   'staging.trackapp.com'),
+  ('url_scheme',   'https')
+on conflict (key) do update set value = excluded.value;
 ```
 
 ### Dev local
@@ -57,22 +63,21 @@ alter database postgres set app.notifications_url_scheme   = 'https';
 `host.docker.internal` permet à Postgres (qui tourne dans Docker via `supabase start`) d'atteindre Next.js qui tourne sur la machine hôte.
 
 ```sql
-alter database postgres set app.notifications_dispatch_url = 'http://host.docker.internal:3000/api/notifications/dispatch';
-alter database postgres set app.notifications_secret       = 'dev-secret-no-need-to-be-strong';
-alter database postgres set app.notifications_app_domain   = 'localhost:3000';
-alter database postgres set app.notifications_url_scheme   = 'http';
+insert into public.notification_settings (key, value) values
+  ('dispatch_url', 'http://host.docker.internal:3000/api/notifications/dispatch'),
+  ('secret',       'dev-secret-no-need-to-be-strong'),
+  ('app_domain',   'localhost:3000'),
+  ('url_scheme',   'http')
+on conflict (key) do update set value = excluded.value;
 ```
 
 ### Vérifier
 
 ```sql
-show app.notifications_dispatch_url;
-show app.notifications_secret;
-show app.notifications_app_domain;
-show app.notifications_url_scheme;
+select key, value from public.notification_settings order by key;
 ```
 
-Si un `show` retourne `unrecognized configuration parameter`, le trigger lit `null` (graceful) et **les notifications sont créées en DB mais aucun dispatch HTTP n'est tenté** — utile en dev quand Next.js n'est pas up.
+Si une clé manque (ou si `dispatch_url`/`secret` retournent `null`), le trigger est graceful : **les notifications sont créées en DB mais aucun dispatch HTTP n'est tenté** — utile en dev quand Next.js n'est pas up.
 
 ---
 
@@ -90,11 +95,10 @@ select cron.schedule(
   '*/5 * * * *',  -- toutes les 5 minutes
   $$
     select net.http_post(
-      url := current_setting('app.notifications_dispatch_url')
-             || replace('/api/notifications/dispatch', '/dispatch', '/worker'),
+      url := replace(public.notification_setting('dispatch_url'), '/dispatch', '/worker'),
       headers := jsonb_build_object(
         'content-type', 'application/json',
-        'x-notify-secret', current_setting('app.notifications_secret')
+        'x-notify-secret', public.notification_setting('secret')
       ),
       body := '{}'::jsonb,
       timeout_milliseconds := 30000
@@ -160,10 +164,10 @@ Note : Vercel Cron ne peut pas envoyer le header `x-notify-secret`. Si tu prends
 
 ### Désactiver temporairement les notifications externes
 
-Mettre à `null` le dispatch URL côté DB :
+Supprimer la ligne `dispatch_url` côté DB :
 
 ```sql
-alter database postgres reset app.notifications_dispatch_url;
+delete from public.notification_settings where key = 'dispatch_url';
 ```
 
-Les notifications continuent d'être créées en DB (in-app via Realtime) mais aucun appel HTTP n'est tenté. Pratique en cas d'incident SMTP.
+Les notifications continuent d'être créées en DB (in-app via Realtime) mais aucun appel HTTP n'est tenté. Pratique en cas d'incident SMTP. Pour réactiver, ré-exécuter l'`insert ... on conflict` de la section 3.
