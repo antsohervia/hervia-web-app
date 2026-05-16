@@ -212,6 +212,7 @@
     "statuses": "Statuses",
     "transportModes": "Transport Modes",
     "users": "Users",
+    "settings": "Settings",
     "appearance": "Appearance",
     "translations": "Translations"
   },
@@ -518,6 +519,50 @@
       "copied": "Copied!",
       "validity": "This link is single-use and expires in 72 hours.",
       "close": "Close"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Update the information displayed in the admin workspace.",
+    "readOnlyNotice": "You are viewing this workspace in impersonation mode: no changes can be made.",
+    "form": {
+      "email": "Email",
+      "emailHint": "Email address cannot be changed from this screen.",
+      "fullName": "Full name",
+      "phone": "Phone",
+      "phonePlaceholder": "+261 32 12 345 67",
+      "save": "Save",
+      "saving": "Saving...",
+      "saved": "Settings updated"
+    },
+    "security": {
+      "title": "Security",
+      "subtitle": "Manage your password and sign-in methods.",
+      "google": {
+        "title": "Google sign-in",
+        "linkedDescription": "You can sign in with Google.",
+        "unlinkedDescription": "Link your Google account to sign in with one click.",
+        "link": "Link Google account",
+        "linking": "Redirecting to Google...",
+        "linked": "Google account linked"
+      },
+      "password": {
+        "title": "Password",
+        "description": "Pick a password of at least 10 characters.",
+        "noPasswordNotice": "No password set on this account. Use 'Forgot password' on the sign-in screen to create one.",
+        "current": "Current password",
+        "new": "New password",
+        "confirm": "Confirm new password",
+        "submit": "Update password",
+        "submitting": "Updating...",
+        "saved": "Password updated",
+        "errors": {
+          "wrongCurrent": "Current password is incorrect",
+          "mismatch": "Passwords do not match",
+          "tooShort": "Password too short (10 characters minimum)",
+          "sameAsCurrent": "New password must differ from the current one"
+        }
+      }
     }
   },
   "translations": {

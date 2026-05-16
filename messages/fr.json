@@ -212,6 +212,7 @@
     "statuses": "Statuts",
     "transportModes": "Modes de transport",
     "users": "Utilisateurs",
+    "settings": "Réglages",
     "appearance": "Apparence",
     "translations": "Traductions"
   },
@@ -518,6 +519,50 @@
       "copied": "Copié !",
       "validity": "Ce lien est à usage unique et expire dans 72 heures.",
       "close": "Fermer"
+    }
+  },
+  "settings": {
+    "title": "Réglages",
+    "subtitle": "Mettez à jour vos informations affichées dans l'espace admin.",
+    "readOnlyNotice": "Vous consultez cet espace en mode impersonation : aucune modification n'est possible.",
+    "form": {
+      "email": "Email",
+      "emailHint": "L'adresse email ne peut pas être modifiée depuis cet écran.",
+      "fullName": "Nom complet",
+      "phone": "Téléphone",
+      "phonePlaceholder": "+261 32 12 345 67",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "saved": "Réglages mis à jour"
+    },
+    "security": {
+      "title": "Sécurité",
+      "subtitle": "Gérez votre mot de passe et vos méthodes de connexion.",
+      "google": {
+        "title": "Connexion avec Google",
+        "linkedDescription": "Vous pouvez vous connecter avec Google.",
+        "unlinkedDescription": "Liez votre compte Google pour vous connecter en un clic.",
+        "link": "Lier mon compte Google",
+        "linking": "Redirection vers Google...",
+        "linked": "Compte Google connecté"
+      },
+      "password": {
+        "title": "Mot de passe",
+        "description": "Choisissez un mot de passe d'au moins 10 caractères.",
+        "noPasswordNotice": "Aucun mot de passe défini sur ce compte. Utilisez « Mot de passe oublié » sur l'écran de connexion pour en créer un.",
+        "current": "Mot de passe actuel",
+        "new": "Nouveau mot de passe",
+        "confirm": "Confirmer le nouveau mot de passe",
+        "submit": "Modifier le mot de passe",
+        "submitting": "Modification...",
+        "saved": "Mot de passe modifié",
+        "errors": {
+          "wrongCurrent": "Mot de passe actuel incorrect",
+          "mismatch": "Les mots de passe ne correspondent pas",
+          "tooShort": "Mot de passe trop court (10 caractères minimum)",
+          "sameAsCurrent": "Le nouveau mot de passe doit être différent de l'actuel"
+        }
+      }
     }
   },
   "translations": {

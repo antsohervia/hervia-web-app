@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Languages,
   Users,
+  Settings,
 } from "lucide-react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
@@ -70,6 +71,13 @@ export default async function TenantAdminShellLayout({
       >
         <Users className="size-5 lg:size-4" />
         {t("nav.users")}
+      </Link>
+      <Link
+        href="/admin/reglages"
+        className="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-accent text-sm min-h-11"
+      >
+        <Settings className="size-5 lg:size-4" />
+        {t("nav.settings")}
       </Link>
       {session.role === "entreprise_admin" ? (
         <>
