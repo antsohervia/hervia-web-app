@@ -129,27 +129,24 @@ export default function PrivacyPage() {
       <section>
         <h2>5. Destinataires et sous-traitants</h2>
         <p>
-          Vos données sont accessibles aux équipes habilitées de HERVIA et aux
-          sous-traitants suivants, agissant strictement sur nos instructions&nbsp;:
+          Vos données sont accessibles aux équipes habilitées de HERVIA et à un
+          nombre restreint de sous-traitants techniques (hébergement, base de
+          données, authentification, envoi d&apos;emails transactionnels) agissant
+          strictement sur nos instructions, dans le cadre de contrats conformes à
+          l&apos;article&nbsp;28 du RGPD.
         </p>
-        <ul>
-          <li>
-            <strong>Supabase</strong> (base de données, authentification,
-            hébergement) — données hébergées en Union Européenne.
-          </li>
-          <li>
-            <strong>[HÉBERGEUR APPLICATIF]</strong> (hébergement de l&apos;application
-            web) — Union Européenne.
-          </li>
-          <li>
-            <strong>[FOURNISSEUR EMAIL TRANSACTIONNEL]</strong> (envoi
-            d&apos;emails) — Union Européenne.
-          </li>
-        </ul>
         <p>
-          Aucune donnée n&apos;est revendue. Aucun transfert hors Union Européenne
-          n&apos;est effectué sans garanties appropriées (clauses contractuelles types
-          de la Commission Européenne).
+          L&apos;ensemble des données est hébergé dans l&apos;Union Européenne. Aucun
+          transfert hors Union Européenne n&apos;est effectué sans garanties
+          appropriées (clauses contractuelles types de la Commission Européenne).
+          Aucune donnée n&apos;est revendue à des tiers, ni utilisée à des fins
+          publicitaires.
+        </p>
+        <p>
+          La liste détaillée et à jour de nos sous-traitants peut être communiquée
+          sur demande motivée à{" "}
+          <a href="mailto:contact@hervia.co">contact@hervia.co</a> (pour des
+          raisons de sécurité, elle n&apos;est pas publiée).
         </p>
       </section>
 

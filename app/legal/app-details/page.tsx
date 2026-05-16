@@ -107,12 +107,16 @@ export default function AppDetailsPage() {
           <li>Chiffrement en transit (TLS 1.2+) sur l&apos;ensemble des échanges.</li>
           <li>Chiffrement au repos des bases de données.</li>
           <li>
-            Hébergement et stockage des données dans l&apos;Union Européenne
-            (Supabase, région EU).
+            Hébergement et stockage des données dans l&apos;Union Européenne, chez
+            un prestataire cloud certifié.
           </li>
           <li>
-            Authentification gérée par Supabase Auth (standards OAuth 2.0 / OpenID
-            Connect).
+            Authentification conforme aux standards OAuth&nbsp;2.0 / OpenID
+            Connect.
+          </li>
+          <li>
+            Contrôle d&apos;accès strict, journalisation des actions sensibles,
+            sauvegardes régulières et tests de restauration.
           </li>
         </ul>
       </section>
