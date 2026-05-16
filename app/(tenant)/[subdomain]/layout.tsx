@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { notFound, redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import { ImpersonationBanner } from "@/components/ImpersonationBanner";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { getImpersonation } from "@/lib/auth/impersonation";
 import { getClientBrand } from "@/lib/branding/client-theme";
 import { getTenantBySubdomain } from "@/lib/tenants/repo";
@@ -68,6 +69,7 @@ export default async function TenantLayout({
 
   return (
     <>
+      <ServiceWorkerRegistration />
       {isImpersonating ? (
         <ImpersonationBanner tenantName={tenant.name} />
       ) : null}
