@@ -4,6 +4,7 @@ import {
   Palette,
   ScanLine,
   Tags,
+  Users,
   Check,
   type LucideIcon,
 } from "lucide-react";
@@ -16,6 +17,7 @@ const FEATURE_ICONS: LucideIcon[] = [
   Palette,
   ScanLine,
   Tags,
+  Users,
 ];
 
 const FEATURE_GRADIENTS = [
@@ -23,6 +25,7 @@ const FEATURE_GRADIENTS = [
   "from-[var(--accent-violet)] to-[var(--accent-rose)]",
   "from-[var(--accent-emerald)] to-[var(--accent-cyan)]",
   "from-[var(--accent-amber)] to-[var(--accent-rose)]",
+  "from-[var(--accent-cyan)] to-[var(--accent-violet)]",
 ];
 
 const FEATURE_SHADOWS = [
@@ -30,6 +33,7 @@ const FEATURE_SHADOWS = [
   "shadow-[var(--accent-violet)]/25",
   "shadow-[var(--accent-emerald)]/25",
   "shadow-[var(--accent-amber)]/25",
+  "shadow-[var(--accent-cyan)]/25",
 ];
 
 export async function Features() {
@@ -106,6 +110,7 @@ function FeaturePreview({ index }: { index: number }) {
     "var(--accent-violet)",
     "var(--accent-emerald)",
     "var(--accent-amber)",
+    "var(--accent-cyan)",
   ];
   const halo = haloColors[index % haloColors.length];
   return (
@@ -122,6 +127,7 @@ function FeaturePreview({ index }: { index: number }) {
         {index === 1 && <BrandingPreview />}
         {index === 2 && <ScanPreview />}
         {index === 3 && <StatusesPreview />}
+        {index === 4 && <TeamPreview />}
       </div>
     </div>
   );
@@ -274,6 +280,61 @@ function StatusesPreview() {
           </span>
         </div>
       ))}
+    </div>
+  );
+}
+
+function TeamPreview() {
+  const members = [
+    { initials: "SL", name: "Sophie Lambert", email: "sophie@acme.co", role: "Admin", active: true },
+    { initials: "KM", name: "Karim Mansouri", email: "karim@acme.co", role: "Membre", active: true },
+    { initials: "JD", name: "Jean-Marc Diop", email: "jd@acme.co", role: "Membre", active: true },
+  ];
+  return (
+    <div className="flex flex-col gap-3 h-full">
+      <div className="flex items-center justify-between mb-1">
+        <p className="text-[10px] uppercase tracking-wide text-muted-foreground font-semibold">
+          Membres actifs
+        </p>
+        <span className="rounded-full bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-brand">
+          + Inviter
+        </span>
+      </div>
+      {members.map((m, i) => (
+        <div
+          key={i}
+          className="flex items-center gap-3 rounded-lg border border-border/60 bg-background/80 p-2.5"
+        >
+          <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-brand/15 text-brand text-[11px] font-bold">
+            {m.initials}
+          </span>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-medium text-foreground truncate">{m.name}</p>
+            <p className="text-[10px] text-muted-foreground truncate">{m.email}</p>
+          </div>
+          <span
+            className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+              m.role === "Admin"
+                ? "bg-brand/10 text-brand"
+                : "bg-muted text-muted-foreground"
+            }`}
+          >
+            {m.role}
+          </span>
+        </div>
+      ))}
+      <div className="mt-auto rounded-lg border border-dashed border-border/60 bg-background/40 p-2.5 flex items-center gap-3">
+        <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-dashed border-border text-muted-foreground text-[11px]">
+          ?
+        </span>
+        <div className="flex-1 min-w-0">
+          <p className="text-[10px] text-muted-foreground">marie@example.com</p>
+          <p className="text-[9px] text-muted-foreground/60">Invitation en attente</p>
+        </div>
+        <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+          En attente
+        </span>
+      </div>
     </div>
   );
 }

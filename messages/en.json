@@ -62,24 +62,29 @@
       "subtitle": "All the essential tools to run your business, in one elegant interface.",
       "items": [
         {
-          "title": "Operational dashboard",
-          "body": "See the status of all your shipments at a glance: ongoing, delivered, pending. Custom KPIs, advanced filters and built-in CSV export.",
-          "highlights": ["Real-time overview", "Filter by client, status, mode", "One-click CSV export"]
+          "title": "Shipment management",
+          "body": "Create, track and update all your parcels from a centralized view. Each shipment comes with a full record — weight, volume, price, route, dates — and a traceable event history.",
+          "highlights": ["Centralized view with filters", "Per-parcel detail sheet", "Timestamped event history"]
         },
         {
           "title": "White-label client portal",
-          "body": "Offer your clients a portal in your brand colors: logo, palette, custom domain. They track parcels without ever seeing HERVIA.",
-          "highlights": ["Custom logo and palette", "Dedicated subdomain", "White-label emails"]
+          "body": "Give your clients a portal in your brand colors: logo, palette and theme fully configurable. They track their parcels without ever seeing HERVIA.",
+          "highlights": ["Configurable logo and palette", "Real-time preview (login + dashboard)", "Light, dark or corporate theme"]
         },
         {
           "title": "Ultra-fast batch scanning",
-          "body": "Update hundreds of parcels in seconds with the mobile scanner. Automatic status transitions, full audit trail.",
-          "highlights": ["Barcode reader & camera support", "Bulk validation", "Detailed audit trail"]
+          "body": "Update hundreds of parcels in seconds with the scanner. Instant status transitions — every action is timestamped and attributed to its operator.",
+          "highlights": ["Barcode reader & manual entry", "Immediate per-reference feedback", "Timestamped audit trail with actor"]
         },
         {
           "title": "Custom statuses and modes",
           "body": "Configure your own lifecycle steps, transport modes (sea, air, road) and colors. HERVIA adapts to your process — not the other way around.",
-          "highlights": ["Custom workflows", "Unlimited transport modes", "Drag-and-drop reordering"]
+          "highlights": ["Statuses with custom color codes", "Unlimited transport modes", "Priority-based reordering"]
+        },
+        {
+          "title": "Multi-operator collaboration",
+          "body": "Invite colleagues by email, assign roles (admin or member) and manage pending invitations. Every action is traced back to its author.",
+          "highlights": ["Email invitations", "Admin and member roles", "Per-actor action traceability"]
         }
       ]
     },

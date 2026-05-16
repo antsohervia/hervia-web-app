@@ -62,24 +62,29 @@
       "subtitle": "Tous les outils essentiels pour piloter votre activité, dans une seule interface élégante.",
       "items": [
         {
-          "title": "Tableau de bord opérationnel",
-          "body": "Visualisez en un coup d'œil l'état de toutes vos expéditions : en cours, livrées, en attente. KPIs personnalisables, filtres avancés et export CSV intégré.",
-          "highlights": ["Vue d'ensemble en temps réel", "Filtres par client, statut, mode", "Export CSV en un clic"]
+          "title": "Gestion des expéditions",
+          "body": "Créez, suivez et mettez à jour l'ensemble de vos colis depuis une vue centralisée. Chaque expédition dispose d'une fiche complète (poids, volume, prix, route, dates) et d'un historique d'événements traçable.",
+          "highlights": ["Vue centralisée avec filtres", "Fiche détail par colis", "Historique d'événements horodaté"]
         },
         {
           "title": "Espace client en marque blanche",
-          "body": "Offrez à vos clients un portail aux couleurs de votre marque : logo, couleurs, domaine personnalisé. Ils suivent leurs colis sans jamais voir HERVIA.",
-          "highlights": ["Logo et palette personnalisés", "Sous-domaine dédié", "Communications en marque blanche"]
+          "body": "Offrez à vos clients un portail aux couleurs de votre marque : logo, palette et thème entièrement configurables. Ils suivent leurs colis sans jamais voir HERVIA.",
+          "highlights": ["Logo et palette configurables", "Preview temps réel (login + dashboard)", "Thème clair, sombre ou corporate"]
         },
         {
           "title": "Scan en lot ultra-rapide",
-          "body": "Mettez à jour des centaines de colis en quelques secondes avec le scanner mobile. Transitions de statut automatiques, journal d'audit complet.",
-          "highlights": ["Compatible douchette et caméra", "Validation en lot", "Audit trail détaillé"]
+          "body": "Mettez à jour des centaines de colis en quelques secondes avec le scanner. Transitions de statut immédiates, chaque action reste horodatée et attribuée à son auteur.",
+          "highlights": ["Compatible douchette et saisie manuelle", "Feedback immédiat par référence", "Audit trail horodaté avec acteur"]
         },
         {
           "title": "Statuts et modes sur mesure",
           "body": "Configurez vos propres étapes de cycle de vie, modes de transport (maritime, aérien, routier) et couleurs. HERVIA s'adapte à votre processus, pas l'inverse.",
-          "highlights": ["Workflows personnalisables", "Modes de transport illimités", "Réordonnancement par glisser-déposer"]
+          "highlights": ["Statuts avec code couleur personnalisé", "Modes de transport illimités", "Réordonnancement par priorité"]
+        },
+        {
+          "title": "Collaboration multi-opérateurs",
+          "body": "Invitez vos collègues par email, attribuez des rôles (admin ou membre) et gérez les invitations en attente. Chaque action reste tracée à son auteur.",
+          "highlights": ["Invitations par email", "Rôles admin et membre", "Traçabilité des actions par acteur"]
         }
       ]
     },
