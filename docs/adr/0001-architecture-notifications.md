@@ -4,6 +4,7 @@
 - **Date :** 2026-05-16
 - **Décideurs :** Mendrika
 - **US concernées :** [US-C4.1, US-C4.2](../../us/US-CLIENT-notifications.md)
+- **Guide de setup par environnement :** [notifications-setup.md](../notifications-setup.md)
 
 ---
 
