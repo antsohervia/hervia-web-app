@@ -31,6 +31,9 @@ export default async function TenantAdminShellLayout({
     getMessages(),
   ]);
 
+  const firstName =
+    session.fullName?.trim().split(/\s+/)[0] ?? session.email ?? t("roles.readOnly");
+
   const navItems = (
     <>
       <Link
@@ -91,9 +94,7 @@ export default async function TenantAdminShellLayout({
 
   const sessionInfo = (
     <div className="px-4 py-4 border-b">
-      <p className="text-xs text-muted-foreground truncate">
-        {session.email ?? t("roles.readOnly")}
-      </p>
+      <p className="text-xs text-muted-foreground truncate">{firstName}</p>
       <p className="text-[10px] uppercase tracking-wide text-muted-foreground mt-0.5">
         {session.role === "entreprise_admin"
           ? t("roles.admin")
@@ -131,7 +132,7 @@ export default async function TenantAdminShellLayout({
               )}
             </Link>
             <p className="text-xs text-muted-foreground mt-1 truncate">
-              {session.email ?? t("roles.readOnly")}
+              {firstName}
             </p>
             <p className="text-[10px] uppercase tracking-wide text-muted-foreground mt-0.5">
               {session.role === "entreprise_admin"

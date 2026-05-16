@@ -34,7 +34,9 @@ export default async function TenantAdminHome({ params }: Props) {
     <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6 lg:space-y-8">
       <div>
         <h1 className="text-xl sm:text-2xl font-semibold">
-          {t("welcome", { name: session.tenant.name })}
+          {t("welcome", {
+            name: session.fullName ?? session.tenant.name,
+          })}
         </h1>
         <p className="text-sm text-muted-foreground mt-1">{t("subtitle")}</p>
       </div>
