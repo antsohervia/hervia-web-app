@@ -65,43 +65,68 @@ export function NotificationsBell({
 
   useEffect(() => {
     const supabase = createSupabaseBrowser();
-    const channel = supabase
-      .channel(`notif:${clientId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "notifications",
-          filter: `recipient_client_id=eq.${clientId}`,
-        },
-        (payload) => {
-          const row = payload.new as ClientNotification;
-          if (seenIds.current.has(row.id)) return;
-          seenIds.current.add(row.id);
-          setItems((prev) => [row, ...prev].slice(0, 200));
-          if (!row.read_at) setUnread((c) => c + 1);
-        },
-      )
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "notifications",
-          filter: `recipient_client_id=eq.${clientId}`,
-        },
-        (payload) => {
-          const row = payload.new as ClientNotification;
-          setItems((prev) =>
-            prev.map((n) => (n.id === row.id ? { ...n, ...row } : n)),
-          );
-        },
-      )
-      .subscribe();
+    let cancelled = false;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let authSub: { unsubscribe: () => void } | null = null;
+
+    (async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (cancelled) return;
+      if (session?.access_token) {
+        supabase.realtime.setAuth(session.access_token);
+      }
+
+      const { data } = supabase.auth.onAuthStateChange((_event, s) => {
+        if (s?.access_token) supabase.realtime.setAuth(s.access_token);
+      });
+      authSub = data.subscription;
+
+      channel = supabase
+        .channel(`notif:${clientId}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "notifications",
+            filter: `recipient_client_id=eq.${clientId}`,
+          },
+          (payload) => {
+            const row = payload.new as ClientNotification;
+            if (seenIds.current.has(row.id)) return;
+            seenIds.current.add(row.id);
+            setItems((prev) => [row, ...prev].slice(0, 200));
+            if (!row.read_at) setUnread((c) => c + 1);
+          },
+        )
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "notifications",
+            filter: `recipient_client_id=eq.${clientId}`,
+          },
+          (payload) => {
+            const row = payload.new as ClientNotification;
+            setItems((prev) =>
+              prev.map((n) => (n.id === row.id ? { ...n, ...row } : n)),
+            );
+          },
+        )
+        .subscribe((status, err) => {
+          if (status !== "SUBSCRIBED") {
+            console.warn("[notifications realtime]", status, err);
+          }
+        });
+    })();
 
     return () => {
-      supabase.removeChannel(channel);
+      cancelled = true;
+      authSub?.unsubscribe();
+      if (channel) supabase.removeChannel(channel);
     };
   }, [clientId]);
 
