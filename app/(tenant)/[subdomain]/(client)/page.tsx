@@ -14,6 +14,7 @@ import { getClientBrand } from "@/lib/branding/client-theme";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AddParcelModal } from "./_add-parcel-modal";
+import { RealtimeParcelsRefresh } from "./_realtime-parcels-refresh";
 
 export const dynamic = "force-dynamic";
 
@@ -92,6 +93,7 @@ export default async function ClientDashboardPage({
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-8">
+      <RealtimeParcelsRefresh clientId={session.clientId} />
       <section
         className="relative overflow-hidden rounded-2xl border p-6 sm:p-8"
         style={{

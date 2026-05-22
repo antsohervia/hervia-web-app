@@ -7,6 +7,7 @@ import { getClientParcelDetail } from "@/lib/clients/repo";
 import { listParcelEvents, listStatuses } from "@/lib/parcels/repo";
 import { getClientBrand } from "@/lib/branding/client-theme";
 import { Button } from "@/components/ui/button";
+import { RealtimeParcelRefresh } from "./_realtime-parcel-refresh";
 
 export const dynamic = "force-dynamic";
 
@@ -52,6 +53,7 @@ export default async function ClientParcelDetailPage({ params }: Props) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-6">
+      <RealtimeParcelRefresh parcelId={parcel.id} />
       <Button asChild variant="ghost" size="sm" className="-ml-2">
         <Link href="/">
           <ArrowLeft className="size-4 mr-1" />
