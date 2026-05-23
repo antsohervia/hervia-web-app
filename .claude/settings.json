@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git stash *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(git mv *)",
+      "Bash(mv \"app/\\(tenant\\)/[subdomain]/admin/\\(shell\\)/profil\" \"app/\\(tenant\\)/[subdomain]/admin/\\(shell\\)/reglages\")",
+      "Bash(cmd /c 'move \"app\\\\\\(tenant\\)\\\\[subdomain]\\\\admin\\\\\\(shell\\)\\\\profil\" \"app\\\\\\(tenant\\)\\\\[subdomain]\\\\admin\\\\\\(shell\\)\\\\reglages\"')",
+      "Bash(cmd //c \"move \\\\\"app\\\\\\(tenant\\)\\\\[subdomain]\\\\admin\\\\\\(shell\\)\\\\profil\\\\\" \\\\\"app\\\\\\(tenant\\)\\\\[subdomain]\\\\admin\\\\\\(shell\\)\\\\reglages\\\\\"\")",
+      "PowerShell(Get-Process | Where-Object {$_.ProcessName -match 'node|next'} | Select-Object Id, ProcessName, MainWindowTitle)",
+      "Read(//e/perso/transit/mytransitaire/app/\\(tenant\\)/**)",
+      "Bash(pnpm exec *)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(echo \"EXIT=$?\")",
+      "Read(//c/Users/mendr/.claude/**)",
+      "Bash(mkdir -p \"/c/Users/mendr/.claude/commands/\")",
+      "mcp__supabase_dev__apply_migration",
+      "Bash(Get-ChildItem -Path \"e:\\\\perso\\\\transit\\\\mytransitaire\\\\app\\\\\\(tenant\\)\\\\[subdomain]\\\\admin\\\\\\(shell\\)\\\\reglages\\\\\" -File)",
+      "PowerShell(Get-ChildItem \"e:\\\\perso\\\\transit\\\\mytransitaire\\\\\" -Recurse -Directory | Where-Object {$_.Name -eq \"admin\" -or $_.Name -eq \"shell\" -or $_.Name -eq \"reglages\"})"
+    ],
+    "additionalDirectories": [
+      "E:\\perso\\transit\\mytransitaire\\app\\(tenant)\\[subdomain]\\admin\\(shell)\\profil",
+      "C:\\Users\\mendr\\.claude\\commands"
+    ]
+  }
+}
