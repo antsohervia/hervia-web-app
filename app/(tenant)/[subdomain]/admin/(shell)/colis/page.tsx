@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { requireTenantSession } from "@/lib/auth/tenant-dal";
 import { listParcels, listStatuses } from "@/lib/parcels/repo";
 import { Button } from "@/components/ui/button";
+import { RealtimeColisRefresh } from "./_realtime-colis-refresh";
 import {
   Table,
   TableBody,
@@ -44,6 +45,7 @@ export default async function ParcelsListPage({ params, searchParams }: Props) {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-4 sm:space-y-6">
+      <RealtimeColisRefresh tenantId={session.tenant.id} />
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div>
           <h1 className="text-xl sm:text-2xl font-semibold">{t("title")}</h1>
