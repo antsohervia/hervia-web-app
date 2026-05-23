@@ -290,6 +290,41 @@ export async function touchClientLastLogin(clientId: string): Promise<void> {
     .eq("id", clientId);
 }
 
+export async function createClientFromOAuth(
+  tenantId: string,
+  userId: string,
+  fullName: string,
+  email: string,
+): Promise<{ id: string }> {
+  const admin = createSupabaseAdmin();
+  const { data, error } = await admin
+    .from("clients")
+    .insert({
+      tenant_id: tenantId,
+      user_id: userId,
+      full_name: fullName,
+      email,
+      status: "active",
+      email_notifications_enabled: true,
+    })
+    .select("id")
+    .single();
+  if (error) throw new Error(error.message);
+  return { id: data.id as string };
+}
+
+export async function linkClientToUser(
+  clientId: string,
+  userId: string,
+): Promise<void> {
+  const admin = createSupabaseAdmin();
+  const { error } = await admin
+    .from("clients")
+    .update({ user_id: userId, status: "active" })
+    .eq("id", clientId);
+  if (error) throw new Error(error.message);
+}
+
 export async function activateClient(clientId: string): Promise<void> {
   const admin = createSupabaseAdmin();
   const { error } = await admin

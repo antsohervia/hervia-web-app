@@ -3,7 +3,13 @@ import type { EmailOtpType } from "@supabase/supabase-js";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { createSupabaseAdmin } from "@/lib/supabase/admin";
 import { requestOrigin } from "@/lib/auth/callback-url";
-import { activateClient, touchClientLastLogin } from "@/lib/clients/repo";
+import {
+  activateClient,
+  touchClientLastLogin,
+  getClientByEmailAndTenant,
+  createClientFromOAuth,
+  linkClientToUser,
+} from "@/lib/clients/repo";
 
 export async function GET(
   req: NextRequest,
@@ -30,7 +36,7 @@ export async function GET(
       return NextResponse.redirect(new URL("/login?error=callback", origin));
     }
   } else {
-    return NextResponse.redirect(new URL("/login", origin));
+    return NextResponse.redirect(new URL("/login?error=oauth", origin));
   }
 
   const {
@@ -122,6 +128,40 @@ export async function GET(
     .maybeSingle();
 
   if (!client) {
+    // Flux OAuth : liaison par email ou auto-inscription.
+    if (code && user.email) {
+      const byEmail = await getClientByEmailAndTenant(user.email, tenant.id);
+      if (byEmail) {
+        if (byEmail.status === "disabled") {
+          await supabase.auth.signOut();
+          return NextResponse.redirect(
+            new URL("/login?error=disabled", origin),
+          );
+        }
+        if (byEmail.user_id === null) {
+          await linkClientToUser(byEmail.id, user.id);
+          await touchClientLastLogin(byEmail.id);
+          return NextResponse.redirect(new URL(next ?? "/", origin));
+        }
+      } else {
+        // Nouvel utilisateur Google : auto-inscription.
+        const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+        const fullName =
+          typeof meta.full_name === "string" && meta.full_name.trim()
+            ? meta.full_name.trim()
+            : typeof meta.name === "string" && meta.name.trim()
+              ? meta.name.trim()
+              : user.email;
+        const newClient = await createClientFromOAuth(
+          tenant.id,
+          user.id,
+          fullName,
+          user.email,
+        );
+        await touchClientLastLogin(newClient.id);
+        return NextResponse.redirect(new URL(next ?? "/", origin));
+      }
+    }
     await supabase.auth.signOut();
     return NextResponse.redirect(new URL("/login?error=callback", origin));
   }

@@ -46,7 +46,10 @@ export function LoginForm({
     const origin = window.location.origin;
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: `${origin}/auth/callback?next=/admin` },
+      options: {
+        redirectTo: `${origin}/auth/callback?next=/admin`,
+        ...(provider === "facebook" && { scopes: "email" }),
+      },
     });
     if (error) {
       setOauthError(error.message);
