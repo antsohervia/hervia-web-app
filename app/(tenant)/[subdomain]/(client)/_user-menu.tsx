@@ -1,7 +1,8 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
-import { ChevronDown, LogOut } from "lucide-react";
+import Link from "next/link";
+import { ChevronDown, LogOut, Settings } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -80,6 +81,13 @@ export function ClientUserMenu({
             </p>
           ) : null}
         </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/reglages" className="cursor-pointer">
+            <Settings className="size-4" />
+            Réglages
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <form action={action}>
           <DropdownMenuItem asChild>
