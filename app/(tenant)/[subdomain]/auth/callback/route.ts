@@ -33,6 +33,7 @@ export async function GET(
   } else if (token_hash && type) {
     const { error } = await supabase.auth.verifyOtp({ token_hash, type });
     if (error) {
+      console.error("[auth/callback] verifyOtp failed", { token_hash, type, error: error.message, code: error.code });
       return NextResponse.redirect(new URL("/login?error=callback", origin));
     }
   } else {

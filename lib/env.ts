@@ -51,6 +51,17 @@ export function getUnsubscribeSecret(): string {
   );
 }
 
+/**
+ * Secret du Send Email Hook Supabase (format `v1,whsec_<base64>`).
+ * Sert à valider la signature Standard Webhooks des requêtes entrantes.
+ */
+export function getAuthEmailHookSecret(): string {
+  return required(
+    "AUTH_EMAIL_HOOK_SECRET",
+    process.env.AUTH_EMAIL_HOOK_SECRET,
+  );
+}
+
 export function getServiceRoleKey(): string {
   return required(
     "SUPABASE_SERVICE_ROLE_KEY",

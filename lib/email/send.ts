@@ -1,6 +1,42 @@
 import "server-only";
 import { getMailer, getMailerFrom } from "./client";
 
+/**
+ * Envoi bas-niveau d'un email déjà rendu (sujet/html/text).
+ * Utilisé par le Send Email Hook auth. `from` reste notre domaine
+ * authentifié (M365) ; le branding tenant est dans le corps du message.
+ */
+export async function sendRenderedEmail(args: {
+  toEmail: string;
+  subject: string;
+  html: string;
+  text: string;
+}): Promise<boolean> {
+  try {
+    const mailer = getMailer();
+    const from = getMailerFrom();
+    if (!mailer || !from) {
+      console.warn("[email] SMTP non configuré, email skipé pour", args.toEmail);
+      return false;
+    }
+    await mailer.sendMail({
+      from,
+      to: args.toEmail,
+      subject: args.subject,
+      html: args.html,
+      text: args.text,
+    });
+    return true;
+  } catch (err) {
+    console.error("[email] Échec envoi", {
+      toEmail: args.toEmail,
+      subject: args.subject,
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return false;
+  }
+}
+
 export async function sendTenantInvitationEmail(args: {
   toEmail: string;
   tenantName: string;
