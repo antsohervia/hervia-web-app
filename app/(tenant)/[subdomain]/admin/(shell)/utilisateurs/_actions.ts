@@ -172,11 +172,14 @@ export async function inviteTenantMemberAction(
 
   const invitationLink = `${redirectTo}?token_hash=${hashedToken}&type=${linkType}`;
 
-  await sendTenantInvitationEmail({
+  const emailSent = await sendTenantInvitationEmail({
     toEmail: email,
     tenantName: session.tenant.name,
     invitationLink,
   });
+  if (!emailSent) {
+    console.error("[invite] Échec envoi email pour", email);
+  }
 
   await logTenantMemberAudit({
     actorId: session.userId,
@@ -187,7 +190,7 @@ export async function inviteTenantMemberAction(
   });
 
   revalidatePath(`/admin/utilisateurs`);
-  return { ok: true, invitationLink, invitedEmail: email };
+  return { ok: true, invitationLink, invitedEmail: email, emailSent };
 }
 
 export async function updateTenantMemberRoleAction(
@@ -396,11 +399,14 @@ export async function resendTenantInvitationAction(
 
   const invitationLink = `${redirectTo}?token_hash=${linkData.properties.hashed_token}&type=magiclink`;
 
-  await sendTenantInvitationEmail({
+  const emailSent = await sendTenantInvitationEmail({
     toEmail: email,
     tenantName: session.tenant.name,
     invitationLink,
   });
+  if (!emailSent) {
+    console.error("[invite] Échec renvoi email pour", email);
+  }
 
   await logTenantMemberAudit({
     actorId: session.userId,
@@ -415,5 +421,5 @@ export async function resendTenantInvitationAction(
   });
 
   revalidatePath(`/admin/utilisateurs`);
-  return { ok: true, invitationLink, invitedEmail: email };
+  return { ok: true, invitationLink, invitedEmail: email, emailSent };
 }

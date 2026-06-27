@@ -43,6 +43,7 @@ export type InviteTenantMemberState = {
   };
   invitationLink?: string;
   invitedEmail?: string;
+  emailSent?: boolean;
   ok?: boolean;
 };
 
@@ -62,5 +63,6 @@ export type ResendTenantInvitationState = {
   errors?: { _form?: string[] };
   invitationLink?: string;
   invitedEmail?: string;
+  emailSent?: boolean;
   ok?: boolean;
 };
