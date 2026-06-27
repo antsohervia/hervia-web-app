@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   Languages,
   Users,
+  Contact,
   Settings,
 } from "lucide-react";
 import { NextIntlClientProvider } from "next-intl";
@@ -68,6 +69,10 @@ export default async function TenantAdminShellLayout({
       <NavLink href="/admin/colis">
         <Package className="size-5 lg:size-4" />
         {t("nav.parcels")}
+      </NavLink>
+      <NavLink href="/admin/clients">
+        <Contact className="size-5 lg:size-4" />
+        {t("nav.clients")}
       </NavLink>
       <NavLink href="/admin/statuts">
         <Tags className="size-5 lg:size-4" />

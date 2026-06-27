@@ -214,6 +214,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "parcels": "Parcels",
+    "clients": "Clients",
     "statuses": "Statuses",
     "transportModes": "Transport Modes",
     "users": "Users",
@@ -267,6 +268,54 @@
     "required": "*",
     "noData": "No data yet.",
     "generatedCode": "Generated code:"
+  },
+  "clients": {
+    "title": "Clients",
+    "subtitle": "{count} client registered",
+    "subtitlePlural": "{count} clients registered",
+    "newClient": "New client",
+    "search": "Search",
+    "searchPlaceholder": "Name or email…",
+    "statusFilter": "Status",
+    "noData": "No clients yet.",
+    "created": "Client created successfully.",
+    "status": {
+      "active": "Active",
+      "pending_activation": "Pending",
+      "disabled": "Disabled"
+    },
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "status": "Status",
+      "parcels": "Parcels",
+      "createdAt": "Created",
+      "actions": "Actions"
+    },
+    "form": {
+      "title": "New client",
+      "description": "Create a client account. The client can activate their account from the client portal.",
+      "fullName": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "cancel": "Cancel",
+      "create": "Create client",
+      "creating": "Creating…"
+    },
+    "recovery": {
+      "generate": "Recovery link",
+      "generating": "Generating…",
+      "title": "Generate a recovery link",
+      "description": "A link will be generated for {email}. The client will be able to set a new password.",
+      "successTitle": "Link generated",
+      "successDescription": "Copy this link and share it with the client (WhatsApp, phone, etc.).",
+      "link": "Recovery link",
+      "copy": "Copy",
+      "copied": "Copied!",
+      "validity": "This link is valid for 24 hours.",
+      "close": "Close"
+    }
   },
   "parcels": {
     "title": "Parcels",

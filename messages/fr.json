@@ -214,6 +214,7 @@
   "nav": {
     "dashboard": "Tableau de bord",
     "parcels": "Colis",
+    "clients": "Clients",
     "statuses": "Statuts",
     "transportModes": "Modes de transport",
     "users": "Utilisateurs",
@@ -267,6 +268,54 @@
     "required": "*",
     "noData": "Aucune donnée pour le moment.",
     "generatedCode": "Code généré :"
+  },
+  "clients": {
+    "title": "Clients",
+    "subtitle": "{count} client enregistré",
+    "subtitlePlural": "{count} clients enregistrés",
+    "newClient": "Nouveau client",
+    "search": "Recherche",
+    "searchPlaceholder": "Nom ou email…",
+    "statusFilter": "Statut",
+    "noData": "Aucun client pour le moment.",
+    "created": "Client créé avec succès.",
+    "status": {
+      "active": "Actif",
+      "pending_activation": "En attente",
+      "disabled": "Désactivé"
+    },
+    "columns": {
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "status": "Statut",
+      "parcels": "Colis",
+      "createdAt": "Créé le",
+      "actions": "Actions"
+    },
+    "form": {
+      "title": "Nouveau client",
+      "description": "Créez un compte client. Le client pourra activer son compte depuis l'espace client.",
+      "fullName": "Nom complet",
+      "email": "Email",
+      "phone": "Téléphone",
+      "cancel": "Annuler",
+      "create": "Créer le client",
+      "creating": "Création…"
+    },
+    "recovery": {
+      "generate": "Lien de récupération",
+      "generating": "Génération…",
+      "title": "Générer un lien de récupération",
+      "description": "Un lien sera généré pour {email}. Le client pourra choisir un nouveau mot de passe.",
+      "successTitle": "Lien généré",
+      "successDescription": "Copiez ce lien et partagez-le avec le client (WhatsApp, téléphone, etc.).",
+      "link": "Lien de récupération",
+      "copy": "Copier",
+      "copied": "Copié !",
+      "validity": "Ce lien est valable 24 heures.",
+      "close": "Fermer"
+    }
   },
   "parcels": {
     "title": "Colis",

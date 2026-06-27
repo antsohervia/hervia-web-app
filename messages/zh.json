@@ -214,6 +214,7 @@
   "nav": {
     "dashboard": "控制台",
     "parcels": "包裹",
+    "clients": "客户",
     "statuses": "状态",
     "transportModes": "运输方式",
     "users": "用户",
@@ -267,6 +268,54 @@
     "required": "*",
     "noData": "暂无数据。",
     "generatedCode": "生成的代码："
+  },
+  "clients": {
+    "title": "客户",
+    "subtitle": "已登记 {count} 位客户",
+    "subtitlePlural": "已登记 {count} 位客户",
+    "newClient": "新客户",
+    "search": "搜索",
+    "searchPlaceholder": "姓名或邮箱…",
+    "statusFilter": "状态",
+    "noData": "暂无客户。",
+    "created": "客户创建成功。",
+    "status": {
+      "active": "活跃",
+      "pending_activation": "待激活",
+      "disabled": "已禁用"
+    },
+    "columns": {
+      "name": "姓名",
+      "email": "邮箱",
+      "phone": "电话",
+      "status": "状态",
+      "parcels": "包裹",
+      "createdAt": "创建时间",
+      "actions": "操作"
+    },
+    "form": {
+      "title": "新客户",
+      "description": "创建客户账户。客户可以通过客户端激活其账户。",
+      "fullName": "全名",
+      "email": "邮箱",
+      "phone": "电话",
+      "cancel": "取消",
+      "create": "创建客户",
+      "creating": "创建中…"
+    },
+    "recovery": {
+      "generate": "恢复链接",
+      "generating": "生成中…",
+      "title": "生成恢复链接",
+      "description": "将为 {email} 生成一个链接。客户可以设置新密码。",
+      "successTitle": "链接已生成",
+      "successDescription": "复制此链接并分享给客户（WhatsApp、电话等）。",
+      "link": "恢复链接",
+      "copy": "复制",
+      "copied": "已复制！",
+      "validity": "此链接有效期为24小时。",
+      "close": "关闭"
+    }
   },
   "parcels": {
     "title": "包裹",
