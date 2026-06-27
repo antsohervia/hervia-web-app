@@ -3,6 +3,11 @@
 > **Rôle concerné :** Entreprise (le transitaire)  
 > **Épic :** E3 — Gestion du portefeuille clients
 
+> **Légende statut** (mise à jour : 2026-06-21) :
+> ✅ Fait · 🟡 Partiel · 🔴 À faire — `- [x]` critère couvert par le code, `- [ ]` non couvert.
+>
+> ⚠️ **État global de l'épic :** non démarré côté espace transitaire. Aucune page `clients` n'existe dans l'admin tenant (à ne pas confondre avec la page **Utilisateurs** qui gère les membres internes de l'équipe). Aujourd'hui les clients finaux n'existent que via l'**auto-inscription** (US-C1.3). Toute la gestion manuelle (liste, fiche, création, désactivation, suppression/anonymisation RGPD) reste à construire.
+
 ---
 
 ## Contexte métier
@@ -20,7 +25,8 @@ Le transitaire gère son portefeuille client depuis son espace d'administration.
 
 ## US-E3.1 — Consulter la liste de ses clients
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🔴 À faire — aucune page de liste clients ni fonction `listClients()` côté transitaire.
 
 ### User story
 > En tant que transitaire, je veux accéder à une liste paginée et filtrable de tous mes clients enregistrés, afin de gérer efficacement mon portefeuille et d'accéder rapidement aux informations d'un client spécifique.
@@ -58,7 +64,8 @@ Un transitaire peut gérer des dizaines à plusieurs centaines de clients. La li
 
 ## US-E3.2 — Créer un compte client
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🔴 À faire — pas de formulaire/action de création manuelle côté admin ; le schéma `clients` n'a pas encore les colonnes adresse postale / notes internes / raison sociale.
 
 ### User story
 > En tant que transitaire, je veux créer manuellement un compte client avec ses informations de contact, afin qu'il puisse se connecter à son espace de suivi et commencer à consulter ses colis.
@@ -100,7 +107,8 @@ L'enrôlement des clients est initié par le transitaire. Lorsqu'il commence à 
 
 ## US-E3.3 — Désactiver ou supprimer un compte client
 
-**Priorité :** Should Have
+**Priorité :** Should Have  
+**Statut :** 🔴 À faire — la logique bas niveau existe partiellement (blocage de connexion d'un client `disabled`, fonction `activateClient`, colis conservés via FK `on delete set null`) mais aucune UI ni suppression/anonymisation RGPD.
 
 ### User story
 > En tant que transitaire, je veux pouvoir désactiver temporairement ou supprimer définitivement un compte client, afin de gérer les fins de relation commerciale ou les doublons.
@@ -113,9 +121,9 @@ Certains clients cessent d'avoir recours aux services du transitaire, ou un comp
 **Désactivation :**
 - [ ] Un bouton "Désactiver le compte" est disponible sur la fiche client
 - [ ] Un motif optionnel peut être renseigné
-- [ ] Le client désactivé ne peut plus se connecter (page d'erreur explicative)
-- [ ] Les colis et l'historique du client sont conservés et toujours accessibles par le transitaire
-- [ ] La réactivation est possible à tout moment depuis la fiche client
+- [ ] Le client désactivé ne peut plus se connecter (page d'erreur explicative) _(⚠️ partiel : le blocage existe dans `client-dal.ts` — redirection `/login?error=disabled` — mais pas de page d'erreur dédiée ni d'UI pour désactiver)_
+- [x] Les colis et l'historique du client sont conservés et toujours accessibles par le transitaire
+- [ ] La réactivation est possible à tout moment depuis la fiche client _(⚠️ partiel : `activateClient()` existe mais aucune fiche/UI pour l'appeler)_
 
 **Suppression définitive :**
 - [ ] La suppression est disponible uniquement si le client n'a aucun colis actif (tous ses colis sont à un statut `final`)

@@ -3,6 +3,9 @@
 > **Rôle concerné :** Entreprise (le transitaire)  
 > **Épic :** E2 — Gestion des statuts et du cycle de vie des colis
 
+> **Légende statut** (mise à jour : 2026-06-21) :
+> ✅ Fait · 🟡 Partiel · 🔴 À faire — `- [x]` critère couvert par le code, `- [ ]` non couvert.
+
 ---
 
 ## Contexte métier
@@ -32,7 +35,8 @@ La plateforme ne dicte pas de statuts fixes — elle laisse chaque transitaire d
 
 ## US-E2.1 — Créer et configurer les statuts personnalisés
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🟡 Partiel — création/édition/suppression + réordonnancement (boutons) en place ; les icônes, l'avertissement de statut utilisé et le drag & drop manquent.
 
 ### User story
 > En tant que transitaire, je veux définir, organiser et modifier ma propre liste de statuts de colis, afin que le suivi proposé à mes clients reflète exactement mon processus logistique interne.
@@ -45,12 +49,12 @@ Dès l'activation de son espace, le transitaire dispose d'une liste de statuts p
 **Création d'un statut :**
 - [x] Un bouton "Ajouter un statut" permet de créer un nouveau statut
 - [x] Champs obligatoires : libellé du statut (max 60 caractères), couleur associée (color picker)
-- [ ] Champs optionnels : icône (sélection depuis une bibliothèque prédéfinie de 30+ icônes), description interne (non visible par le client, max 200 caractères)
-- [x] Un aperçu du rendu du statut (couleur + icône + libellé) est affiché avant confirmation
+- [ ] Champs optionnels : icône (sélection depuis une bibliothèque prédéfinie de 30+ icônes), description interne (non visible par le client, max 200 caractères) _(⚠️ partiel : description gérée, sélecteur d'icône absent)_
+- [ ] Un aperçu du rendu du statut (couleur + icône + libellé) est affiché avant confirmation _(⚠️ partiel : aperçu couleur + libellé sans icône)_
 
 **Modification d'un statut existant :**
 - [x] Tous les champs d'un statut sont modifiables à tout moment
-- [ ] Si le statut est actuellement utilisé sur des colis actifs, un avertissement est affiché : "Ce statut est utilisé sur X colis en cours. La modification s'appliquera immédiatement."
+- [ ] Si le statut est actuellement utilisé sur des colis actifs, un avertissement est affiché : "Ce statut est utilisé sur X colis en cours. La modification s'appliquera immédiatement." _(❌ pas d'avertissement en modification)_
 
 **Suppression d'un statut :**
 - [x] Un statut peut être supprimé uniquement s'il n'est plus utilisé sur aucun colis actif
@@ -58,8 +62,8 @@ Dès l'activation de son espace, le transitaire dispose d'une liste de statuts p
 - [x] Il faut conserver un minimum de 2 statuts actifs dans la liste
 
 **Organisation :**
-- [ ] Les statuts sont réordonnables par glisser-déposer (drag & drop) pour définir l'ordre chronologique
-- [ ] L'ordre des statuts est utilisé pour afficher la timeline de progression dans l'espace client
+- [ ] Les statuts sont réordonnables par glisser-déposer (drag & drop) pour définir l'ordre chronologique _(⚠️ partiel : réordonnancement via boutons haut/bas, pas de drag & drop)_
+- [x] L'ordre des statuts est utilisé pour afficher la timeline de progression dans l'espace client
 
 ### Règles métier
 
@@ -84,7 +88,8 @@ Dès l'activation de son espace, le transitaire dispose d'une liste de statuts p
 
 ## US-E2.2 — Mettre à jour le statut d'un colis
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🟡 Partiel — changement de statut + commentaire + historique + notification automatique opérationnels ; la liste déroulante n'affiche pas couleur/icône.
 
 ### User story
 > En tant que transitaire (opérateur), je veux changer le statut d'un colis depuis mon espace d'administration, afin de tenir le client informé de l'évolution de son expédition en temps réel.
@@ -95,12 +100,12 @@ Les opérateurs du transitaire (équipe logistique, customer service) utilisent 
 ### Critères d'acceptation
 
 - [x] Depuis la liste des colis ou la fiche d'un colis, un bouton "Changer le statut" est accessible
-- [ ] Une liste déroulante affiche les statuts disponibles (définis en US-E2.1), avec la couleur et l'icône associées
+- [ ] Une liste déroulante affiche les statuts disponibles (définis en US-E2.1), avec la couleur et l'icône associées _(⚠️ partiel : la liste affiche le libellé seul)_
 - [x] Un champ texte optionnel "Commentaire" permet d'ajouter un message visible du client (ex. "Votre colis est en attente de dédouanement suite à un contrôle douanier.", max 500 caractères)
 - [x] Un champ de date/heure optionnel permet de dater précisément le changement (par défaut : date et heure actuelles)
 - [x] Une confirmation est demandée avant application (modale de confirmation avec résumé)
 - [x] Après confirmation, le statut est mis à jour immédiatement sur la fiche colis et dans l'espace client
-- [ ] Une notification est automatiquement déclenchée vers le client concerné (voir Épic C4)
+- [x] Une notification est automatiquement déclenchée vers le client concerné (voir Épic C4)
 - [x] Le changement est inscrit dans l'historique de la fiche colis avec : nouveau statut, commentaire, date/heure, nom de l'opérateur qui a effectué le changement
 
 ### Règles métier
@@ -125,7 +130,8 @@ Les opérateurs du transitaire (équipe logistique, customer service) utilisent 
 
 ## US-E2.3 — Créer et enregistrer un nouveau colis
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🟡 Partiel — création complète + unicité + visibilité temps réel côté client ; la notification "nouveau colis" reste à brancher.
 
 ### User story
 > En tant que transitaire, je veux pouvoir créer une fiche colis et l'associer à un client, afin de démarrer le suivi d'une nouvelle expédition.
@@ -139,8 +145,8 @@ Un colis est créé par le transitaire (pas par le client seul). Le transitaire 
 - [x] Champs obligatoires : numéro de tracking (unique, max 50 caractères), client associé (sélection depuis la liste des clients), statut initial, date de création de l'expédition
 - [x] Champs optionnels : description de la marchandise (max 200 caractères), poids (kg), volume (m³), estimation de prix (montant + devise), pays d'origine, pays de destination, date de livraison estimée
 - [x] Le numéro de tracking est vérifié pour l'unicité dans le tenant
-- [ ] Le colis est immédiatement visible dans l'espace client du client associé
-- [ ] Une notification est envoyée au client pour l'informer qu'un nouveau colis a été enregistré à son nom
+- [x] Le colis est immédiatement visible dans l'espace client du client associé
+- [ ] Une notification est envoyée au client pour l'informer qu'un nouveau colis a été enregistré à son nom _(❌ notification déclenchée seulement au changement de statut, pas à la création)_
 
 ### Règles métier
 

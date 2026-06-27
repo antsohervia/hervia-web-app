@@ -3,6 +3,9 @@
 > **Rôle concerné :** Client (client final du transitaire)  
 > **Épics :** C2 — Suivi de colis en temps réel · C3 — Historique des expéditions
 
+> **Légende statut** (mise à jour : 2026-06-21) :
+> ✅ Fait · 🟡 Partiel · 🔴 À faire — `- [x]` critère couvert par le code, `- [ ]` non couvert.
+
 ---
 
 ## Contexte métier
@@ -26,7 +29,8 @@ Le client peut avoir plusieurs colis en simultané, à différentes étapes du p
 
 ## US-C2.1 — Enregistrer un numéro de colis depuis l'espace client
 
-**Priorité :** Should Have
+**Priorité :** Should Have  
+**Statut :** 🟡 Partiel — ajout et association d'un numéro fonctionnels ; la notification au transitaire pour un numéro inconnu manque.
 
 ### User story
 > En tant que client, je veux pouvoir ajouter moi-même un numéro de colis depuis mon espace personnel, afin de commencer à suivre une expédition dont je connais déjà le numéro de tracking.
@@ -36,12 +40,12 @@ Dans certains cas, le transitaire communique le numéro de tracking par téléph
 
 ### Critères d'acceptation
 
-- [ ] Un champ "Ajouter un numéro de colis" est visible sur le tableau de bord client
-- [ ] Le client saisit le numéro de tracking et soumet
-- [ ] **Cas 1 — Le numéro existe dans le tenant et est déjà associé au client :** la fiche colis est affichée directement, pas de duplication
-- [ ] **Cas 2 — Le numéro existe dans le tenant mais n'est pas encore associé à ce client :** la fiche colis est affichée (le transitaire a créé le colis sans l'associer encore)
-- [ ] **Cas 3 — Le numéro n'existe pas dans le tenant :** un message informe le client que ce numéro n'est pas reconnu et l'invite à contacter son transitaire ; une demande est envoyée en notification au transitaire
-- [ ] Le champ de saisie accepte les caractères alphanumériques, tirets et underscores
+- [x] Un champ "Ajouter un numéro de colis" est visible sur le tableau de bord client
+- [x] Le client saisit le numéro de tracking et soumet
+- [x] **Cas 1 — Le numéro existe dans le tenant et est déjà associé au client :** la fiche colis est affichée directement, pas de duplication
+- [x] **Cas 2 — Le numéro existe dans le tenant mais n'est pas encore associé à ce client :** la fiche colis est affichée (le transitaire a créé le colis sans l'associer encore)
+- [ ] **Cas 3 — Le numéro n'existe pas dans le tenant :** un message informe le client que ce numéro n'est pas reconnu et l'invite à contacter son transitaire ; une demande est envoyée en notification au transitaire _(⚠️ partiel : le message est affiché, mais aucune notification/log n'est remontée au transitaire)_
+- [x] Le champ de saisie accepte les caractères alphanumériques, tirets et underscores
 
 ### Règles métier
 
@@ -64,7 +68,8 @@ Dans certains cas, le transitaire communique le numéro de tracking par téléph
 
 ## US-C2.2 — Voir l'évolution du statut d'un colis
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** ✅ Fait — cartes résumé + timeline détaillée avec étape courante mise en avant et étapes futures grisées.
 
 ### User story
 > En tant que client, je veux visualiser la progression de mon colis sur une timeline claire, avec les dates et les commentaires associés à chaque étape, afin de savoir exactement où en est mon expédition.
@@ -75,14 +80,14 @@ C'est la fonctionnalité centrale de la plateforme. La timeline de suivi doit ê
 ### Critères d'acceptation
 
 **Vue tableau de bord (résumé) :**
-- [ ] Chaque colis actif est présenté sous forme de carte avec : numéro de tracking, statut actuel (couleur + libellé), date du dernier changement de statut, barre de progression visuelle (étapes passées / étape actuelle / étapes restantes)
+- [x] Chaque colis actif est présenté sous forme de carte avec : numéro de tracking, statut actuel (couleur + libellé), date du dernier changement de statut, barre de progression visuelle (étapes passées / étape actuelle / étapes restantes)
 
 **Vue détail du colis :**
-- [ ] Une timeline verticale affiche toutes les étapes dans l'ordre chronologique défini par le transitaire
-- [ ] Chaque étape passée affiche : l'icône et la couleur du statut, le libellé, la date et l'heure du changement, le commentaire du transitaire (si renseigné)
-- [ ] L'étape actuelle est mise en évidence visuellement (taille, couleur, animation subtile)
-- [ ] Les étapes futures (non encore atteintes) sont affichées en grisé pour montrer la progression à venir
-- [ ] Si une date de livraison estimée a été renseignée, elle est affichée de manière prominente en haut de la fiche
+- [x] Une timeline verticale affiche toutes les étapes dans l'ordre chronologique défini par le transitaire
+- [x] Chaque étape passée affiche : l'icône et la couleur du statut, le libellé, la date et l'heure du changement, le commentaire du transitaire (si renseigné)
+- [x] L'étape actuelle est mise en évidence visuellement (taille, couleur, animation subtile)
+- [x] Les étapes futures (non encore atteintes) sont affichées en grisé pour montrer la progression à venir
+- [x] Si une date de livraison estimée a été renseignée, elle est affichée de manière prominente en haut de la fiche
 
 ### Règles métier
 
@@ -107,7 +112,8 @@ C'est la fonctionnalité centrale de la plateforme. La timeline de suivi doit ê
 
 ## US-C2.3 — Consulter l'estimation du prix de l'expédition
 
-**Priorité :** Should Have
+**Priorité :** Should Have  
+**Statut :** 🔴 À faire — le montant/devise est stocké et chargé en base mais n'est pas affiché sur la fiche colis client.
 
 ### User story
 > En tant que client, je veux voir l'estimation du coût de mon expédition sur la fiche de mon colis, afin d'anticiper mes dépenses et de préparer les paiements à venir.
@@ -117,7 +123,7 @@ L'estimation de prix est renseignée par le transitaire lors de la création ou 
 
 ### Critères d'acceptation
 
-- [ ] Si une estimation de prix a été renseignée par le transitaire, elle est visible sur la fiche colis dans une section dédiée
+- [ ] Si une estimation de prix a été renseignée par le transitaire, elle est visible sur la fiche colis dans une section dédiée _(❌ donnée chargée mais non rendue sur `parcels/[id]`)_
 - [ ] L'estimation affiche : le montant, la devise, et la mention "Estimation indicative — le montant final peut varier"
 - [ ] Si aucune estimation n'a été renseignée, la section n'est pas affichée (pas de "0" ou de champ vide visible)
 - [ ] Si l'estimation a été mise à jour par le transitaire, la nouvelle valeur est affichée avec la date de mise à jour
@@ -141,7 +147,8 @@ L'estimation de prix est renseignée par le transitaire lors de la création ou 
 
 ## US-C3.1 — Consulter l'historique de tous ses colis
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** ✅ Fait — section "Mes expéditions" avec recherche, filtres statut/période et pagination.
 
 ### User story
 > En tant que client, je veux accéder à la liste complète de toutes mes expéditions passées et en cours, filtrables et triables, afin de retrouver facilement un colis spécifique et d'avoir une vue d'ensemble de mon activité.
@@ -151,13 +158,13 @@ Un client actif peut avoir cumulé plusieurs dizaines de colis sur une année. L
 
 ### Critères d'acceptation
 
-- [ ] Une section "Mes expéditions" liste tous les colis du client (actifs + terminés/archivés)
-- [ ] Par défaut, les colis actifs apparaissent en premier, triés par date de dernier changement de statut (le plus récent en tête)
-- [ ] Chaque ligne de la liste affiche : numéro de tracking, statut actuel (couleur + libellé), date de création, date de livraison (ou date estimée si pas encore livré)
-- [ ] Des filtres sont disponibles : statut (tous / actifs / terminés), période de création (ce mois, 3 derniers mois, cette année, personnalisé)
-- [ ] Une barre de recherche permet de rechercher par numéro de tracking ou par description de marchandise
-- [ ] La liste est paginée (10 colis par page sur mobile, 20 sur desktop)
-- [ ] Un clic sur une ligne ouvre la fiche détail du colis (US-C2.2)
+- [x] Une section "Mes expéditions" liste tous les colis du client (actifs + terminés/archivés)
+- [x] Par défaut, les colis actifs apparaissent en premier, triés par date de dernier changement de statut (le plus récent en tête)
+- [x] Chaque ligne de la liste affiche : numéro de tracking, statut actuel (couleur + libellé), date de création, date de livraison (ou date estimée si pas encore livré)
+- [x] Des filtres sont disponibles : statut (tous / actifs / terminés), période de création (ce mois, 3 derniers mois, cette année, personnalisé)
+- [x] Une barre de recherche permet de rechercher par numéro de tracking ou par description de marchandise
+- [x] La liste est paginée (10 colis par page sur mobile, 20 sur desktop)
+- [x] Un clic sur une ligne ouvre la fiche détail du colis (US-C2.2)
 
 ### Règles métier
 
@@ -180,7 +187,8 @@ Un client actif peut avoir cumulé plusieurs dizaines de colis sur une année. L
 
 ## US-C3.2 — Exporter l'historique de ses colis
 
-**Priorité :** Could Have
+**Priorité :** Could Have  
+**Statut :** 🔴 À faire — aucun bouton ni route d'export CSV côté client.
 
 ### User story
 > En tant que client, je veux pouvoir exporter la liste de mes colis au format CSV, afin de la réutiliser dans mes outils comptables ou de gestion.

@@ -3,6 +3,9 @@
 > **Rôle concerné :** Client (client final du transitaire)  
 > **Épic :** C1 — Authentification et gestion de l'accès à l'espace client
 
+> **Légende statut** (mise à jour : 2026-06-21) :
+> ✅ Fait · 🟡 Partiel · 🔴 À faire — `- [x]` critère couvert par le code, `- [ ]` non couvert, `⚠️ partiel` derrière une case = comportement principal présent mais incomplet.
+
 ---
 
 ## Contexte métier
@@ -21,7 +24,8 @@ L'expérience d'authentification doit être simple, rassurante, et porter la mar
 
 ## US-C1.1 — Se connecter à son espace client
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🟡 Partiel — connexion email/mdp + OAuth Google/Facebook opérationnels ; il manque le blocage anti-bruteforce applicatif.
 
 ### User story
 > En tant que client, je veux me connecter à mon espace personnel via l'adresse de mon transitaire avec mon email et mon mot de passe, afin d'accéder de manière sécurisée à mes informations de suivi.
@@ -31,14 +35,15 @@ La page de connexion est le premier contact visuel du client avec la plateforme.
 
 ### Critères d'acceptation
 
-- [ ] La page de connexion (`[sous-domaine].trackapp.com/login`) affiche : le logo du transitaire, un titre de bienvenue avec le nom du transitaire, un formulaire email + mot de passe, un lien "Créer un compte" (vers le formulaire d'auto-inscription — US-C1.3) et un lien "Mot de passe oublié ?"
-- [ ] La connexion est validée côté serveur — un token de session est émis en cas de succès
-- [ ] En cas d'échec (mauvais identifiants) : un message d'erreur générique est affiché ("Email ou mot de passe incorrect") sans préciser lequel est faux
-- [ ] Après 5 tentatives échouées consécutives sur le même compte, le compte est temporairement bloqué pendant 15 minutes
-- [ ] Après connexion réussie, le client est redirigé vers son tableau de bord (liste de ses colis)
-- [ ] Une case "Se souvenir de moi" permet de maintenir la session 30 jours (sans cette case : session expire après fermeture du navigateur)
-- [ ] La page est responsive et utilisable sur mobile (écran 320px minimum)
-- [ ] La connexion fonctionne sur les navigateurs modernes : Chrome, Firefox, Safari, Edge (2 dernières versions majeures)
+- [x] La page de connexion (`[sous-domaine].trackapp.com/login`) affiche : le logo du transitaire, un titre de bienvenue avec le nom du transitaire, un formulaire email + mot de passe, un lien "Créer un compte" (vers le formulaire d'auto-inscription — US-C1.3) et un lien "Mot de passe oublié ?"
+- [x] La connexion est validée côté serveur — un token de session est émis en cas de succès
+- [x] En cas d'échec (mauvais identifiants) : un message d'erreur générique est affiché ("Email ou mot de passe incorrect") sans préciser lequel est faux
+- [ ] Après 5 tentatives échouées consécutives sur le même compte, le compte est temporairement bloqué pendant 15 minutes _(❌ pas de rate-limiting applicatif ; repose uniquement sur les limites natives Supabase)_
+- [x] Après connexion réussie, le client est redirigé vers son tableau de bord (liste de ses colis)
+- [x] Une case "Se souvenir de moi" permet de maintenir la session 30 jours (sans cette case : session expire après fermeture du navigateur)
+- [x] La page est responsive et utilisable sur mobile (écran 320px minimum)
+- [x] La connexion fonctionne sur les navigateurs modernes : Chrome, Firefox, Safari, Edge (2 dernières versions majeures)
+- [x] _(bonus, hors critères initiaux)_ Connexion via OAuth Google et Facebook avec auto-inscription du client
 
 ### Règles métier
 
@@ -62,7 +67,8 @@ La page de connexion est le premier contact visuel du client avec la plateforme.
 
 ## US-C1.2 — Réinitialiser son mot de passe
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** ✅ Fait — flux complet (demande générique, lien à durée limitée, nouveau mot de passe, auto-connexion).
 
 ### User story
 > En tant que client, je veux pouvoir réinitialiser mon mot de passe de manière autonome depuis la page de connexion, afin de retrouver l'accès à mon espace sans avoir à contacter mon transitaire.
@@ -72,15 +78,15 @@ Que le client ait choisi son mot de passe lors de l'auto-inscription (US-C1.3) o
 
 ### Critères d'acceptation
 
-- [ ] Un lien "Mot de passe oublié ?" est disponible sur la page de connexion
-- [ ] En cliquant, le client est invité à saisir son adresse email
-- [ ] Si l'email existe dans le tenant, un email de réinitialisation est envoyé dans les 2 minutes
-- [ ] Si l'email n'existe pas, la même confirmation est affichée (sécurité : ne pas révéler les emails existants)
-- [ ] L'email de réinitialisation contient un lien unique valable 1 heure, avec le logo du transitaire
-- [ ] Le lien mène vers un formulaire de saisie du nouveau mot de passe (2 champs : nouveau mdp + confirmation)
-- [ ] Le nouveau mot de passe doit respecter : minimum 8 caractères, au moins 1 chiffre, au moins 1 lettre
-- [ ] Après changement réussi, le client est automatiquement connecté et redirigé vers son tableau de bord
-- [ ] L'ancien mot de passe est invalidé immédiatement après la réinitialisation
+- [x] Un lien "Mot de passe oublié ?" est disponible sur la page de connexion
+- [x] En cliquant, le client est invité à saisir son adresse email
+- [x] Si l'email existe dans le tenant, un email de réinitialisation est envoyé dans les 2 minutes
+- [x] Si l'email n'existe pas, la même confirmation est affichée (sécurité : ne pas révéler les emails existants)
+- [x] L'email de réinitialisation contient un lien unique valable 1 heure, avec le logo du transitaire
+- [x] Le lien mène vers un formulaire de saisie du nouveau mot de passe (2 champs : nouveau mdp + confirmation)
+- [x] Le nouveau mot de passe doit respecter : minimum 8 caractères, au moins 1 chiffre, au moins 1 lettre
+- [x] Après changement réussi, le client est automatiquement connecté et redirigé vers son tableau de bord
+- [x] L'ancien mot de passe est invalidé immédiatement après la réinitialisation
 
 ### Règles métier
 
@@ -105,7 +111,8 @@ Que le client ait choisi son mot de passe lors de l'auto-inscription (US-C1.3) o
 
 ## US-C1.3 — S'inscrire et activer son compte
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🟡 Partiel — auto-inscription + activation email + auto-connexion en place ; la notification du transitaire à l'activation reste à faire.
 
 ### User story
 > En tant qu'importateur ou exportateur, je veux pouvoir créer moi-même mon compte client depuis le sous-domaine de mon transitaire et y accéder immédiatement après activation par email, afin de ne pas dépendre du transitaire pour démarrer le suivi de mes marchandises.
@@ -115,17 +122,17 @@ Pour fluidifier l'enrôlement, le client peut s'inscrire de manière autonome de
 
 ### Critères d'acceptation
 
-- [ ] Un lien "Créer un compte" est disponible depuis la page de connexion (`[sous-domaine].trackapp.com/login`) et redirige vers `[sous-domaine].trackapp.com/signup`
-- [ ] La page d'inscription affiche le logo, les couleurs et le nom du transitaire (marque blanche)
-- [ ] Le formulaire demande : prénom + nom (ou raison sociale), adresse email, mot de passe + confirmation, rôle (importateur / exportateur), case "j'accepte les CGU"
-- [ ] Champs optionnels : numéro de téléphone (international), nom de la société
-- [ ] Le mot de passe choisi doit respecter : minimum 8 caractères, au moins 1 chiffre, au moins 1 lettre (mêmes règles que US-C1.2)
-- [ ] L'email est vérifié pour l'unicité dans le tenant (un email ne peut pas déjà être associé à un client du même transitaire)
-- [ ] À la soumission du formulaire, le compte est créé en statut `pending_activation` (non connectable)
-- [ ] Un email d'activation est envoyé dans les 2 minutes, avec le logo et le nom du transitaire, et un lien d'activation unique valable 24 heures
-- [ ] Au clic sur le lien d'activation, le compte passe en statut `active`, le client est automatiquement connecté et redirigé vers son tableau de bord (espace client)
-- [ ] Une notification (in-app + email récapitulatif) est envoyée au transitaire pour qu'il puisse rapprocher le compte de ses dossiers
-- [ ] La page d'inscription est responsive et utilisable sur mobile (écran 320px minimum)
+- [x] Un lien "Créer un compte" est disponible depuis la page de connexion (`[sous-domaine].trackapp.com/login`) et redirige vers `[sous-domaine].trackapp.com/signup`
+- [x] La page d'inscription affiche le logo, les couleurs et le nom du transitaire (marque blanche)
+- [x] Le formulaire demande : prénom + nom (ou raison sociale), adresse email, mot de passe + confirmation, rôle (importateur / exportateur), case "j'accepte les CGU"
+- [x] Champs optionnels : numéro de téléphone (international), nom de la société
+- [x] Le mot de passe choisi doit respecter : minimum 8 caractères, au moins 1 chiffre, au moins 1 lettre (mêmes règles que US-C1.2)
+- [x] L'email est vérifié pour l'unicité dans le tenant (un email ne peut pas déjà être associé à un client du même transitaire)
+- [x] À la soumission du formulaire, le compte est créé en statut `pending_activation` (non connectable)
+- [x] Un email d'activation est envoyé dans les 2 minutes, avec le logo et le nom du transitaire, et un lien d'activation unique valable 24 heures
+- [x] Au clic sur le lien d'activation, le compte passe en statut `active`, le client est automatiquement connecté et redirigé vers son tableau de bord (espace client)
+- [ ] Une notification (in-app + email récapitulatif) est envoyée au transitaire pour qu'il puisse rapprocher le compte de ses dossiers _(❌ pas encore déclenchée à l'activation)_
+- [x] La page d'inscription est responsive et utilisable sur mobile (écran 320px minimum)
 
 ### Règles métier
 

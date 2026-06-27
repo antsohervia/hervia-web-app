@@ -3,6 +3,9 @@
 > **Rôle concerné :** Client (client final du transitaire)  
 > **Épic :** C4 — Notifications et alertes de changement de statut
 
+> **Légende statut** (mise à jour : 2026-06-21) :
+> ✅ Fait · 🟡 Partiel · 🔴 À faire — `- [x]` critère couvert par le code, `- [ ]` non couvert.
+
 ---
 
 ## Contexte métier
@@ -25,7 +28,8 @@ Les notifications sont un canal de communication directe entre le transitaire et
 
 ## US-C4.1 — Recevoir une notification email à chaque changement de statut
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🟡 Partiel — email de changement de statut + barre de progression + désinscription opérationnels ; la réactivation depuis les réglages client manque.
 
 ### User story
 > En tant que client, je veux recevoir un email automatique dès qu'un de mes colis change de statut, afin d'être informé de l'évolution de mon expédition sans avoir à me connecter régulièrement.
@@ -36,21 +40,21 @@ L'email est le canal de notification principal en V1. Il est déclenché automat
 ### Critères d'acceptation
 
 **Déclenchement :**
-- [ ] Un email est envoyé automatiquement dans les 2 minutes suivant un changement de statut par le transitaire
-- [ ] Si plusieurs statuts sont changés simultanément sur le même colis (edge case d'import), un seul email est envoyé (le dernier statut)
-- [ ] En cas de changement de statut groupé (multiple colis), un email séparé est envoyé par colis (pas d'email récapitulatif groupé en V1)
+- [x] Un email est envoyé automatiquement dans les 2 minutes suivant un changement de statut par le transitaire
+- [x] Si plusieurs statuts sont changés simultanément sur le même colis (edge case d'import), un seul email est envoyé (le dernier statut)
+- [x] En cas de changement de statut groupé (multiple colis), un email séparé est envoyé par colis (pas d'email récapitulatif groupé en V1)
 
 **Contenu de l'email :**
-- [ ] Le logo du transitaire est affiché en haut de l'email
-- [ ] L'objet de l'email suit le format : `[Nom du transitaire] — Mise à jour de votre colis [numéro de tracking]`
-- [ ] Le corps contient : le numéro de tracking, le nouveau statut (avec sa couleur sous forme d'un badge coloré), la date et l'heure du changement, le commentaire du transitaire (si renseigné), un bouton CTA "Voir le détail de mon colis" (lien direct vers la fiche)
-- [ ] Une barre de progression visuelle (étapes passées / actuelle / à venir) est incluse dans l'email
-- [ ] Le bas de l'email contient : les coordonnées du transitaire, un lien de désinscription des notifications email
+- [x] Le logo du transitaire est affiché en haut de l'email
+- [x] L'objet de l'email suit le format : `[Nom du transitaire] — Mise à jour de votre colis [numéro de tracking]`
+- [x] Le corps contient : le numéro de tracking, le nouveau statut (avec sa couleur sous forme d'un badge coloré), la date et l'heure du changement, le commentaire du transitaire (si renseigné), un bouton CTA "Voir le détail de mon colis" (lien direct vers la fiche)
+- [x] Une barre de progression visuelle (étapes passées / actuelle / à venir) est incluse dans l'email
+- [x] Le bas de l'email contient : les coordonnées du transitaire, un lien de désinscription des notifications email
 
 **Gestion des préférences :**
-- [ ] En cliquant sur le lien de désinscription, le client est redirigé vers une page de confirmation lui permettant de désactiver les notifications email (sans avoir à se connecter)
-- [ ] La désinscription est effective immédiatement
-- [ ] Le client peut réactiver les notifications depuis son espace personnel (paramètres)
+- [x] En cliquant sur le lien de désinscription, le client est redirigé vers une page de confirmation lui permettant de désactiver les notifications email (sans avoir à se connecter)
+- [x] La désinscription est effective immédiatement
+- [ ] Le client peut réactiver les notifications depuis son espace personnel (paramètres) _(❌ pas d'UI de réactivation dans `/reglages`)_
 
 ### Règles métier
 
@@ -76,7 +80,8 @@ L'email est le canal de notification principal en V1. Il est déclenché automat
 
 ## US-C4.2 — Consulter les notifications in-app
 
-**Priorité :** Should Have
+**Priorité :** Should Have  
+**Statut :** 🟡 Partiel — cloche, compteur temps réel, marquage lu et pagination en place ; rétention 90j (purge) et gestion d'un colis supprimé restent à faire.
 
 ### User story
 > En tant que client, je veux voir un centre de notifications dans mon espace, avec l'historique de toutes les alertes reçues, afin de retrouver facilement les informations même si j'ai raté un email.
@@ -86,13 +91,13 @@ Certains clients peuvent manquer les emails (spam, boîte pleine) ou préfèrent
 
 ### Critères d'acceptation
 
-- [ ] Une icône de cloche est visible dans le header de l'espace client, avec un compteur des notifications non lues
-- [ ] En cliquant sur la cloche, un panneau latéral (ou dropdown) s'ouvre avec la liste des notifications
-- [ ] Chaque notification affiche : le numéro de colis concerné, le nouveau statut, la date et l'heure, un indicateur visuel "lu/non lu"
-- [ ] Un clic sur une notification marque celle-ci comme lue et redirige vers la fiche colis concernée
-- [ ] Un bouton "Tout marquer comme lu" permet de vider le compteur
-- [ ] Les notifications sont conservées pendant 90 jours
-- [ ] La liste est paginée (20 notifications par chargement, scroll infini)
+- [x] Une icône de cloche est visible dans le header de l'espace client, avec un compteur des notifications non lues
+- [x] En cliquant sur la cloche, un panneau latéral (ou dropdown) s'ouvre avec la liste des notifications
+- [x] Chaque notification affiche : le numéro de colis concerné, le nouveau statut, la date et l'heure, un indicateur visuel "lu/non lu"
+- [x] Un clic sur une notification marque celle-ci comme lue et redirige vers la fiche colis concernée
+- [x] Un bouton "Tout marquer comme lu" permet de vider le compteur
+- [ ] Les notifications sont conservées pendant 90 jours _(❌ pas de purge/cron de rétention à 90j)_
+- [x] La liste est paginée (20 notifications par chargement, scroll infini)
 
 ### Règles métier
 
@@ -103,7 +108,7 @@ Certains clients peuvent manquer les emails (spam, boîte pleine) ou préfèrent
 ### Cas limites
 
 - Plus de 200 notifications non lues → le compteur affiche "99+" pour ne pas surcharger visuellement
-- Notification pointant vers un colis supprimé → la notification reste affichée mais le lien est désactivé avec un message "Ce colis n'est plus disponible"
+- [ ] Notification pointant vers un colis supprimé → la notification reste affichée mais le lien est désactivé avec un message "Ce colis n'est plus disponible" _(⚠️ partiel : pas de gestion explicite du colis supprimé)_
 
 ### Dépendances
 

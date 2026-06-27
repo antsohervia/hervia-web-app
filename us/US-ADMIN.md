@@ -3,6 +3,9 @@
 > **Rôle concerné :** Admin (équipe interne SaaS)  
 > **Épic :** A1 — Gestion des tenants (sous-domaines)
 
+> **Légende statut** (mise à jour : 2026-06-21) :
+> ✅ Fait · 🟡 Partiel · 🔴 À faire — `- [x]` critère couvert par le code, `- [ ]` non couvert.
+
 ---
 
 ## Contexte métier
@@ -20,7 +23,8 @@ Chaque transitaire est représenté par un **tenant** : une instance isolée de 
 
 ## US-A1.1 — Créer un nouveau tenant transitaire
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🟡 Partiel — création + validation sous-domaine + email d'invitation 72h opérationnels ; le logo par défaut n'est pas attribué automatiquement.
 
 ### User story
 > En tant qu'admin, je veux créer un nouvel espace entreprise avec un sous-domaine dédié, afin d'onboarder un nouveau transitaire sur la plateforme rapidement et de manière autonome.
@@ -33,10 +37,10 @@ Lorsqu'un nouveau transitaire souscrit à la plateforme, l'admin doit pouvoir lu
 - [x] Un formulaire de création permet de saisir : nom de l'entreprise, sous-domaine souhaité, email de l'administrateur entreprise, pays, devise par défaut
 - [x] Le système vérifie que le sous-domaine est disponible et valide (lettres, chiffres, tirets uniquement — pas d'espaces ni caractères spéciaux)
 - [x] En cas de sous-domaine déjà pris, un message d'erreur clair est affiché avec des suggestions alternatives
-- [ ] Un email d'activation est envoyé automatiquement à l'administrateur entreprise avec un lien valable 72h
+- [x] Un email d'activation est envoyé automatiquement à l'administrateur entreprise avec un lien valable 72h
 - [x] L'application du tenant est accessible via `[sous-domaine].trackapp.com` dès la création
 - [x] Le tenant est visible dans la liste des tenants de l'admin avec le statut "Actif"
-- [ ] Un logo par défaut est attribué au tenant jusqu'à personnalisation
+- [ ] Un logo par défaut est attribué au tenant jusqu'à personnalisation _(❌ colonne `logo_url` NULL à la création, pas de logo générique)_
 
 ### Règles métier
 
@@ -60,7 +64,8 @@ Lorsqu'un nouveau transitaire souscrit à la plateforme, l'admin doit pouvoir lu
 
 ## US-A1.2 — Suspendre ou supprimer un tenant
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🟡 Partiel — suspension/réactivation, page de suspension (`/suspended`), suppression en 2 étapes et export ZIP en place ; l'email de notification de suspension manque.
 
 ### User story
 > En tant qu'admin, je veux pouvoir suspendre ou supprimer définitivement un tenant, afin de gérer les fins d'abonnement, les impayés ou les fermetures de compte.
@@ -76,7 +81,7 @@ Un transitaire peut cesser son abonnement, être en défaut de paiement, ou dema
 - [x] Dès la suspension, les utilisateurs du tenant (entreprise et clients) voient une page de suspension avec un message explicatif
 - [x] Les données du tenant sont intégralement conservées
 - [x] L'admin peut réactiver le tenant à tout moment — le tenant retrouve son état exact d'avant suspension
-- [ ] Un email de notification est envoyé à l'administrateur entreprise lors de la suspension
+- [ ] Un email de notification est envoyé à l'administrateur entreprise lors de la suspension _(❌ les destinataires sont identifiés mais aucun email n'est envoyé)_
 
 **Suppression définitive :**
 - [x] La suppression est disponible uniquement si le tenant est déjà suspendu (pas de suppression directe depuis l'état actif)
@@ -103,7 +108,8 @@ Un transitaire peut cesser son abonnement, être en défaut de paiement, ou dema
 
 ## US-A1.3 — Visualiser le tableau de bord global
 
-**Priorité :** Should Have
+**Priorité :** Should Have  
+**Statut :** ✅ Fait — liste paginée/filtrable/triable, fiche détail, impersonification et KPI globaux présents.
 
 ### User story
 > En tant qu'admin, je veux accéder à un tableau de bord centralisant l'état de tous les tenants, afin de surveiller la santé de la plateforme et détecter rapidement les anomalies.
@@ -139,7 +145,8 @@ Avec un nombre croissant de transitaires sur la plateforme, l'admin a besoin d'u
 
 ## US-A1.4 — Modifier les informations d'un tenant
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🟡 Partiel — édition nom/email/pays/devise/fuseau + audit en place ; l'édition du logo et la notification de changement d'email manquent.
 
 ### User story
 > En tant qu'admin, je veux pouvoir modifier les informations d'un tenant existant, afin de corriger une erreur de saisie ou refléter un changement de situation côté transitaire (changement de contact, de devise, etc.).
@@ -149,10 +156,10 @@ Les informations renseignées à la création peuvent évoluer : un transitaire 
 
 ### Critères d'acceptation
 
-- [ ] Depuis la fiche détail d'un tenant, l'admin peut éditer : nom de l'entreprise, email administrateur entreprise, pays, devise par défaut, fuseau horaire, logo
+- [ ] Depuis la fiche détail d'un tenant, l'admin peut éditer : nom de l'entreprise, email administrateur entreprise, pays, devise par défaut, fuseau horaire, logo _(⚠️ partiel : tous les champs sauf le **logo** absent du formulaire d'édition)_
 - [x] Le sous-domaine reste **non modifiable** depuis cette interface (cf. US-A1.1)
 - [x] Toute modification est horodatée et tracée dans le journal d'audit (cf. US-A1.7)
-- [ ] Un changement d'email administrateur entreprise déclenche un email de notification à l'ancien et au nouveau contact
+- [ ] Un changement d'email administrateur entreprise déclenche un email de notification à l'ancien et au nouveau contact _(❌ TODO laissé dans le code)_
 - [x] La modification de devise par défaut n'affecte pas les colis/factures existants (verrouillés à leur devise d'origine)
 - [x] Un changement de fuseau horaire est appliqué immédiatement aux affichages de dates côté tenant
 
@@ -177,7 +184,8 @@ Les informations renseignées à la création peuvent évoluer : un transitaire 
 
 ## US-A1.5 — Gérer les plans, abonnements et quotas
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🔴 À faire — aucune table plans/abonnements, aucune UI. Épic entièrement à développer.
 
 ### User story
 > En tant qu'admin, je veux affecter un plan tarifaire à chaque tenant et suivre son abonnement, afin de facturer correctement et d'appliquer les limites prévues au contrat.
@@ -219,7 +227,8 @@ Chaque transitaire souscrit à un plan (Starter, Pro, Enterprise…) avec des qu
 
 ## US-A1.6 — Gérer les comptes administrateurs internes
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🟡 Partiel — CRUD admins + restrictions par rôle + invalidation de session en place ; il manque le 3ᵉ rôle (Admin Comptable) et le 2FA obligatoire.
 
 ### User story
 > En tant qu'admin principal, je veux pouvoir créer et gérer d'autres comptes administrateurs internes avec différents niveaux de permissions, afin de répartir les responsabilités au sein de l'équipe SaaS sans donner un accès total à tous.
@@ -230,9 +239,9 @@ Chaque transitaire souscrit à un plan (Starter, Pro, Enterprise…) avec des qu
 ### Critères d'acceptation
 
 - [x] Un admin principal peut créer, modifier, désactiver d'autres comptes administrateurs
-- [ ] Trois rôles minimum sont disponibles : `Super Admin` (tous droits), `Admin Support` (lecture + impersonification, pas de suspension/suppression), `Admin Comptable` (lecture des facturations + exports)
+- [ ] Trois rôles minimum sont disponibles : `Super Admin` (tous droits), `Admin Support` (lecture + impersonification, pas de suspension/suppression), `Admin Comptable` (lecture des facturations + exports) _(⚠️ partiel : seuls `super_admin` et `admin_support` existent, `admin_comptable` manquant)_
 - [x] Chaque action sensible (suppression, modification de plan, impersonification) est restreinte selon le rôle
-- [ ] L'authentification des admins exige un second facteur (2FA obligatoire)
+- [ ] L'authentification des admins exige un second facteur (2FA obligatoire) _(❌ aucun 2FA/TOTP)_
 - [x] Un admin désactivé voit ses sessions actives invalidées immédiatement
 - [x] La liste des admins affiche : nom, email, rôle, dernière connexion, statut (actif/désactivé)
 - [x] Un admin ne peut pas modifier ou supprimer son propre compte (évite l'auto-lockout)
@@ -259,7 +268,8 @@ Chaque transitaire souscrit à un plan (Starter, Pro, Enterprise…) avec des qu
 
 ## US-A1.7 — Consulter le journal d'audit
 
-**Priorité :** Must Have
+**Priorité :** Must Have  
+**Statut :** 🟡 Partiel — journal centralisé en lecture seule + filtres + recherche + export en place ; IP/user-agent et le détail des sessions d'impersonification ne sont pas tracés.
 
 ### User story
 > En tant qu'admin, je veux consulter un journal exhaustif des actions effectuées sur la plateforme, afin de garantir la traçabilité, répondre aux exigences RGPD et investiguer en cas d'incident.
@@ -270,11 +280,11 @@ La traçabilité est une exigence légale (RGPD, devoir de conservation) et opé
 ### Critères d'acceptation
 
 - [x] Un journal centralise toutes les actions sensibles : création/modification/suppression de tenants, suspensions, changements de plan, modifications de comptes admin, impersonifications, exports de données
-- [x] Chaque entrée affiche : date/heure, acteur (admin), action, cible (tenant ou ressource), métadonnées (IP, user-agent, motif si renseigné)
+- [ ] Chaque entrée affiche : date/heure, acteur (admin), action, cible (tenant ou ressource), métadonnées (IP, user-agent, motif si renseigné) _(⚠️ partiel : date/acteur/action/cible/motif présents, **IP et user-agent non tracés**)_
 - [x] Des filtres sont disponibles : par acteur, par type d'action, par tenant cible, par plage de dates
 - [x] Une recherche textuelle libre est possible
 - [x] Un export CSV/JSON du journal filtré est proposé
-- [ ] Les sessions d'impersonification affichent en plus : durée, ressources consultées (résumé)
+- [ ] Les sessions d'impersonification affichent en plus : durée, ressources consultées (résumé) _(❌ pas de suivi de durée ni des ressources)_
 - [x] Le journal est en lecture seule — aucune modification/suppression d'entrée possible depuis l'interface
 
 ### Règles métier
@@ -299,7 +309,8 @@ La traçabilité est une exigence légale (RGPD, devoir de conservation) et opé
 
 ## US-A1.8 — Renvoyer ou régénérer un lien d'activation
 
-**Priorité :** Should Have
+**Priorité :** Should Have  
+**Statut :** 🔴 À faire — aucune action de renvoi/régénération, pas de suivi de l'état d'activation du tenant.
 
 ### User story
 > En tant qu'admin, je veux pouvoir renvoyer ou régénérer le lien d'activation d'un tenant, afin de débloquer un onboarding lorsque le lien initial a expiré, été perdu, ou si l'email n'a pas été reçu.
@@ -338,7 +349,8 @@ Le lien d'activation envoyé à la création d'un tenant (US-A1.1) a une validit
 
 ## US-A1.9 — Communication globale aux tenants
 
-**Priorité :** Could Have
+**Priorité :** Could Have  
+**Statut :** 🔴 À faire — pas de table annonces ni d'UI. Épic entièrement à développer.
 
 ### User story
 > En tant qu'admin, je veux pouvoir diffuser des annonces aux administrateurs des tenants (maintenance planifiée, nouveautés, alertes), afin de communiquer efficacement sans dépendre d'un canal externe (email manuel, support).
