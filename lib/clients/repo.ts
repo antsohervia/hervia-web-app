@@ -20,6 +20,111 @@ export type ClientRecord = {
   created_at: string;
 };
 
+export type ClientListRow = {
+  id: string;
+  full_name: string;
+  email: string | null;
+  phone: string | null;
+  status: "active" | "disabled" | "pending_activation";
+  user_id: string | null;
+  parcel_count: number;
+  created_at: string;
+};
+
+export type ListClientsParams = {
+  search?: string;
+  status?: string;
+  page?: number;
+  pageSize?: number;
+};
+
+export type ListClientsResult = {
+  rows: ClientListRow[];
+  total: number;
+  page: number;
+  pageSize: number;
+};
+
+export async function listClients(
+  tenantId: string,
+  params: ListClientsParams = {},
+): Promise<ListClientsResult> {
+  const admin = createSupabaseAdmin();
+  const page = Math.max(1, params.page ?? 1);
+  const pageSize = Math.max(1, Math.min(100, params.pageSize ?? 25));
+
+  let query = admin
+    .from("clients")
+    .select("id, full_name, email, phone, status, user_id, created_at", {
+      count: "exact",
+    })
+    .eq("tenant_id", tenantId);
+
+  if (params.search) {
+    const like = `%${params.search.replace(/[%_]/g, "")}%`;
+    query = query.or(`full_name.ilike.${like},email.ilike.${like}`);
+  }
+  if (params.status) {
+    query = query.eq("status", params.status);
+  }
+
+  query = query
+    .order("created_at", { ascending: false })
+    .range((page - 1) * pageSize, page * pageSize - 1);
+
+  const { data, count, error } = await query;
+  if (error) throw new Error(error.message);
+
+  const clientIds = (data ?? []).map((r) => r.id as string);
+
+  let countsByClient: Record<string, number> = {};
+  if (clientIds.length > 0) {
+    const { data: parcelsData } = await admin
+      .from("parcels")
+      .select("client_id")
+      .eq("tenant_id", tenantId)
+      .in("client_id", clientIds);
+    for (const p of parcelsData ?? []) {
+      const cid = p.client_id as string;
+      countsByClient[cid] = (countsByClient[cid] ?? 0) + 1;
+    }
+  }
+
+  const rows: ClientListRow[] = (data ?? []).map((r) => ({
+    id: r.id as string,
+    full_name: r.full_name as string,
+    email: (r.email as string | null) ?? null,
+    phone: (r.phone as string | null) ?? null,
+    status: r.status as ClientListRow["status"],
+    user_id: (r.user_id as string | null) ?? null,
+    parcel_count: countsByClient[r.id as string] ?? 0,
+    created_at: r.created_at as string,
+  }));
+
+  return { rows, total: count ?? 0, page, pageSize };
+}
+
+export async function createClientAdmin(
+  tenantId: string,
+  input: { full_name: string; email: string; phone: string | null },
+): Promise<{ id: string }> {
+  const admin = createSupabaseAdmin();
+  const { data, error } = await admin
+    .from("clients")
+    .insert({
+      tenant_id: tenantId,
+      full_name: input.full_name,
+      email: input.email,
+      phone: input.phone,
+      status: "pending_activation",
+      email_notifications_enabled: true,
+    })
+    .select("id")
+    .single();
+  if (error) throw new Error(error.message);
+  return { id: data.id as string };
+}
+
 export async function getClientByUserAndTenant(
   userId: string,
   tenantId: string,
